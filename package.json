@@ -15,9 +15,15 @@
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node hotline-parser.js",
+    "get-tokens": "node get-tokens.js",
+    "get-tokens-headless": "node get-tokens-headless.js"
   },
   "dependencies": {
-    "dotenv": "^17.0.1"
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^17.0.1",
+    "puppeteer": "^24.11.2"
   }
 }
