@@ -1,0 +1,23 @@
+{
+  "name": "bifo",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/vtjvlad/bifo#readme",
+  "bugs": {
+    "url": "https://github.com/vtjvlad/bifo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vtjvlad/bifo.git"
+  },
+  "license": "ISC",
+  "author": "vtjvlad",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.0.1"
+  }
+}
