@@ -1,5 +1,29 @@
 const axios = require('axios');
 const fs = require('fs').promises;
+const { XTOKEN, XREQUESTID } = require('./tt')();
+
+// async function getTokens() {
+//     const tokensFile = await JSON.parse(fs.readFileSync('./tokens.json', 'utf8'));
+    
+//     const tokens = JSON.stringify(tokensFile);
+
+//     return tokens
+
+// }
+
+// getTokens();
+
+// console.log(`${tokens}`)
+
+// async function getTokens() {
+//     const tokensFile = JSON.parse(fs.readFileSync('./tokens.json', 'utf8'));
+//     const tokens = JSON.stringify(tokensFile);
+//     return tokens;
+// }
+
+// getTokens().then(tokens => {
+//     console.log(`${tokens}`);
+// });
 
 class HotlineParser {
     constructor() {
@@ -9,8 +33,8 @@ class HotlineParser {
             'content-type': 'application/json',
             'x-language': 'uk',
             'x-referer': 'https://hotline.ua/mobile/mobilnye-telefony-i-smartfony/',
-            'x-token': 'fd8455c2-b7b6-4067-8bfd-18053279630c',
-            'x-request-id': '77904f1f0ed647ddcea7fb19b27d99cb',
+            "x-token": `${XTOKEN}`,
+            "x-request-id": `${XREQUESTID}`,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         };
     }
@@ -143,17 +167,21 @@ class HotlineParser {
     async getAllProducts() {
         let allProducts = [];
         let currentPage = 1;
-        let totalPages = 1;
+        let totalPages = 106;
 
         try {
             console.log('Начинаем парсинг товаров...');
             
             // Получаем первую страницу для определения общего количества страниц
             const firstPageData = await this.getProducts(currentPage);
-            totalPages = firstPageData.data.byPathSectionQueryProducts.paginationInfo.lastPage;
-            
+            // totalPages = firstPageData.data.byPathSectionQueryProducts.paginationInfo.lastPage;
+            function getTotalPages(firstPageData) {
+                return firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage / 48;
+            }
+
+            totalPages = getTotalPages(firstPageData);
             console.log(`Всего страниц: ${totalPages}`);
-            console.log(`Всего товаров: ${firstPageData.data.byPathSectionQueryProducts.paginationInfo.totalCount}`);
+            console.log(`Всего товаров: ${firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage}`);
 
             // Добавляем товары с первой страницы
             allProducts = allProducts.concat(firstPageData.data.byPathSectionQueryProducts.collection);
@@ -187,6 +215,16 @@ class HotlineParser {
             throw error;
         }
     }
+
+    // async saveThePagination(paginationInfo, filename = 'hotline-pagination.json') {
+    //     try {
+    //         await fs.writeFile(filename, JSON.stringify(paginationInfo, null, 2), 'utf8');
+    //         console.log(`Данные сохранены в файл: ${filename}`);
+    //     } catch (error) {
+    //         console.error('Ошибка при сохранении файла:', error.message);
+    //         throw error;
+    //     }
+    // }
 
     async saveToCSV(products, filename = 'hotline-products.csv') {
         try {
@@ -258,6 +296,7 @@ async function main() {
         
         // Сохраняем в JSON
         await parser.saveToFile(products);
+        // await parser.saveThePagination(products);
         
         // Сохраняем в CSV
         await parser.saveToCSV(products);

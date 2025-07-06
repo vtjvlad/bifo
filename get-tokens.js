@@ -202,9 +202,15 @@ class TokenExtractor {
             
             // Обновляем x-token
             let updatedContent = parserContent.replace(
-                /'x-token':\s*'[^']*'/,
+                /'x-token':\s*'[^']*'('?)/,
                 `'x-token': '${tokens['x-token'] || '55779a23-508b-4e66-a2e1-6a19e34a48d7'}`
             );
+
+            // let updatedContent = parserContent.replace(
+            //     /'x-token':\s*"[^"]*"("?)/,
+            //     (_, comma) => `'x-token': '${tokens['x-token'] || '55779a23-508b-4e66-a2e1-6a19e34a48d7'}'${comma || ','}`
+            //   );
+              
             
             // Обновляем x-request-id
             updatedContent = updatedContent.replace(
