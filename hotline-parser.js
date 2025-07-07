@@ -29,10 +29,26 @@ class HotlineParser {
             'x-token': null,
             'x-request-id': null
         };
+        
+        // Создаем папки для сохранения файлов (асинхронно)
+        this.ensureDirectories().catch(error => {
+            console.error('Ошибка при создании папок:', error.message);
+        });
     }
 
     generateRequestId() {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    // Создание необходимых папок
+    async ensureDirectories() {
+        try {
+            await fs.mkdir('JSON', { recursive: true });
+            await fs.mkdir('CSV', { recursive: true });
+            this.log('📁 Папки JSON и CSV созданы/проверены');
+        } catch (error) {
+            this.log(`❌ Ошибка при создании папок: ${error.message}`);
+        }
     }
 
     // Извлекаем путь категории из URL
@@ -556,7 +572,7 @@ class HotlineParser {
         }
     }
 
-    async saveToFileProgressive(products, filename = 'hotline-products.json') {
+    async saveToFileProgressive(products, filename = 'JSON/hotline-products.json') {
         try {
             // Если файл существует, читаем его и добавляем новые данные
             let existingProducts = [];
@@ -580,7 +596,7 @@ class HotlineParser {
         }
     }
 
-    async saveToFile(products, filename = 'hotline-products.json') {
+    async saveToFile(products, filename = 'JSON/hotline-products.json') {
         try {
             await fs.writeFile(filename, JSON.stringify(products, null, 2), 'utf8');
             this.log(`Данные сохранены в файл: ${filename}`);
@@ -600,11 +616,17 @@ class HotlineParser {
     //     }
     // }
 
-    async saveToCSV(products, filename = 'hotline-products.csv') {
+    async saveToCSV(products, filename = 'CSV/hotline-products.csv') {
         try {
             // Добавляем BOM для корректного отображения кириллицы в Excel
             const BOM = '\uFEFF';
-            const csvHeader = BOM + 'ID,Название,Производитель,Категория,Минимальная цена,Максимальная цена,Количество предложений,URL,Изображения,Характеристики\n';
+            
+            // Определяем заголовки в зависимости от наличия дополнительных полей
+            const hasCategoryField = products.length > 0 && products[0].category;
+            const csvHeader = BOM + (hasCategoryField ? 
+                'ID,Название,Производитель,Категория,URL категории,Минимальная цена,Максимальная цена,Количество предложений,URL,Изображения,Характеристики\n' :
+                'ID,Название,Производитель,Категория,Минимальная цена,Максимальная цена,Количество предложений,URL,Изображения,Характеристики\n'
+            );
             
             const csvRows = products.map(product => {
                 // Очищаем и экранируем данные
@@ -624,7 +646,7 @@ class HotlineParser {
                     cleanText(product.imageLinks.join('; ')) : 
                     (product.imageLinks ? cleanText(product.imageLinks.toString()) : '');
                 
-                return [
+                const baseRow = [
                     cleanText(product._id),
                     `"${cleanText(product.title)}"`,
                     `"${cleanText(product.vendor?.title)}"`,
@@ -635,7 +657,14 @@ class HotlineParser {
                     `"${cleanText(product.url)}"`,
                     `"${images}"`,
                     `"${specs}"`
-                ].join(',');
+                ];
+                
+                // Добавляем дополнительные поля если они есть
+                if (hasCategoryField) {
+                    baseRow.splice(4, 0, `"${cleanText(product.category)}"`, `"${cleanText(product.categoryUrl)}"`);
+                }
+                
+                return baseRow.join(',');
             });
 
             const csvContent = csvHeader + csvRows.join('\n');
@@ -779,8 +808,12 @@ class HotlineParser {
                 this.log(`✅ Категория ${categoryName}: получено ${products.length} товаров`);
                 
                 // Сохраняем отдельный файл для каждой категории
-                const filename = `hotline-${categoryName.replace(/[^a-zA-Z0-9]/g, '-')}.json`;
+                const filename = `JSON/hotline-${categoryName.replace(/[^a-zA-Z0-9]/g, '-')}.json`;
                 await this.saveToFile(products, filename);
+                
+                // Сохраняем CSV файл для каждой категории
+                const csvFilename = `CSV/hotline-${categoryName.replace(/[^a-zA-Z0-9]/g, '-')}.csv`;
+                await this.saveToCSV(products, csvFilename);
                 
                 // Небольшая пауза между категориями
                 if (i < categories.length - 1) {
@@ -809,8 +842,29 @@ class HotlineParser {
             timestamp: new Date().toISOString()
         };
         
-        await this.saveToFile(report, 'hotline-all-categories-report.json');
-        this.log('📊 Отчет сохранен в hotline-all-categories-report.json');
+        await this.saveToFile(report, 'JSON/hotline-all-categories-report.json');
+        this.log('📊 Отчет сохранен в JSON/hotline-all-categories-report.json');
+        
+        // Создаем общий CSV файл со всеми товарами
+        this.log('📊 Создание общего CSV файла...');
+        const allProducts = [];
+        Object.keys(allResults).forEach(categoryName => {
+            const result = allResults[categoryName];
+            if (result.products && result.products.length > 0) {
+                // Добавляем информацию о категории к каждому товару
+                const productsWithCategory = result.products.map(product => ({
+                    ...product,
+                    category: categoryName,
+                    categoryUrl: result.url
+                }));
+                allProducts.push(...productsWithCategory);
+            }
+        });
+        
+        if (allProducts.length > 0) {
+            await this.saveToCSV(allProducts, 'CSV/hotline-all-categories.csv');
+            this.log(`📊 Общий CSV файл создан: CSV/hotline-all-categories.csv (${allProducts.length} товаров)`);
+        }
         
         return allResults;
     }
@@ -908,8 +962,10 @@ async function main() {
             this.log('📦 Парсим одну категорию...');
             const products = await parser.getAllProducts(true, 25, BATCH_SIZE, SINGLE_CATEGORY_URL);
             
-            // Сохраняем в CSV (если нужно)
-            await parser.saveToCSV(products);
+            // Сохраняем в CSV
+            const categoryName = parser.extractPathFromUrl(SINGLE_CATEGORY_URL);
+            const csvFilename = `CSV/hotline-${categoryName.replace(/[^a-zA-Z0-9]/g, '-')}.csv`;
+            await parser.saveToCSV(products, csvFilename);
             
             // Примеры использования дополнительных методов
             parser.log('\n=== Примеры фильтрации ===');
