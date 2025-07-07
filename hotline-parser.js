@@ -1,5 +1,6 @@
 const axios = require('axios');
 const fs = require('fs').promises;
+const cliProgress = require('cli-progress');
 const { XTOKEN, XREQUESTID } = require('./tt')();
 
 // async function getTokens() {
@@ -37,10 +38,47 @@ class HotlineParser {
             "x-request-id": `${XREQUESTID}`,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         };
+        this.progressBar = null;
     }
 
     generateRequestId() {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    initProgressBar(totalPages) {
+        this.progressBar = new cliProgress.SingleBar({
+            format: '📊 Парсинг |{bar}| {percentage}% | Страница {value}/{total} | Скорость: {speed} стр/с | Осталось: {eta}s',
+            barCompleteChar: '\u2588',
+            barIncompleteChar: '\u2591',
+            hideCursor: true,
+            clearOnComplete: true
+        });
+        this.progressBar.start(totalPages, 0);
+    }
+
+    updateProgress(currentPage) {
+        if (this.progressBar) {
+            this.progressBar.update(currentPage);
+        }
+    }
+
+    stopProgress() {
+        if (this.progressBar) {
+            this.progressBar.stop();
+            this.progressBar = null;
+        }
+    }
+
+    log(message) {
+        if (this.progressBar) {
+            // Останавливаем прогресс-бар временно для вывода лога
+            this.progressBar.stop();
+            console.log(message);
+            // Перезапускаем прогресс-бар с текущим значением
+            this.progressBar.start(this.progressBar.total, this.progressBar.value);
+        } else {
+            console.log(message);
+        }
     }
 
     async getProducts(page = 1, itemsPerPage = 48) {
@@ -121,8 +159,6 @@ class HotlineParser {
         };
 
         try {
-            console.log(`📡 Отправка запроса на страницу ${page}...`);
-            
             const response = await axios.post(this.baseUrl, {
                 operationName: "getCatalogProducts",
                 variables: variables,
@@ -137,40 +173,39 @@ class HotlineParser {
             }
 
             if (response.data.errors) {
-                console.error('Ошибки GraphQL:', response.data.errors);
+                this.log('Ошибки GraphQL: ' + JSON.stringify(response.data.errors));
                 throw new Error(`GraphQL ошибки: ${JSON.stringify(response.data.errors)}`);
             }
 
             if (!response.data.data) {
-                console.error('Неожиданная структура ответа:', JSON.stringify(response.data, null, 2));
+                this.log('Неожиданная структура ответа: ' + JSON.stringify(response.data, null, 2));
                 throw new Error('Отсутствует data в ответе');
             }
 
             if (!response.data.data.byPathSectionQueryProducts) {
-                console.error('Неожиданная структура ответа:', JSON.stringify(response.data.data, null, 2));
+                this.log('Неожиданная структура ответа: ' + JSON.stringify(response.data.data, null, 2));
                 throw new Error('Отсутствует byPathSectionQueryProducts в ответе');
             }
 
-            console.log(`✅ Успешно получены данные для страницы ${page}`);
             return response.data;
         } catch (error) {
-            console.error('❌ Ошибка при получении данных:', error.message);
+            this.log('❌ Ошибка при получении данных: ' + error.message);
             if (error.response) {
-                console.error('Статус ответа:', error.response.status);
-                console.error('Заголовки ответа:', error.response.headers);
-                console.error('Данные ответа:', error.response.data);
+                this.log('Статус ответа: ' + error.response.status);
+                this.log('Заголовки ответа: ' + JSON.stringify(error.response.headers));
+                this.log('Данные ответа: ' + JSON.stringify(error.response.data));
             }
             throw error;
         }
     }
 
-    async getAllProducts() {
+    async getAllProducts(saveProgressively = true, saveInterval = 5) {
         let allProducts = [];
         let currentPage = 1;
-        let totalPages = 106;
+        let totalPages = 1;
 
         try {
-            console.log('Начинаем парсинг товаров...');
+            this.log('🚀 Начинаем парсинг товаров...');
             
             // Получаем первую страницу для определения общего количества страниц
             const firstPageData = await this.getProducts(currentPage);
@@ -180,28 +215,79 @@ class HotlineParser {
             }
 
             totalPages = getTotalPages(firstPageData);
-            console.log(`Всего страниц: ${totalPages}`);
-            console.log(`Всего товаров: ${firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage}`);
+            this.log(`📄 Всего страниц: ${totalPages}`);
+            this.log(`📦 Всего товаров: ${firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage}`);
+
+            // Инициализируем прогресс-бар
+            this.initProgressBar(totalPages);
+            this.updateProgress(1); // Обновляем для первой страницы
 
             // Добавляем товары с первой страницы
             allProducts = allProducts.concat(firstPageData.data.byPathSectionQueryProducts.collection);
+            
+            // Сохраняем первую страницу если включено постепенное сохранение
+            if (saveProgressively) {
+                await this.saveToFileProgressive(firstPageData.data.byPathSectionQueryProducts.collection);
+            }
 
             // Получаем остальные страницы
             for (let page = 2; page <= totalPages; page++) {
-                console.log(`Парсинг страницы ${page}/${totalPages}...`);
-                
                 const pageData = await this.getProducts(page);
-                allProducts = allProducts.concat(pageData.data.byPathSectionQueryProducts.collection);
+                const pageProducts = pageData.data.byPathSectionQueryProducts.collection;
+                allProducts = allProducts.concat(pageProducts);
+                
+                // Обновляем прогресс-бар
+                this.updateProgress(page);
+                
+                // Сохраняем данные постепенно
+                if (saveProgressively && page % saveInterval === 0) {
+                    await this.saveToFileProgressive(pageProducts);
+                }
                 
                 // Небольшая задержка между запросами
                 await this.delay(1000);
             }
 
-            console.log(`Парсинг завершен! Получено ${allProducts.length} товаров`);
+            // Останавливаем прогресс-бар
+            this.stopProgress();
+
+            // Финальное сохранение всех данных
+            if (saveProgressively) {
+                this.log('💾 Выполняем финальное сохранение всех данных...');
+                await this.saveToFile(allProducts);
+            }
+
+            this.log(`✅ Парсинг завершен! Получено ${allProducts.length} товаров`);
             return allProducts;
 
         } catch (error) {
-            console.error('Ошибка при парсинге всех товаров:', error.message);
+            // Останавливаем прогресс-бар в случае ошибки
+            this.stopProgress();
+            this.log('❌ Ошибка при парсинге всех товаров: ' + error.message);
+            throw error;
+        }
+    }
+
+    async saveToFileProgressive(products, filename = 'hotline-products.json') {
+        try {
+            // Если файл существует, читаем его и добавляем новые данные
+            let existingProducts = [];
+            try {
+                const fileContent = await fs.readFile(filename, 'utf8');
+                existingProducts = JSON.parse(fileContent);
+            } catch (error) {
+                // Файл не существует или пустой, начинаем с пустого массива
+                this.log('Создаем новый файл для сохранения данных');
+            }
+
+            // Добавляем новые продукты
+            const allProducts = existingProducts.concat(products);
+            
+            // Сохраняем обновленный файл
+            await fs.writeFile(filename, JSON.stringify(allProducts, null, 2), 'utf8');
+            this.log(`✅ Данные сохранены в файл: ${filename} (всего товаров: ${allProducts.length})`);
+        } catch (error) {
+            this.log('❌ Ошибка при сохранении файла: ' + error.message);
             throw error;
         }
     }
@@ -209,9 +295,9 @@ class HotlineParser {
     async saveToFile(products, filename = 'hotline-products.json') {
         try {
             await fs.writeFile(filename, JSON.stringify(products, null, 2), 'utf8');
-            console.log(`Данные сохранены в файл: ${filename}`);
+            this.log(`Данные сохранены в файл: ${filename}`);
         } catch (error) {
-            console.error('Ошибка при сохранении файла:', error.message);
+            this.log('Ошибка при сохранении файла: ' + error.message);
             throw error;
         }
     }
@@ -266,9 +352,9 @@ class HotlineParser {
 
             const csvContent = csvHeader + csvRows.join('\n');
             await fs.writeFile(filename, csvContent, 'utf8');
-            console.log(`Данные сохранены в CSV файл: ${filename}`);
+            this.log(`Данные сохранены в CSV файл: ${filename}`);
         } catch (error) {
-            console.error('Ошибка при сохранении CSV файла:', error.message);
+            this.log('Ошибка при сохранении CSV файла: ' + error.message);
             throw error;
         }
     }
@@ -280,7 +366,7 @@ class HotlineParser {
     // Метод для получения информации о конкретном товаре
     async getProductDetails(productId) {
         // Здесь можно добавить логику для получения детальной информации о товаре
-        console.log(`Получение деталей товара с ID: ${productId}`);
+        this.log(`Получение деталей товара с ID: ${productId}`);
     }
 
     // Метод для фильтрации товаров по цене
@@ -305,35 +391,33 @@ async function main() {
     const parser = new HotlineParser();
     
     try {
-        // Получаем все товары
-        const products = await parser.getAllProducts();
+        // Получаем все товары с постепенным сохранением
+        // saveProgressively = true - включить постепенное сохранение
+        // saveInterval = 5 - сохранять каждые 5 страниц
+        const products = await parser.getAllProducts(true, 5);
         
-        // Сохраняем в JSON
-        await parser.saveToFile(products);
-        // await parser.saveThePagination(products);
-        
-        // Сохраняем в CSV
+        // Сохраняем в CSV (если нужно)
         await parser.saveToCSV(products);
         
         // Примеры использования дополнительных методов
-        console.log('\n=== Примеры фильтрации ===');
+        parser.log('\n=== Примеры фильтрации ===');
         
         // Фильтр по цене (от 5000 до 50000 грн)
         const filteredByPrice = parser.filterByPrice(products, 5000, 50000);
-        console.log(`Товары в диапазоне 5000-50000 грн: ${filteredByPrice.length}`);
+        parser.log(`Товары в диапазоне 5000-50000 грн: ${filteredByPrice.length}`);
         
         // Поиск по названию
         const searchResults = parser.searchByName(products, 'iPhone');
-        console.log(`Товары с "iPhone" в названии: ${searchResults.length}`);
+        parser.log(`Товары с "iPhone" в названии: ${searchResults.length}`);
         
         // Выводим первые 5 товаров для примера
-        console.log('\n=== Первые 5 товаров ===');
+        parser.log('\n=== Первые 5 товаров ===');
         products.slice(0, 5).forEach((product, index) => {
-            console.log(`${index + 1}. ${product.title} - ${product.minPrice} грн`);
+            parser.log(`${index + 1}. ${product.title} - ${product.minPrice} грн`);
         });
         
     } catch (error) {
-        console.error('Ошибка в main:', error.message);
+        parser.log('❌ Ошибка в main: ' + error.message);
     }
 }
 
