@@ -39,6 +39,9 @@ class HotlineParser {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         };
         this.progressBar = null;
+        this.startTime = null;
+        this.logBuffer = [];
+        this.progressActive = false;
     }
 
     generateRequestId() {
@@ -46,38 +49,106 @@ class HotlineParser {
     }
 
     initProgressBar(totalPages) {
-        this.progressBar = new cliProgress.SingleBar({
-            format: '📊 Парсинг |{bar}| {percentage}% | Страница {value}/{total} | Скорость: {speed} стр/с | Осталось: {eta}s',
-            barCompleteChar: '\u2588',
-            barIncompleteChar: '\u2591',
-            hideCursor: true,
-            clearOnComplete: true
-        });
-        this.progressBar.start(totalPages, 0);
+        try {
+            this.startTime = Date.now();
+            this.progressActive = true;
+            this.logBuffer = [];
+            
+            this.progressBar = new cliProgress.SingleBar({
+                format: '📊 Парсинг |{bar}| {percentage}% | Страница {value}/{total} | {speed} стр/с | ETA: {eta}s | Товаров: {products}',
+                barCompleteChar: '\u2588',
+                barIncompleteChar: '\u2591',
+                hideCursor: true,
+                clearOnComplete: false,
+                stopOnComplete: false,
+                forceRedraw: true
+            }, cliProgress.Presets.rect);
+            
+            this.progressBar.start(totalPages, 0, {
+                speed: '0.0',
+                eta: '∞',
+                products: '0'
+            });
+        } catch (error) {
+            console.error('Ошибка инициализации прогресс бара:', error.message);
+            this.progressActive = false;
+        }
     }
 
-    updateProgress(currentPage) {
-        if (this.progressBar) {
-            this.progressBar.update(currentPage);
+    updateProgress(currentPage, productsCount = 0) {
+        if (!this.progressBar || !this.progressActive) return;
+        
+        try {
+            const elapsed = (Date.now() - this.startTime) / 1000;
+            const speed = currentPage / elapsed;
+            const eta = Math.round((this.progressBar.total - currentPage) / speed);
+            
+            this.progressBar.update(currentPage, {
+                speed: speed.toFixed(1),
+                eta: isFinite(eta) ? eta : '∞',
+                products: productsCount.toString()
+            });
+        } catch (error) {
+            console.error('Ошибка обновления прогресс бара:', error.message);
         }
     }
 
     stopProgress() {
-        if (this.progressBar) {
-            this.progressBar.stop();
-            this.progressBar = null;
+        if (this.progressBar && this.progressActive) {
+            try {
+                this.progressBar.stop();
+                this.progressActive = false;
+                
+                // Выводим накопленные логи
+                if (this.logBuffer.length > 0) {
+                    this.logBuffer.forEach(msg => console.log(msg));
+                    this.logBuffer = [];
+                }
+                
+                this.progressBar = null;
+            } catch (error) {
+                console.error('Ошибка остановки прогресс бара:', error.message);
+            }
         }
     }
 
     log(message) {
-        if (this.progressBar) {
-            // Останавливаем прогресс-бар временно для вывода лога
-            this.progressBar.stop();
-            console.log(message);
-            // Перезапускаем прогресс-бар с текущим значением
-            this.progressBar.start(this.progressBar.total, this.progressBar.value);
+        const timestamp = new Date().toLocaleTimeString();
+        const formattedMessage = `[${timestamp}] ${message}`;
+        
+        if (this.progressActive && this.progressBar) {
+            // Если прогресс бар активен, добавляем сообщение в буфер
+            this.logBuffer.push(formattedMessage);
+            
+            // Если буфер становится слишком большим, выводим сообщения
+            if (this.logBuffer.length > 10) {
+                this.flushLogs();
+            }
         } else {
-            console.log(message);
+            console.log(formattedMessage);
+        }
+    }
+
+    flushLogs() {
+        if (this.logBuffer.length === 0) return;
+        
+        if (this.progressActive && this.progressBar) {
+            try {
+                // Временно очищаем строку прогресс бара
+                process.stdout.write('\r\x1b[K');
+                
+                // Выводим все накопленные сообщения
+                this.logBuffer.forEach(msg => console.log(msg));
+                this.logBuffer = [];
+                
+                // Принудительно перерисовываем прогресс бар
+                this.progressBar.render();
+            } catch (error) {
+                console.error('Ошибка вывода логов:', error.message);
+            }
+        } else {
+            this.logBuffer.forEach(msg => console.log(msg));
+            this.logBuffer = [];
         }
     }
 
@@ -220,7 +291,8 @@ class HotlineParser {
 
             // Инициализируем прогресс-бар
             this.initProgressBar(totalPages);
-            this.updateProgress(1); // Обновляем для первой страницы
+            let productsCount = firstPageData.data.byPathSectionQueryProducts.collection.length;
+            this.updateProgress(1, productsCount); // Обновляем для первой страницы
 
             // Добавляем товары с первой страницы
             allProducts = allProducts.concat(firstPageData.data.byPathSectionQueryProducts.collection);
@@ -235,19 +307,28 @@ class HotlineParser {
                 const pageData = await this.getProducts(page);
                 const pageProducts = pageData.data.byPathSectionQueryProducts.collection;
                 allProducts = allProducts.concat(pageProducts);
+                productsCount += pageProducts.length;
                 
-                // Обновляем прогресс-бар
-                this.updateProgress(page);
+                // Обновляем прогресс-бар с общим количеством товаров
+                this.updateProgress(page, productsCount);
                 
                 // Сохраняем данные постепенно
                 if (saveProgressively && page % saveInterval === 0) {
                     await this.saveToFileProgressive(pageProducts);
+                    // Периодически выводим накопленные логи
+                    this.flushLogs();
                 }
                 
                 // Небольшая задержка между запросами
                 await this.delay(1000);
             }
 
+            // Финальное обновление прогресс-бара
+            this.updateProgress(totalPages, productsCount);
+            
+            // Выводим накопленные логи перед остановкой
+            this.flushLogs();
+            
             // Останавливаем прогресс-бар
             this.stopProgress();
 
@@ -261,6 +342,8 @@ class HotlineParser {
             return allProducts;
 
         } catch (error) {
+            // Выводим накопленные логи перед остановкой
+            this.flushLogs();
             // Останавливаем прогресс-бар в случае ошибки
             this.stopProgress();
             this.log('❌ Ошибка при парсинге всех товаров: ' + error.message);
@@ -416,8 +499,13 @@ async function main() {
             parser.log(`${index + 1}. ${product.title} - ${product.minPrice} грн`);
         });
         
+        // Выводим все накопленные логи
+        parser.flushLogs();
+        
     } catch (error) {
         parser.log('❌ Ошибка в main: ' + error.message);
+        // Выводим все накопленные логи в случае ошибки
+        parser.flushLogs();
     }
 }
 
