@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "invalid-request-token"
+    }
+  ],
+  "data": {
+    "byPathQueryProduct": null
+  }
+}

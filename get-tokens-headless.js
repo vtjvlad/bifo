@@ -3,8 +3,8 @@ const fs = require('fs').promises;
 
 class TokenExtractorHeadless {
     constructor() {
-        // this.url = 'https://hotline.ua/ua/mobile/mobilnye-telefony-i-smartfony/';
-        this.url = 'https://hotline.ua/ua/computer/noutbuki-netbuki/';
+        this.url = 'https://hotline.ua/ua/mobile/mobilnye-telefony-i-smartfony/';
+        // this.url = 'https://hotline.ua/ua/computer/noutbuki-netbuki/';
         this.browser = null;
         this.page = null;
     }
@@ -22,9 +22,16 @@ class TokenExtractorHeadless {
                 '--no-zygote',
                 '--disable-gpu',
                 '--disable-web-security',
-                '--disable-features=VizDisplayCompositor'
+                '--disable-features=VizDisplayCompositor',
+                '--proxy=http://pfucslqf:ukpzonddbg51@38.154.227.167:5868'
             ]
         });
+
+        // const browser = await puppeteer.launch({
+        //     executablePath: "/snap/bin/chromium",
+        //     headless: true,
+        //     args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
+        // });
 
         this.page = await this.browser.newPage();
         

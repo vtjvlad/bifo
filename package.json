@@ -30,6 +30,9 @@
     "figlet": "^1.6.0",
     "inquirer": "^8.2.6",
     "ora": "^6.3.0",
-    "puppeteer": "^24.11.2"
+    "proxy-agent": "^6.5.0",
+    "puppeteer": "^24.11.2",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2"
   }
 }
