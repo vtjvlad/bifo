@@ -228,23 +228,37 @@ class HotlineParser {
 
     async saveToCSV(products, filename = 'hotline-products.csv') {
         try {
-            const csvHeader = 'ID,Название,Производитель,Категория,Минимальная цена,Максимальная цена,Количество предложений,URL,Изображения,Характеристики\n';
+            // Добавляем BOM для корректного отображения кириллицы в Excel
+            const BOM = '\uFEFF';
+            const csvHeader = BOM + 'ID,Название,Производитель,Категория,Минимальная цена,Максимальная цена,Количество предложений,URL,Изображения,Характеристики\n';
             
             const csvRows = products.map(product => {
-                const specs = product.techShortSpecificationsList ? 
-                    product.techShortSpecificationsList.join('; ') : '';
-                const images = product.imageLinks ? 
-                    product.imageLinks.join('; ') : '';
+                // Очищаем и экранируем данные
+                const cleanText = (text) => {
+                    if (!text) return '';
+                    return text.toString()
+                        .replace(/"/g, '""')  // Экранируем кавычки
+                        .replace(/\n/g, ' ')  // Заменяем переносы строк
+                        .replace(/\r/g, ' ')  // Заменяем возврат каретки
+                        .replace(/\t/g, ' ')  // Заменяем табуляцию
+                        .trim();
+                };
+
+                const specs = product.techShortSpecificationsList && Array.isArray(product.techShortSpecificationsList) ? 
+                    cleanText(product.techShortSpecificationsList.join('; ')) : '';
+                const images = product.imageLinks && Array.isArray(product.imageLinks) ? 
+                    cleanText(product.imageLinks.join('; ')) : 
+                    (product.imageLinks ? cleanText(product.imageLinks.toString()) : '');
                 
                 return [
-                    product._id,
-                    `"${product.title.replace(/"/g, '""')}"`,
-                    `"${product.vendor?.title || ''}"`,
-                    `"${product.section?.productCategoryName || ''}"`,
+                    cleanText(product._id),
+                    `"${cleanText(product.title)}"`,
+                    `"${cleanText(product.vendor?.title)}"`,
+                    `"${cleanText(product.section?.productCategoryName)}"`,
                     product.minPrice || '',
                     product.maxPrice || '',
                     product.offerCount || '',
-                    `"${product.url || ''}"`,
+                    `"${cleanText(product.url)}"`,
                     `"${images}"`,
                     `"${specs}"`
                 ].join(',');
