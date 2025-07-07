@@ -3,37 +3,14 @@ const fs = require('fs').promises;
 const cliProgress = require('cli-progress');
 const { XTOKEN, XREQUESTID } = require('./tt')();
 
-// async function getTokens() {
-//     const tokensFile = await JSON.parse(fs.readFileSync('./tokens.json', 'utf8'));
-    
-//     const tokens = JSON.stringify(tokensFile);
-
-//     return tokens
-
-// }
-
-// getTokens();
-
-// console.log(`${tokens}`)
-
-// async function getTokens() {
-//     const tokensFile = JSON.parse(fs.readFileSync('./tokens.json', 'utf8'));
-//     const tokens = JSON.stringify(tokensFile);
-//     return tokens;
-// }
-
-// getTokens().then(tokens => {
-//     console.log(`${tokens}`);
-// });
 
 class HotlineParser {
     constructor() {
         this.baseUrl = 'https://hotline.ua/svc/frontend-api/graphql';
-        this.headers = {
+        this.baseHeaders = {
             'accept': '*/*',
             'content-type': 'application/json',
             'x-language': 'uk',
-            'x-referer': 'https://hotline.ua/mobile/mobilnye-telefony-i-smartfony/',
             "x-token": `${XTOKEN}`,
             "x-request-id": `${XREQUESTID}`,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
@@ -42,10 +19,42 @@ class HotlineParser {
         this.startTime = null;
         this.logBuffer = [];
         this.progressActive = false;
+        this.requestStats = {
+            totalRequests: 0,
+            successfulRequests: 0,
+            failedRequests: 0,
+            lastErrorTime: null,
+            consecutiveErrors: 0
+        };
+        this.currentCategory = null;
     }
 
     generateRequestId() {
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+    }
+
+    // Извлекаем путь категории из URL
+    extractPathFromUrl(url) {
+        try {
+            const urlObj = new URL(url);
+            // Убираем начальный и конечный слеш
+            let path = urlObj.pathname.replace(/^\/+|\/+$/g, '');
+            // Разбиваем путь на части и берем только последний фрагмент
+            const pathParts = path.split('/');
+            const lastFragment = pathParts[pathParts.length - 1];
+            return lastFragment;
+        } catch (error) {
+            this.log(`❌ Ошибка при извлечении пути из URL: ${url}`);
+            throw error;
+        }
+    }
+
+    // Получаем заголовки для конкретной категории
+    getHeadersForCategory(categoryUrl) {
+        return {
+            ...this.baseHeaders,
+            'x-referer': categoryUrl
+        };
     }
 
     initProgressBar(totalPages) {
@@ -152,7 +161,7 @@ class HotlineParser {
         }
     }
 
-    async getProducts(page = 1, itemsPerPage = 48) {
+    async getProducts(page = 1, itemsPerPage = 48, categoryUrl = null) {
         const query = `
             query getCatalogProducts($path: String!, $cityId: Int, $sort: String, $showFirst: String, $phrase: String, $itemsPerPage: Int, $page: Int, $filters: [Int], $excludedFilters: [Int], $priceMin: Int, $priceMax: Int) {
                 byPathSectionQueryProducts(path: $path, cityId: $cityId, sort: $sort, showFirst: $showFirst, phrase: $phrase, itemsPerPage: $itemsPerPage, page: $page, filters: $filters, excludedFilters: $excludedFilters, priceMin: $priceMin, priceMax: $priceMax) {
@@ -219,8 +228,18 @@ class HotlineParser {
             }
         `;
 
+        // Определяем путь категории
+        let path = "mobilnye-telefony-i-smartfony"; // по умолчанию
+        let headers = this.baseHeaders;
+        
+        if (categoryUrl) {
+            path = this.extractPathFromUrl(categoryUrl);
+            headers = this.getHeadersForCategory(categoryUrl);
+            this.currentCategory = path;
+        }
+
         const variables = {
-            path: "mobilnye-telefony-i-smartfony",
+            path: path,
             cityId: 5394,
             page: page,
             sort: "popularity",
@@ -235,7 +254,7 @@ class HotlineParser {
                 variables: variables,
                 query: query
             }, {
-                headers: this.headers
+                headers: headers
             });
 
             // Проверяем структуру ответа
@@ -258,8 +277,13 @@ class HotlineParser {
                 throw new Error('Отсутствует byPathSectionQueryProducts в ответе');
             }
 
+            // Обновляем статистику успешного запроса
+            this.updateRequestStats(true);
             return response.data;
         } catch (error) {
+            // Обновляем статистику неудачного запроса
+            this.updateRequestStats(false);
+            
             this.log('❌ Ошибка при получении данных: ' + error.message);
             if (error.response) {
                 this.log('Статус ответа: ' + error.response.status);
@@ -270,16 +294,17 @@ class HotlineParser {
         }
     }
 
-    async getAllProducts(saveProgressively = true, saveInterval = 5) {
+    async getAllProducts(saveProgressively = true, saveInterval = 25, batchSize = 25, categoryUrl = null) {
         let allProducts = [];
         let currentPage = 1;
         let totalPages = 1;
 
         try {
-            this.log('🚀 Начинаем парсинг товаров...');
+            const categoryName = categoryUrl ? this.extractPathFromUrl(categoryUrl) : 'телефоны';
+            this.log(`🚀 Начинаем парсинг товаров категории: ${categoryName}`);
             
             // Получаем первую страницу для определения общего количества страниц
-            const firstPageData = await this.getProducts(currentPage);
+            const firstPageData = await this.getProducts(currentPage, 48, categoryUrl);
             // totalPages = firstPageData.data.byPathSectionQueryProducts.paginationInfo.lastPage;
             function getTotalPages(firstPageData) {
                 return firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage / 48;
@@ -288,6 +313,7 @@ class HotlineParser {
             totalPages = getTotalPages(firstPageData);
             this.log(`📄 Всего страниц: ${totalPages}`);
             this.log(`📦 Всего товаров: ${firstPageData.data.byPathSectionQueryProducts.paginationInfo.itemsPerPage}`);
+            this.log(`⚡ Размер батча: ${batchSize} страниц`);
 
             // Инициализируем прогресс-бар
             this.initProgressBar(totalPages);
@@ -302,25 +328,60 @@ class HotlineParser {
                 await this.saveToFileProgressive(firstPageData.data.byPathSectionQueryProducts.collection);
             }
 
-            // Получаем остальные страницы
-            for (let page = 2; page <= totalPages; page++) {
-                const pageData = await this.getProducts(page);
-                const pageProducts = pageData.data.byPathSectionQueryProducts.collection;
-                allProducts = allProducts.concat(pageProducts);
-                productsCount += pageProducts.length;
+            // Обрабатываем остальные страницы батчами
+            for (let startPage = 2; startPage <= totalPages; startPage += batchSize) {
+                const endPage = Math.min(startPage + batchSize - 1, totalPages);
+                const pagesInBatch = endPage - startPage + 1;
                 
-                // Обновляем прогресс-бар с общим количеством товаров
-                this.updateProgress(page, productsCount);
+                this.log(`🔄 Обрабатываем батч страниц ${startPage}-${endPage}...`);
                 
-                // Сохраняем данные постепенно
-                if (saveProgressively && page % saveInterval === 0) {
-                    await this.saveToFileProgressive(pageProducts);
-                    // Периодически выводим накопленные логи
-                    this.flushLogs();
+                // Создаем массив промисов для параллельного выполнения
+                const batchPromises = [];
+                for (let page = startPage; page <= endPage; page++) {
+                    batchPromises.push(this.getProducts(page, 48, categoryUrl));
                 }
                 
-                // Небольшая задержка между запросами
-                await this.delay(1000);
+                // Выполняем все запросы в батче параллельно
+                const batchResults = await Promise.allSettled(batchPromises);
+                
+                // Обрабатываем результаты батча
+                let batchProducts = [];
+                let successfulPages = 0;
+                
+                batchResults.forEach((result, index) => {
+                    const page = startPage + index;
+                    
+                    if (result.status === 'fulfilled') {
+                        const pageProducts = result.value.data.byPathSectionQueryProducts.collection;
+                        batchProducts = batchProducts.concat(pageProducts);
+                        productsCount += pageProducts.length;
+                        successfulPages++;
+                        this.log(`✅ Страница ${page}: получено ${pageProducts.length} товаров`);
+                    } else {
+                        this.log(`❌ Ошибка на странице ${page}: ${result.reason.message}`);
+                    }
+                });
+                
+                // Добавляем все товары из батча
+                allProducts = allProducts.concat(batchProducts);
+                
+                // Обновляем прогресс-бар
+                this.updateProgress(endPage, productsCount);
+                
+                // Сохраняем данные постепенно
+                if (saveProgressively && batchProducts.length > 0) {
+                    await this.saveToFileProgressive(batchProducts);
+                }
+                
+                // Периодически выводим накопленные логи
+                this.flushLogs();
+                
+                // Адаптивная задержка между батчами
+                if (endPage < totalPages) {
+                    const adaptiveDelay = this.getAdaptiveDelay();
+                    this.log(`⏱️ Задержка между батчами: ${adaptiveDelay}мс`);
+                    await this.delay(adaptiveDelay);
+                }
             }
 
             // Финальное обновление прогресс-бара
@@ -339,6 +400,15 @@ class HotlineParser {
             }
 
             this.log(`✅ Парсинг завершен! Получено ${allProducts.length} товаров`);
+            
+            // Выводим статистику запросов
+            const successRate = (this.requestStats.successfulRequests / this.requestStats.totalRequests * 100).toFixed(1);
+            this.log(`📊 Статистика запросов:`);
+            this.log(`   Всего запросов: ${this.requestStats.totalRequests}`);
+            this.log(`   Успешных: ${this.requestStats.successfulRequests}`);
+            this.log(`   Неудачных: ${this.requestStats.failedRequests}`);
+            this.log(`   Процент успеха: ${successRate}%`);
+            
             return allProducts;
 
         } catch (error) {
@@ -446,6 +516,41 @@ class HotlineParser {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Адаптивная задержка в зависимости от статистики запросов
+    getAdaptiveDelay() {
+        const baseDelay = 500; // базовая задержка между батчами
+        
+        // Если есть последовательные ошибки, увеличиваем задержку
+        if (this.requestStats.consecutiveErrors > 0) {
+            const multiplier = Math.min(this.requestStats.consecutiveErrors * 2, 10);
+            return baseDelay * multiplier;
+        }
+        
+        // Если успешность запросов высокая, уменьшаем задержку
+        if (this.requestStats.totalRequests > 10) {
+            const successRate = this.requestStats.successfulRequests / this.requestStats.totalRequests;
+            if (successRate > 0.95) {
+                return Math.max(baseDelay * 0.5, 200); // минимум 200мс
+            }
+        }
+        
+        return baseDelay;
+    }
+
+    // Обновление статистики запросов
+    updateRequestStats(success) {
+        this.requestStats.totalRequests++;
+        
+        if (success) {
+            this.requestStats.successfulRequests++;
+            this.requestStats.consecutiveErrors = 0;
+        } else {
+            this.requestStats.failedRequests++;
+            this.requestStats.consecutiveErrors++;
+            this.requestStats.lastErrorTime = Date.now();
+        }
+    }
+
     // Метод для получения информации о конкретном товаре
     async getProductDetails(productId) {
         // Здесь можно добавить логику для получения детальной информации о товаре
@@ -467,37 +572,221 @@ class HotlineParser {
             product.title.toLowerCase().includes(term)
         );
     }
+
+    // Метод для настройки оптимального размера батча
+    getOptimalBatchSize() {
+        // Можно настроить в зависимости от производительности сервера
+        // и ограничений API
+        return 25;
+    }
+
+    // Чтение категорий из файла
+    async loadCategoriesFromFile(filename = 'categories.txt') {
+        try {
+            const content = await fs.readFile(filename, 'utf8');
+            const categories = content
+                .split('\n')
+                .map(line => line.trim())
+                .filter(line => line.length > 0 && !line.startsWith('#'))
+                .filter(line => line.includes('hotline.ua'));
+            
+            this.log(`📁 Загружено ${categories.length} категорий из файла ${filename}`);
+            return categories;
+        } catch (error) {
+            this.log(`❌ Ошибка при чтении файла категорий: ${error.message}`);
+            throw error;
+        }
+    }
+
+    // Парсинг всех категорий
+    async parseAllCategories(categories, saveProgressively = true, batchSize = 15) {
+        const allResults = {};
+        let totalProducts = 0;
+        
+        this.log(`🔄 Начинаем парсинг ${categories.length} категорий...`);
+        
+        for (let i = 0; i < categories.length; i++) {
+            const categoryUrl = categories[i];
+            const categoryName = this.extractPathFromUrl(categoryUrl);
+            
+            this.log(`\n📦 [${i + 1}/${categories.length}] Обрабатываем категорию: ${categoryName}`);
+            
+            try {
+                // Сбрасываем статистику для каждой категории
+                this.requestStats = {
+                    totalRequests: 0,
+                    successfulRequests: 0,
+                    failedRequests: 0,
+                    lastErrorTime: null,
+                    consecutiveErrors: 0
+                };
+                
+                const products = await this.getAllProducts(
+                    saveProgressively, 
+                    25, 
+                    batchSize, 
+                    categoryUrl
+                );
+                
+                allResults[categoryName] = {
+                    url: categoryUrl,
+                    products: products,
+                    count: products.length
+                };
+                
+                totalProducts += products.length;
+                
+                this.log(`✅ Категория ${categoryName}: получено ${products.length} товаров`);
+                
+                // Сохраняем отдельный файл для каждой категории
+                const filename = `hotline-${categoryName.replace(/[^a-zA-Z0-9]/g, '-')}.json`;
+                await this.saveToFile(products, filename);
+                
+                // Небольшая пауза между категориями
+                if (i < categories.length - 1) {
+                    this.log('⏱️ Пауза между категориями...');
+                    await this.delay(2000);
+                }
+                
+            } catch (error) {
+                this.log(`❌ Ошибка при парсинге категории ${categoryName}: ${error.message}`);
+                allResults[categoryName] = {
+                    url: categoryUrl,
+                    products: [],
+                    count: 0,
+                    error: error.message
+                };
+            }
+        }
+        
+        this.log(`\n🎉 Парсинг завершен! Всего товаров: ${totalProducts}`);
+        
+        // Сохраняем общий отчет
+        const report = {
+            totalCategories: categories.length,
+            totalProducts: totalProducts,
+            categories: allResults,
+            timestamp: new Date().toISOString()
+        };
+        
+        await this.saveToFile(report, 'hotline-all-categories-report.json');
+        this.log('📊 Отчет сохранен в hotline-all-categories-report.json');
+        
+        return allResults;
+    }
+
+    // Метод для тестирования производительности с разными размерами батчей
+    async testBatchPerformance(maxBatchSize = 25) {
+        this.log('🧪 Тестируем производительность с разными размерами батчей...');
+        
+        const results = [];
+        
+        for (let batchSize = 1; batchSize <= maxBatchSize; batchSize++) {
+            this.log(`\n📊 Тестируем батч размером ${batchSize}...`);
+            
+            const startTime = Date.now();
+            
+            try {
+                // Тестируем на первых 3 страницах
+                const testProducts = await this.getAllProducts(false, 1, batchSize);
+                const endTime = Date.now();
+                const duration = (endTime - startTime) / 1000;
+                
+                results.push({
+                    batchSize,
+                    duration,
+                    productsCount: testProducts.length,
+                    speed: testProducts.length / duration
+                });
+                
+                this.log(`✅ Батч ${batchSize}: ${duration.toFixed(2)}с, ${testProducts.length} товаров, ${(testProducts.length / duration).toFixed(1)} товаров/с`);
+                
+            } catch (error) {
+                this.log(`❌ Ошибка с батчем ${batchSize}: ${error.message}`);
+                break; // Прерываем тест при ошибке
+            }
+        }
+        
+        // Находим оптимальный размер батча
+        const optimal = results.reduce((best, current) => 
+            current.speed > best.speed ? current : best
+        );
+        
+        this.log(`\n🏆 Оптимальный размер батча: ${optimal.batchSize} (${optimal.speed.toFixed(1)} товаров/с)`);
+        
+        return {
+            results,
+            optimal
+        };
+    }
 }
 
 // Основная функция для запуска парсера
 async function main() {
     const parser = new HotlineParser();
     
+    // Настройки парсинга
+    const TEST_PERFORMANCE = false; // Установите true для тестирования производительности
+    const BATCH_SIZE = 15; // Размер батча для параллельной обработки
+    const PARSE_ALL_CATEGORIES = true; // Установите true для парсинга всех категорий из файла
+    const SINGLE_CATEGORY_URL = 'https://hotline.ua/mobile/mobilnye-telefony-i-smartfony/'; // URL для парсинга одной категории
+    
     try {
-        // Получаем все товары с постепенным сохранением
-        // saveProgressively = true - включить постепенное сохранение
-        // saveInterval = 5 - сохранять каждые 5 страниц
-        const products = await parser.getAllProducts(true, 5);
+        if (TEST_PERFORMANCE) {
+            // Тестируем производительность с разными размерами батчей
+            await parser.testBatchPerformance(15);
+            return;
+        }
         
-        // Сохраняем в CSV (если нужно)
-        await parser.saveToCSV(products);
-        
-        // Примеры использования дополнительных методов
-        parser.log('\n=== Примеры фильтрации ===');
-        
-        // Фильтр по цене (от 5000 до 50000 грн)
-        const filteredByPrice = parser.filterByPrice(products, 5000, 50000);
-        parser.log(`Товары в диапазоне 5000-50000 грн: ${filteredByPrice.length}`);
-        
-        // Поиск по названию
-        const searchResults = parser.searchByName(products, 'iPhone');
-        parser.log(`Товары с "iPhone" в названии: ${searchResults.length}`);
-        
-        // Выводим первые 5 товаров для примера
-        parser.log('\n=== Первые 5 товаров ===');
-        products.slice(0, 5).forEach((product, index) => {
-            parser.log(`${index + 1}. ${product.title} - ${product.minPrice} грн`);
-        });
+        if (PARSE_ALL_CATEGORIES) {
+            // Парсим все категории из файла
+            parser.log('📁 Загружаем категории из файла...');
+            const categories = await parser.loadCategoriesFromFile('categories.txt');
+            
+            if (categories.length === 0) {
+                parser.log('❌ Не найдено категорий для парсинга');
+                return;
+            }
+            
+            // Парсим все категории
+            const allResults = await parser.parseAllCategories(categories, true, BATCH_SIZE);
+            
+            // Выводим итоговую статистику
+            parser.log('\n📊 Итоговая статистика:');
+            Object.keys(allResults).forEach(categoryName => {
+                const result = allResults[categoryName];
+                if (result.error) {
+                    parser.log(`❌ ${categoryName}: ошибка - ${result.error}`);
+                } else {
+                    parser.log(`✅ ${categoryName}: ${result.count} товаров`);
+                }
+            });
+            
+        } else {
+            // Парсим одну категорию
+            this.log('📦 Парсим одну категорию...');
+            const products = await parser.getAllProducts(true, 25, BATCH_SIZE, SINGLE_CATEGORY_URL);
+            
+            // Сохраняем в CSV (если нужно)
+            await parser.saveToCSV(products);
+            
+            // Примеры использования дополнительных методов
+            parser.log('\n=== Примеры фильтрации ===');
+            
+            // Фильтр по цене (от 5000 до 50000 грн)
+            const filteredByPrice = parser.filterByPrice(products, 5000, 50000);
+            parser.log(`Товары в диапазоне 5000-50000 грн: ${filteredByPrice.length}`);
+            
+            // Поиск по названию
+            const searchResults = parser.searchByName(products, 'iPhone');
+            parser.log(`Товары с "iPhone" в названии: ${searchResults.length}`);
+            
+            // Выводим первые 5 товаров для примера
+            parser.log('\n=== Первые 5 товаров ===');
+            products.slice(0, 5).forEach((product, index) => {
+                parser.log(`${index + 1}. ${product.title} - ${product.minPrice} грн`);
+            });
+        }
         
         // Выводим все накопленные логи
         parser.flushLogs();

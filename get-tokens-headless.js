@@ -3,7 +3,8 @@ const fs = require('fs').promises;
 
 class TokenExtractorHeadless {
     constructor() {
-        this.url = 'https://hotline.ua/ua/mobile/mobilnye-telefony-i-smartfony/';
+        // this.url = 'https://hotline.ua/ua/mobile/mobilnye-telefony-i-smartfony/';
+        this.url = 'https://hotline.ua/ua/computer/noutbuki-netbuki/';
         this.browser = null;
         this.page = null;
     }
