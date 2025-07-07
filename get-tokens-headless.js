@@ -23,8 +23,9 @@ class TokenExtractorHeadless {
                 '--disable-gpu',
                 '--disable-web-security',
                 '--disable-features=VizDisplayCompositor',
-                '--proxy=http://pfucslqf:ukpzonddbg51@38.154.227.167:5868'
+                // '--proxy=http://pfucslqf:ukpzonddbg51@38.154.227.167:5868'
             ]
+            
         });
 
         // const browser = await puppeteer.launch({
@@ -32,6 +33,11 @@ class TokenExtractorHeadless {
         //     headless: true,
         //     args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
         // });
+
+        this.page = await this.browser.newPage();
+        await this.page.goto('https://httpbin.org/ip');
+        const content = await this.page.content();
+        console.log(content);
 
         this.page = await this.browser.newPage();
         
