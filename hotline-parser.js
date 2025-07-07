@@ -11,8 +11,6 @@ class HotlineParser {
             'accept': '*/*',
             'content-type': 'application/json',
             'x-language': 'uk',
-            "x-token": `${XTOKEN}`,
-            "x-request-id": `${XREQUESTID}`,
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         };
         this.progressBar = null;
@@ -27,6 +25,10 @@ class HotlineParser {
             consecutiveErrors: 0
         };
         this.currentCategory = null;
+        this.currentTokens = {
+            'x-token': null,
+            'x-request-id': null
+        };
     }
 
     generateRequestId() {
@@ -53,8 +55,128 @@ class HotlineParser {
     getHeadersForCategory(categoryUrl) {
         return {
             ...this.baseHeaders,
-            'x-referer': categoryUrl
+            'x-referer': categoryUrl,
+            'x-token': this.currentTokens['x-token'],
+            'x-request-id': this.currentTokens['x-request-id']
         };
+    }
+
+    // Получение токенов для конкретной категории
+    async getTokensForCategory(categoryUrl) {
+        try {
+            this.log(`🔑 Получение токенов для категории: ${this.extractPathFromUrl(categoryUrl)}`);
+            
+            // Используем puppeteer для получения токенов
+            const puppeteer = require('puppeteer');
+            
+            const browser = await puppeteer.launch({
+                headless: true,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--disable-gpu',
+                    '--disable-web-security',
+                    '--disable-features=VizDisplayCompositor'
+                ]
+            });
+
+            const page = await browser.newPage();
+            
+            // Устанавливаем User-Agent
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            await page.setViewport({ width: 1920, height: 1080 });
+
+            // Перехватываем сетевые запросы
+            await page.setRequestInterception(true);
+            
+            const requests = [];
+            page.on('request', request => {
+                requests.push({
+                    url: request.url(),
+                    headers: request.headers(),
+                    method: request.method()
+                });
+                request.continue();
+            });
+
+            // Переходим на страницу категории
+            await page.goto(categoryUrl, { 
+                waitUntil: 'networkidle2',
+                timeout: 30000 
+            });
+
+            // Ждем загрузки всех ресурсов
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            // Ищем GraphQL запросы с токенами
+            const graphqlRequests = requests.filter(req => 
+                req.url.includes('graphql') || 
+                req.url.includes('api') ||
+                req.headers['x-token'] ||
+                req.headers['x-request-id']
+            );
+
+            let tokens = {
+                'x-token': null,
+                'x-request-id': null
+            };
+
+            // Ищем токены в заголовках запросов
+            for (const req of graphqlRequests) {
+                if (req.headers['x-token']) {
+                    tokens['x-token'] = req.headers['x-token'];
+                }
+                if (req.headers['x-request-id']) {
+                    tokens['x-request-id'] = req.headers['x-request-id'];
+                }
+            }
+
+            // Если токены не найдены, ищем в JavaScript коде
+            if (!tokens['x-token'] || !tokens['x-request-id']) {
+                const pageContent = await page.content();
+                
+                const xTokenMatch = pageContent.match(/x-token["\s]*:["\s]*["']([^"']+)["']/i);
+                if (xTokenMatch) {
+                    tokens['x-token'] = xTokenMatch[1];
+                }
+
+                const xRequestIdMatch = pageContent.match(/x-request-id["\s]*:["\s]*["']([^"']+)["']/i);
+                if (xRequestIdMatch) {
+                    tokens['x-request-id'] = xRequestIdMatch[1];
+                }
+            }
+
+            // Генерируем x-request-id если не найден
+            if (!tokens['x-request-id']) {
+                tokens['x-request-id'] = this.generateRequestId();
+            }
+
+            await browser.close();
+
+            if (tokens['x-token'] && tokens['x-request-id']) {
+                this.currentTokens = tokens;
+                this.log(`✅ Токены получены: x-token=${tokens['x-token'].substring(0, 10)}..., x-request-id=${tokens['x-request-id'].substring(0, 10)}...`);
+                return tokens;
+            } else {
+                throw new Error('Не удалось получить токены для категории');
+            }
+
+        } catch (error) {
+            this.log(`❌ Ошибка при получении токенов: ${error.message}`);
+            
+            // Используем дефолтные токены как fallback
+            this.currentTokens = {
+                'x-token': XTOKEN,
+                'x-request-id': XREQUESTID
+            };
+            
+            this.log(`🔄 Используем дефолтные токены как fallback`);
+            return this.currentTokens;
+        }
     }
 
     initProgressBar(totalPages) {
@@ -302,6 +424,19 @@ class HotlineParser {
         try {
             const categoryName = categoryUrl ? this.extractPathFromUrl(categoryUrl) : 'телефоны';
             this.log(`🚀 Начинаем парсинг товаров категории: ${categoryName}`);
+            
+            // Устанавливаем токены (если не установлены)
+            if (!this.currentTokens['x-token'] || !this.currentTokens['x-request-id']) {
+                if (categoryUrl) {
+                    await this.getTokensForCategory(categoryUrl);
+                } else {
+                    // Используем дефолтные токены для обратной совместимости
+                    this.currentTokens = {
+                        'x-token': XTOKEN,
+                        'x-request-id': XREQUESTID
+                    };
+                }
+            }
             
             // Получаем первую страницу для определения общего количества страниц
             const firstPageData = await this.getProducts(currentPage, 48, categoryUrl);
@@ -599,7 +734,7 @@ class HotlineParser {
     }
 
     // Парсинг всех категорий
-    async parseAllCategories(categories, saveProgressively = true, batchSize = 15) {
+    async parseAllCategories(categories, saveProgressively = true, batchSize = 15, autoGetTokens = true) {
         const allResults = {};
         let totalProducts = 0;
         
@@ -620,6 +755,11 @@ class HotlineParser {
                     lastErrorTime: null,
                     consecutiveErrors: 0
                 };
+                
+                // Получаем актуальные токены для текущей категории (если включено)
+                if (autoGetTokens) {
+                    await this.getTokensForCategory(categoryUrl);
+                }
                 
                 const products = await this.getAllProducts(
                     saveProgressively, 
@@ -730,6 +870,7 @@ async function main() {
     const BATCH_SIZE = 15; // Размер батча для параллельной обработки
     const PARSE_ALL_CATEGORIES = true; // Установите true для парсинга всех категорий из файла
     const SINGLE_CATEGORY_URL = 'https://hotline.ua/mobile/mobilnye-telefony-i-smartfony/'; // URL для парсинга одной категории
+    const AUTO_GET_TOKENS = true; // Автоматическое получение токенов для каждой категории
     
     try {
         if (TEST_PERFORMANCE) {
@@ -749,7 +890,7 @@ async function main() {
             }
             
             // Парсим все категории
-            const allResults = await parser.parseAllCategories(categories, true, BATCH_SIZE);
+            const allResults = await parser.parseAllCategories(categories, true, BATCH_SIZE, AUTO_GET_TOKENS);
             
             // Выводим итоговую статистику
             parser.log('\n📊 Итоговая статистика:');
