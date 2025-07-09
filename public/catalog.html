@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог товаров - BIFO</title>
+    <link rel="icon" type="image/png" href="/images/bifo-logo.png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/bifo-logo.png" alt="BIFO" height="40" class="me-2">
+                <span class="fw-bold">BIFO</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Search Bar -->
+                <form class="d-flex mx-auto" style="max-width: 500px;">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="searchInput" placeholder="Поиск товаров..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Navigation -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-user me-1"></i>Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="cartBtn">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Корзина <span class="badge bg-danger" id="cartCount">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mt-5 pt-4">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar Filters -->
+                <div class="col-lg-3 col-md-4">
+                    <div class="card sticky-top" style="top: 100px;">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры</h5>
+                        </div>
+                        <div class="card-body">
+                            <!-- Category Filter -->
+                            <div class="mb-4">
+                                <h6>Категория</h6>
+                                <select class="form-select" id="categoryFilter">
+                                    <option value="">Все категории</option>
+                                </select>
+                            </div>
+
+                            <!-- Brand Filter -->
+                            <div class="mb-4">
+                                <h6>Бренд</h6>
+                                <select class="form-select" id="brandFilter">
+                                    <option value="">Все бренды</option>
+                                </select>
+                            </div>
+
+                            <!-- Price Range -->
+                            <div class="mb-4">
+                                <h6>Цена</h6>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <input type="number" class="form-control" id="minPrice" placeholder="От">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" class="form-control" id="maxPrice" placeholder="До">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sort Options -->
+                            <div class="mb-4">
+                                <h6>Сортировка</h6>
+                                <select class="form-select" id="sortFilter">
+                                    <option value="createdAt_desc">Новинки</option>
+                                    <option value="price_asc">Цена: по возрастанию</option>
+                                    <option value="price_desc">Цена: по убыванию</option>
+                                    <option value="sales_desc">По популярности</option>
+                                    <option value="title_asc">По названию А-Я</option>
+                                </select>
+                            </div>
+
+                            <!-- Additional Filters -->
+                            <div class="mb-4">
+                                <h6>Дополнительно</h6>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="featuredFilter">
+                                    <label class="form-check-label" for="featuredFilter">
+                                        Только акции
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="saleFilter">
+                                    <label class="form-check-label" for="saleFilter">
+                                        Только новинки
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Apply Filters Button -->
+                            <button class="btn btn-primary w-100" onclick="catalogApp.applyFilters()">
+                                <i class="fas fa-search me-2"></i>Применить фильтры
+                            </button>
+
+                            <!-- Clear Filters Button -->
+                            <button class="btn btn-outline-secondary w-100 mt-2" onclick="catalogApp.clearFilters()">
+                                <i class="fas fa-times me-2"></i>Очистить фильтры
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="col-lg-9 col-md-8">
+                    <!-- Header with results count and view options -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2>Каталог товаров</h2>
+                            <p class="text-muted mb-0">Найдено товаров: <span id="resultsCount">0</span></p>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="btn-group me-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" id="gridView">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="listView">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                            </div>
+                            <select class="form-select" style="width: auto;" id="itemsPerPage">
+                                <option value="12">12 на странице</option>
+                                <option value="24">24 на странице</option>
+                                <option value="48">48 на странице</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Loading Spinner -->
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Загрузка...</span>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div id="productsGrid" class="row">
+                        <!-- Products will be loaded here -->
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Products pagination" class="mt-4">
+                        <ul class="pagination justify-content-center" id="pagination">
+                            <!-- Pagination will be generated here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>BIFO</h5>
+                    <p>Ваш надежный партнер в покупках. Огромный ассортимент, качественные товары, быстрая доставка.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Информация</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50">О нас</a></li>
+                        <li><a href="#" class="text-white-50">Доставка</a></li>
+                        <li><a href="#" class="text-white-50">Оплата</a></li>
+                        <li><a href="#" class="text-white-50">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Контакты</h5>
+                    <p class="mb-1"><i class="fas fa-phone me-2"></i>+7 (999) 123-45-67</p>
+                    <p class="mb-1"><i class="fas fa-envelope me-2"></i>info@bifo.ru</p>
+                    <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Москва, Россия</p>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 BIFO. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Вход в систему</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs" id="authTabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#loginTab">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#registerTab">Регистрация</a>
+                        </li>
+                    </ul>
+                    
+                    <div class="tab-content mt-3">
+                        <!-- Login Tab -->
+                        <div class="tab-pane fade show active" id="loginTab">
+                            <form id="loginForm">
+                                <div class="mb-3">
+                                    <label for="loginEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="loginEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loginPassword" class="form-label">Пароль</label>
+                                    <input type="password" class="form-control" id="loginPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Войти</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Register Tab -->
+                        <div class="tab-pane fade" id="registerTab">
+                            <form id="registerForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="registerFirstName" class="form-label">Имя</label>
+                                        <input type="text" class="form-control" id="registerFirstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="registerLastName" class="form-label">Фамилия</label>
+                                        <input type="text" class="form-control" id="registerLastName" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="registerEmail" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPhone" class="form-label">Телефон</label>
+                                    <input type="tel" class="form-control" id="registerPhone">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="registerPassword" class="form-label">Пароль</label>
+                                    <input type="password" class="form-control" id="registerPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Зарегистрироваться</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Корзина</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="cartItems">
+                        <!-- Cart items will be loaded here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h5>Итого: <span id="cartTotal">0 ₽</span></h5>
+                        <button type="button" class="btn btn-primary" id="checkoutBtn">Оформить заказ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/catalog.js"></script>
+</body>
+</html> 
