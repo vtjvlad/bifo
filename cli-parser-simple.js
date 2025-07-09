@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Отключаем проверку SSL сертификатов
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const inquirer = require('inquirer');
 const ora = require('ora');
 const figlet = require('figlet');

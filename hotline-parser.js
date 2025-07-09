@@ -1,3 +1,6 @@
+// Отключаем проверку SSL сертификатов
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 const axios = require('axios');
 const fs = require('fs').promises;
 const cliProgress = require('cli-progress');
@@ -13,6 +16,12 @@ class HotlineParser {
             'x-language': 'uk',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         };
+        
+        // Настройка axios для игнорирования SSL ошибок
+        const https = require('https');
+        axios.defaults.httpsAgent = new https.Agent({
+            rejectUnauthorized: false
+        });
         this.progressBar = null;
         this.startTime = null;
         this.logBuffer = [];
@@ -96,7 +105,10 @@ class HotlineParser {
                     '--no-zygote',
                     '--disable-gpu',
                     '--disable-web-security',
-                    '--disable-features=VizDisplayCompositor'
+                    '--disable-features=VizDisplayCompositor',
+                    '--ignore-certificate-errors',
+                    '--ignore-ssl-errors',
+                    '--ignore-certificate-errors-spki-list'
                 ]
             });
 
@@ -123,6 +135,17 @@ class HotlineParser {
             await page.goto(categoryUrl, { 
                 waitUntil: 'networkidle2',
                 timeout: 30000 
+            }).catch(async (error) => {
+                // Если есть SSL ошибка, пробуем с игнорированием ошибок
+                if (error.message.includes('certificate') || error.message.includes('SSL')) {
+                    this.log('🔄 SSL ошибка, пробуем с игнорированием сертификатов...');
+                    await page.goto(categoryUrl, { 
+                        waitUntil: 'networkidle2',
+                        timeout: 30000 
+                    });
+                } else {
+                    throw error;
+                }
             });
 
             // Ждем загрузки всех ресурсов
@@ -392,7 +415,10 @@ class HotlineParser {
                 variables: variables,
                 query: query
             }, {
-                headers: headers
+                headers: headers,
+                httpsAgent: new (require('https').Agent)({
+                    rejectUnauthorized: false
+                })
             });
 
             // Проверяем структуру ответа
