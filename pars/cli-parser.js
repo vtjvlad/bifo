@@ -121,7 +121,7 @@ class HotlineCLI {
             let categories;
             
             try {
-                const content = await fs.readFile('categories.txt', 'utf8');
+                const content = await fs.readFile('tctgr/categories.txt', 'utf8');
                 categories = content
                     .split('\n')
                     .map(line => line.trim())

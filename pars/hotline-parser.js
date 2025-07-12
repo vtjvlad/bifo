@@ -572,7 +572,7 @@ class HotlineParser {
         }
     }
 
-    async saveToFileProgressive(products, filename = 'JSON/hotline-products.json') {
+    async saveToFileProgressive(products, filename = '../JSON/hotline-products.json') {
         try {
             // Если файл существует, читаем его и добавляем новые данные
             let existingProducts = [];
@@ -745,7 +745,7 @@ class HotlineParser {
     }
 
     // Чтение категорий из файла
-    async loadCategoriesFromFile(filename = 'categories.txt') {
+    async loadCategoriesFromFile(filename = './tctgr/categories.txt') {
         try {
             const content = await fs.readFile(filename, 'utf8');
             const categories = content
