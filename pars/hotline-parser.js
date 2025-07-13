@@ -838,7 +838,7 @@ class HotlineParser {
         const report = {
             totalCategories: categories.length,
             totalProducts: totalProducts,
-            categories: allResults,
+            // categories: allResults,
             timestamp: new Date().toISOString()
         };
         
