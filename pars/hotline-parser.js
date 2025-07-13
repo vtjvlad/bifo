@@ -745,7 +745,7 @@ class HotlineParser {
     }
 
     // Чтение категорий из файла
-    async loadCategoriesFromFile(filename = './tctgr/categories.txt') {
+    async loadCategoriesFromFile(filename = './tctgr/categories/categories.txt') {
         try {
             const content = await fs.readFile(filename, 'utf8');
             const categories = content
