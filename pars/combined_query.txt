@@ -1,0 +1,104 @@
+query getCatalogProductsWithOffers($path: String!, $cityId: Int!, $sort: String, $showFirst: String, $phrase: String, $itemsPerPage: Int, $page: Int, $filters: [Int], $excludedFilters: [Int], $priceMin: Int, $priceMax: Int) {
+  byPathSectionQueryProducts(path: $path, cityId: $cityId, sort: $sort, showFirst: $showFirst, phrase: $phrase, itemsPerPage: $itemsPerPage, page: $page, filters: $filters, excludedFilters: $excludedFilters, priceMin: $priceMin, priceMax: $priceMax) {
+    collection {
+      _id
+      title
+      date
+      vendor {
+        title
+        __typename
+      }
+      section {
+        _id
+        productCategoryName
+        __typename
+      }
+      isPromo
+      toOfficial
+      promoBid
+      lineName
+      linePathNew
+      imagesCount
+      videosCount
+      techShortSpecifications
+      techShortSpecificationsList
+      reviewsCount
+      questionsCount
+      url
+      imageLinks
+      minPrice
+      maxPrice
+      salesCount
+      isNew
+      colorsProduct
+      offerCount
+      singleOffer {
+        _id
+        conversionUrl
+        firmId
+        firmTitle
+        price
+        firmExtraInfo
+        delivery {
+          deliveryMethods
+          hasFreeDelivery
+          isSameCity
+          name
+          __typename
+        }
+        __typename
+      }
+      madeInUkraine
+      userSubscribed
+      # Добавляем предложения для каждого продукта
+      offers(first: 1000) {
+        totalCount
+        edges {
+          node {
+            _id
+            condition
+            conditionId
+            conversionUrl
+            descriptionFull
+            descriptionShort
+            firmId
+            firmLogo
+            firmTitle
+            firmExtraInfo
+            guaranteeTerm
+            guaranteeTermName
+            guaranteeType
+            hasBid
+            historyId
+            payment
+            price
+            reviewsNegativeNumber
+            reviewsPositiveNumber
+            bid
+            shipping
+            delivery {
+              deliveryMethods
+              hasFreeDelivery
+              isSameCity
+              name
+              countryCodeFirm
+              __typename
+            }
+            sortPlace
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    paginationInfo {
+      lastPage
+      totalCount
+      itemsPerPage
+      __typename
+    }
+    __typename
+  }
+} 

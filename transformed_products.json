@@ -1,0 +1,241 @@
+{
+  "metadata": {
+    "totalProducts": 2,
+    "processedAt": "2025-07-14T02:23:57.959Z",
+    "sourceFile": "test.json"
+  },
+  "products": [
+    {
+      "productInfo": {
+        "id": 25775722,
+        "title": "LOQ 15ARP9 (83JC009CUS)",
+        "releaseDate": "2024-09-26",
+        "vendor": "Lenovo",
+        "category": {
+          "id": 12,
+          "name": "Ноутбуки"
+        },
+        "line": {
+          "name": "LOQ 15ARP9",
+          "path": "/computer/noutbuki-netbuki/294417-21297811/"
+        },
+        "url": "/computer-noutbuki-netbuki/lenovo-loq-15arp9-83jc009cus/"
+      },
+      "marketing": {
+        "isPromo": false,
+        "isOfficial": false,
+        "isNew": false,
+        "madeInUkraine": false,
+        "userSubscribed": false
+      },
+      "media": {
+        "imagesCount": 3,
+        "videosCount": 0,
+        "images": [
+          {
+            "id": 1,
+            "thumbnail": "https://hotline.ua/img/tx/510/5108970810.jpg",
+            "basic": "https://hotline.ua/img/tx/510/5108970811.jpg",
+            "small": "https://hotline.ua/img/tx/510/510897081_s265.jpg",
+            "large": "https://hotline.ua/img/tx/510/5108970815.jpg"
+          },
+          {
+            "id": 2,
+            "thumbnail": "https://hotline.ua/img/tx/510/5109037760.jpg",
+            "basic": "https://hotline.ua/img/tx/510/5109037761.jpg",
+            "small": "https://hotline.ua/img/tx/510/510903776_s265.jpg",
+            "large": "https://hotline.ua/img/tx/510/5109037765.jpg"
+          },
+          {
+            "id": 3,
+            "thumbnail": "https://hotline.ua/img/tx/510/5109037770.jpg",
+            "basic": "https://hotline.ua/img/tx/510/5109037771.jpg",
+            "small": "https://hotline.ua/img/tx/510/510903777_s265.jpg",
+            "large": "https://hotline.ua/img/tx/510/5109037775.jpg"
+          }
+        ],
+        "colors": []
+      },
+      "specifications": {
+        "raw": [
+          "Ноутбук",
+          " Дисплей: 15,6\"",
+          "IPS",
+          "1920x1080",
+          "144 Гц",
+          " Процесор: AMD Ryzen 7 7435HS",
+          " 3,1 ГГц",
+          " Відеокарта: NVIDIA GeForce RTX 4070",
+          " ОЗП: 16 ГБ",
+          " DDR5",
+          " SSD: 512 ГБ",
+          " ОС: Windows 11 Home",
+          " Вага: 2,38 кг"
+        ],
+        "structured": {
+          "general": [
+            "Ноутбук",
+            "IPS",
+            "1920x1080",
+            "144 Гц",
+            "3,1 ГГц",
+            "DDR5"
+          ],
+          "Дисплей": "15,6\"",
+          "Процесор": "AMD Ryzen 7 7435HS",
+          "Відеокарта": "NVIDIA GeForce RTX 4070",
+          "ОЗП": "16 ГБ",
+          "SSD": "512 ГБ",
+          "ОС": "Windows 11 Home",
+          "Вага": "2,38 кг"
+        }
+      },
+      "engagement": {
+        "reviewsCount": 1,
+        "questionsCount": 0,
+        "salesCount": 0
+      },
+      "pricing": {
+        "minPrice": 47899,
+        "maxPrice": 72580,
+        "offerCount": 44,
+        "priceRange": 24681
+      }
+    },
+    {
+      "productInfo": {
+        "id": 25731565,
+        "title": "iPhone 16 Pro Max 512GB Black Titanium (MYX03)",
+        "releaseDate": "2024-09-10",
+        "vendor": "Apple",
+        "category": {
+          "id": 11,
+          "name": "Смартфоны и мобильные телефоны"
+        },
+        "line": {
+          "name": "iPhone 16 Pro Max",
+          "path": "/mobile/mobilnye-telefony-i-smartfony/294245-20954479/"
+        },
+        "url": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-black-titanium-myx03/"
+      },
+      "marketing": {
+        "isPromo": false,
+        "isOfficial": false,
+        "isNew": false,
+        "madeInUkraine": false,
+        "userSubscribed": false
+      },
+      "media": {
+        "imagesCount": 4,
+        "videosCount": 3,
+        "images": [
+          {
+            "id": 1,
+            "thumbnail": "https://hotline.ua/img/tx/484/4844901730.jpg",
+            "basic": "https://hotline.ua/img/tx/484/4844901731.jpg",
+            "small": "https://hotline.ua/img/tx/484/484490173_s265.jpg",
+            "large": "https://hotline.ua/img/tx/484/4844901735.jpg"
+          },
+          {
+            "id": 2,
+            "thumbnail": "https://hotline.ua/img/tx/484/4844901740.jpg",
+            "basic": "https://hotline.ua/img/tx/484/4844901741.jpg",
+            "small": "https://hotline.ua/img/tx/484/484490174_s265.jpg",
+            "large": "https://hotline.ua/img/tx/484/4844901745.jpg"
+          },
+          {
+            "id": 3,
+            "thumbnail": "https://hotline.ua/img/tx/484/4844901750.jpg",
+            "basic": "https://hotline.ua/img/tx/484/4844901751.jpg",
+            "small": "https://hotline.ua/img/tx/484/484490175_s265.jpg",
+            "large": "https://hotline.ua/img/tx/484/4844901755.jpg"
+          },
+          {
+            "id": 4,
+            "thumbnail": "https://hotline.ua/img/tx/484/4844901760.jpg",
+            "basic": "https://hotline.ua/img/tx/484/4844901761.jpg",
+            "small": "https://hotline.ua/img/tx/484/484490176_s265.jpg",
+            "large": "https://hotline.ua/img/tx/484/4844901765.jpg"
+          }
+        ],
+        "colors": [
+          {
+            "id": 25731568,
+            "name": "Золотистий",
+            "alias": "gold",
+            "image": "https://hotline.ua/img/tx/484/4844901771.jpg",
+            "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-desert-titanium-myx23/"
+          },
+          {
+            "id": 25731565,
+            "name": "Чорний",
+            "alias": "black",
+            "image": "https://hotline.ua/img/tx/484/4844901731.jpg",
+            "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-black-titanium-myx03/"
+          },
+          {
+            "id": 25731566,
+            "name": "Білий",
+            "alias": "white",
+            "image": "https://hotline.ua/img/tx/484/4844902171.jpg",
+            "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-white-titanium-myx13/"
+          },
+          {
+            "id": 25731567,
+            "name": "сірий",
+            "alias": "silver",
+            "image": "https://hotline.ua/img/tx/484/4844902131.jpg",
+            "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-natural-titanium-myx33/"
+          }
+        ]
+      },
+      "specifications": {
+        "raw": [
+          "Смартфон",
+          " екран: 6,9\"",
+          " OLED",
+          " 2868x1320",
+          " 120 Гц",
+          " пам'ять: 512 ГБ",
+          " ОЗП: 8 ГБ",
+          " процесор: Apple A18 Pro",
+          " ОС: iOS 18",
+          " камера: 48 (f/1.78, ширококутна) + ...",
+          " корпус: скло/титан",
+          "227 г",
+          "товщина 8,25 мм",
+          " NFC: + (Apple Pay)"
+        ],
+        "structured": {
+          "general": [
+            "Смартфон",
+            "OLED",
+            "2868x1320",
+            "120 Гц",
+            "227 г",
+            "товщина 8,25 мм"
+          ],
+          "екран": "6,9\"",
+          "пам'ять": "512 ГБ",
+          "ОЗП": "8 ГБ",
+          "процесор": "Apple A18 Pro",
+          "ОС": "iOS 18",
+          "камера": "48 (f/1.78, ширококутна) + ...",
+          "корпус": "скло/титан",
+          "NFC": "+ (Apple Pay)"
+        }
+      },
+      "engagement": {
+        "reviewsCount": 3,
+        "questionsCount": 1,
+        "salesCount": 0
+      },
+      "pricing": {
+        "minPrice": 59400,
+        "maxPrice": 86299,
+        "offerCount": 100,
+        "priceRange": 26899
+      }
+    }
+  ]
+}

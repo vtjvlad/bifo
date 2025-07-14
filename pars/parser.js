@@ -351,18 +351,49 @@ class HotlineParser {
                             }
                             __typename
                         }
-                            offers{    
-                            totalCount 
+                        offers(first: 1000) {
+                            totalCount
                             edges {
-                             node {
-                              id 
-                              price 
-                              }
-                               __typename 
-                               } 
-                               __typename 
-                               }
-                        madeInUkraine
+                            node {
+                                _id
+                                condition
+                                conditionId
+                                conversionUrl
+                                descriptionFull
+                                descriptionShort
+                                firmId
+                                firmLogo
+                                firmTitle
+                                firmExtraInfo
+                                guaranteeTerm
+                                guaranteeTermName
+                                guaranteeType
+                                hasBid
+                                historyId
+                                payment
+                                price
+                                reviewsNegativeNumber
+                                reviewsPositiveNumber
+                                bid
+                                shipping
+                                delivery {
+                                deliveryMethods
+                                hasFreeDelivery
+                                isSameCity
+                                name
+                                countryCodeFirm
+                                __typename
+                                }
+                                sortPlace
+                                __typename
+                            }
+                            __typename
+                            }
+                            __typename
+                        }
+                        __typename
+                        }
+                            madeInUkraine
                         userSubscribed
                         __typename
                     }

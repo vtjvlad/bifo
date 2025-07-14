@@ -1,0 +1,46 @@
+query getOffers($path: String!, $cityId: Int!) {
+  byPathQueryProduct(path: $path, cityId: $cityId) {
+    id
+    offers(first: 1000) {
+      totalCount
+      edges {
+        node {
+          _id
+          condition
+          conditionId
+          conversionUrl
+          descriptionFull
+          descriptionShort
+          firmId
+          firmLogo
+          firmTitle
+          firmExtraInfo
+          guaranteeTerm
+          guaranteeTermName
+          guaranteeType
+          hasBid
+          historyId
+          payment
+          price
+          reviewsNegativeNumber
+          reviewsPositiveNumber
+          bid
+          shipping
+          delivery {
+            deliveryMethods
+            hasFreeDelivery
+            isSameCity
+            name
+            countryCodeFirm
+            __typename
+          }
+          sortPlace
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+  }
+}

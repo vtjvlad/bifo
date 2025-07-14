@@ -1,0 +1,343 @@
+[
+    {
+    "id": 25775722,
+    "title": "LOQ 15ARP9 (83JC009CUS)",
+    "date": "2024-09-26",
+    "vendor": {
+      "title": "Lenovo",
+      "__typename": "Vendor"
+    },
+    "section": {
+      "_id": 12,
+      "productCategoryName": "Ноутбуки",
+      "__typename": "Section"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "promoBid": null,
+    "lineName": "LOQ 15ARP9",
+    "linePathNew": "/computer/noutbuki-netbuki/294417-21297811/",
+    "imagesCount": 3,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Ноутбук",
+      " Дисплей: 15,6\"",
+      "IPS",
+      "1920x1080",
+      "144 Гц",
+      " Процесор: AMD Ryzen 7 7435HS",
+      " 3,1 ГГц",
+      " Відеокарта: NVIDIA GeForce RTX 4070",
+      " ОЗП: 16 ГБ",
+      " DDR5",
+      " SSD: 512 ГБ",
+      " ОС: Windows 11 Home",
+      " Вага: 2,38 кг"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Ноутбук",
+        "isNoMargin": false
+      },
+      {
+        "key": "Дисплей",
+        "value": "15,6\"",
+        "isNoMargin": true
+      },
+      {
+        "value": "IPS",
+        "isNoMargin": true
+      },
+      {
+        "value": "1920x1080",
+        "isNoMargin": true
+      },
+      {
+        "value": "144 Гц",
+        "isNoMargin": false
+      },
+      {
+        "key": "Процесор",
+        "value": "AMD Ryzen 7 7435HS",
+        "isNoMargin": true
+      },
+      {
+        "value": "3,1 ГГц",
+        "isNoMargin": false
+      },
+      {
+        "key": "Відеокарта",
+        "value": "NVIDIA GeForce RTX 4070",
+        "isNoMargin": false
+      },
+      {
+        "key": "ОЗП",
+        "value": "16 ГБ",
+        "isNoMargin": true
+      },
+      {
+        "value": "DDR5",
+        "isNoMargin": false
+      },
+      {
+        "key": "SSD",
+        "value": "512 ГБ",
+        "isNoMargin": false
+      },
+      {
+        "key": "ОС",
+        "value": "Windows 11 Home",
+        "isNoMargin": false
+      },
+      {
+        "key": "Вага",
+        "value": "2,38 кг",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 1,
+    "questionsCount": 0,
+    "url": "/computer-noutbuki-netbuki/lenovo-loq-15arp9-83jc009cus/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/510/5108970810.jpg",
+        "basic": "https://hotline.ua/img/tx/510/5108970811.jpg",
+        "small": "https://hotline.ua/img/tx/510/510897081_s265.jpg",
+        "big": "https://hotline.ua/img/tx/510/5108970815.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/510/5109037760.jpg",
+        "basic": "https://hotline.ua/img/tx/510/5109037761.jpg",
+        "small": "https://hotline.ua/img/tx/510/510903776_s265.jpg",
+        "big": "https://hotline.ua/img/tx/510/5109037765.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/510/5109037770.jpg",
+        "basic": "https://hotline.ua/img/tx/510/5109037771.jpg",
+        "small": "https://hotline.ua/img/tx/510/510903777_s265.jpg",
+        "big": "https://hotline.ua/img/tx/510/5109037775.jpg"
+      }
+    ],
+    "minPrice": 47899,
+    "maxPrice": 72580,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 44,
+    "singleOffer": null,
+    "madeInUkraine": false,
+    "userSubscribed": false,
+    "__typename": "Product"
+    },
+    {
+    "id": 25731565,
+    "title": "iPhone 16 Pro Max 512GB Black Titanium (MYX03)",
+    "date": "2024-09-10",
+    "vendor": {
+      "title": "Apple",
+      "__typename": "Vendor"
+    },
+    "section": {
+      "_id": 11,
+      "productCategoryName": "Смартфоны и мобильные телефоны",
+      "__typename": "Section"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "promoBid": null,
+    "lineName": "iPhone 16 Pro Max",
+    "linePathNew": "/mobile/mobilnye-telefony-i-smartfony/294245-20954479/",
+    "imagesCount": 4,
+    "videosCount": 3,
+    "techShortSpecifications": [
+      "Смартфон",
+      " екран: 6,9\"",
+      " OLED",
+      " 2868x1320",
+      " 120 Гц",
+      " пам'ять: 512 ГБ",
+      " ОЗП: 8 ГБ",
+      " процесор: Apple A18 Pro",
+      " ОС: iOS 18",
+      " камера: 48 (f/1.78, ширококутна) + ...",
+      " корпус: скло/титан",
+      "227 г",
+      "товщина 8,25 мм",
+      " NFC: + (Apple Pay)"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Смартфон",
+        "isNoMargin": false
+      },
+      {
+        "key": "екран",
+        "value": "6,9\"",
+        "isNoMargin": true
+      },
+      {
+        "value": "OLED",
+        "isNoMargin": true
+      },
+      {
+        "value": "2868x1320",
+        "isNoMargin": true
+      },
+      {
+        "value": "120 Гц",
+        "isNoMargin": false
+      },
+      {
+        "key": "пам'ять",
+        "value": "512 ГБ",
+        "isNoMargin": false
+      },
+      {
+        "key": "ОЗП",
+        "value": "8 ГБ",
+        "isNoMargin": false
+      },
+      {
+        "key": "процесор",
+        "value": "Apple A18 Pro",
+        "isNoMargin": false
+      },
+      {
+        "key": "ОС",
+        "value": "iOS 18",
+        "isNoMargin": false
+      },
+      {
+        "key": "камера",
+        "value": "48 (f/1.78, ширококутна) + ...",
+        "isNoMargin": false
+      },
+      {
+        "key": "корпус",
+        "value": "скло/титан",
+        "isNoMargin": true
+      },
+      {
+        "value": "227 г",
+        "isNoMargin": true
+      },
+      {
+        "value": "товщина 8,25 мм",
+        "isNoMargin": false
+      },
+      {
+        "key": "NFC",
+        "value": "+ (Apple Pay)",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 3,
+    "questionsCount": 1,
+    "url": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-black-titanium-myx03/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/484/4844901730.jpg",
+        "basic": "https://hotline.ua/img/tx/484/4844901731.jpg",
+        "small": "https://hotline.ua/img/tx/484/484490173_s265.jpg",
+        "big": "https://hotline.ua/img/tx/484/4844901735.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/484/4844901740.jpg",
+        "basic": "https://hotline.ua/img/tx/484/4844901741.jpg",
+        "small": "https://hotline.ua/img/tx/484/484490174_s265.jpg",
+        "big": "https://hotline.ua/img/tx/484/4844901745.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/484/4844901750.jpg",
+        "basic": "https://hotline.ua/img/tx/484/4844901751.jpg",
+        "small": "https://hotline.ua/img/tx/484/484490175_s265.jpg",
+        "big": "https://hotline.ua/img/tx/484/4844901755.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/484/4844901760.jpg",
+        "basic": "https://hotline.ua/img/tx/484/4844901761.jpg",
+        "small": "https://hotline.ua/img/tx/484/484490176_s265.jpg",
+        "big": "https://hotline.ua/img/tx/484/4844901765.jpg"
+      }
+    ],
+    "minPrice": 59400,
+    "maxPrice": 86299,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [
+      {
+        "id": 25731568,
+        "title": "iPhone 16 Pro Max 512GB Desert Titanium (MYX23)",
+        "imageId": 484490177,
+        "productPath": "apple-iphone-16-pro-max-512gb-desert-titanium-myx23",
+        "sectionId": 11,
+        "colorId": 58,
+        "alias": "gold",
+        "colorName": "Золотистий",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "https://hotline.ua/img/tx/484/4844901771.jpg",
+        "pathImgSmall": "https://hotline.ua/img/tx/484/484490177_s265.jpg",
+        "pathImgBig": "https://hotline.ua/img/tx/484/4844901775.jpg",
+        "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-desert-titanium-myx23/"
+      },
+      {
+        "id": 25731565,
+        "title": "iPhone 16 Pro Max 512GB Black Titanium (MYX03)",
+        "imageId": 484490173,
+        "productPath": "apple-iphone-16-pro-max-512gb-black-titanium-myx03",
+        "sectionId": 11,
+        "colorId": 1,
+        "alias": "black",
+        "colorName": "Чорний",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "https://hotline.ua/img/tx/484/4844901731.jpg",
+        "pathImgSmall": "https://hotline.ua/img/tx/484/484490173_s265.jpg",
+        "pathImgBig": "https://hotline.ua/img/tx/484/4844901735.jpg",
+        "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-black-titanium-myx03/"
+      },
+      {
+        "id": 25731566,
+        "title": "iPhone 16 Pro Max 512GB White Titanium (MYX13)",
+        "imageId": 484490217,
+        "productPath": "apple-iphone-16-pro-max-512gb-white-titanium-myx13",
+        "sectionId": 11,
+        "colorId": 5,
+        "alias": "white",
+        "colorName": "Білий",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "https://hotline.ua/img/tx/484/4844902171.jpg",
+        "pathImgSmall": "https://hotline.ua/img/tx/484/484490217_s265.jpg",
+        "pathImgBig": "https://hotline.ua/img/tx/484/4844902175.jpg",
+        "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-white-titanium-myx13/"
+      },
+      {
+        "id": 25731567,
+        "title": "iPhone 16 Pro Max 512GB Natural Titanium (MYX33)",
+        "imageId": 484490213,
+        "productPath": "apple-iphone-16-pro-max-512gb-natural-titanium-myx33",
+        "sectionId": 11,
+        "colorId": 18,
+        "alias": "silver",
+        "colorName": "сірий",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "https://hotline.ua/img/tx/484/4844902131.jpg",
+        "pathImgSmall": "https://hotline.ua/img/tx/484/484490213_s265.jpg",
+        "pathImgBig": "https://hotline.ua/img/tx/484/4844902135.jpg",
+        "path": "/mobile-mobilnye-telefony-i-smartfony/apple-iphone-16-pro-max-512gb-natural-titanium-myx33/"
+      }
+    ],
+    "offerCount": 100,
+    "singleOffer": null,
+    "madeInUkraine": false,
+    "userSubscribed": false,
+    "__typename": "Product"
+    }
+]
