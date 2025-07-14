@@ -745,7 +745,7 @@ class HotlineParser {
     }
 
     // Чтение категорий из файла
-    async loadCategoriesFromFile(filename = './tctgr/categories/categories.txt') {
+    async loadCategoriesFromFile(filename = './tctgr/categories.txt') {
         try {
             const content = await fs.readFile(filename, 'utf8');
             const categories = content
@@ -838,7 +838,7 @@ class HotlineParser {
         const report = {
             totalCategories: categories.length,
             totalProducts: totalProducts,
-            // categories: allResults,
+            categories: allResults,
             timestamp: new Date().toISOString()
         };
         

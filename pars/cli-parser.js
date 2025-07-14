@@ -235,6 +235,21 @@ class HotlineCLI {
                 
                 if (validUrls.length === 0) {
                     console.log(chalk.yellow('⚠️  В файле нет валидных URL hotline.ua'));
+                } else {
+                    // Предлагаем запустить парсинг
+                    const { startParsing } = await inquirer.prompt([
+                        {
+                            type: 'confirm',
+                            name: 'startParsing',
+                            message: 'Запустить парсинг выбранного файла?',
+                            default: true
+                        }
+                    ]);
+                    
+                    if (startParsing) {
+                        console.log('');
+                        await this.parseSelectedFile();
+                    }
                 }
 
             } catch (error) {
@@ -582,24 +597,24 @@ class HotlineCLI {
         try {
             // Анализируем JSON файлы для получения статистики
             const jsonFiles = await this.getFilesInDirectory('JSON');
-            
+
             if (jsonFiles.length === 0) {
                 console.log(chalk.yellow('📁 Нет JSON файлов для анализа'));
                 console.log(chalk.cyan('Сначала запустите парсинг категорий'));
             } else {
                 // Сначала показываем файлы
-                console.log(chalk.green('📁 JSON файлы:'));
+            console.log(chalk.green('📁 JSON файлы:'));
                 jsonFiles.forEach(file => {
                     console.log(chalk.cyan(`   📄 ${file}`));
                 });
 
                 const csvFiles = await this.getFilesInDirectory('CSV');
                 if (csvFiles.length > 0) {
-                    console.log('');
-                    console.log(chalk.green('📁 CSV файлы:'));
-                    csvFiles.forEach(file => {
-                        console.log(chalk.cyan(`   📊 ${file}`));
-                    });
+            console.log('');
+            console.log(chalk.green('📁 CSV файлы:'));
+                csvFiles.forEach(file => {
+                    console.log(chalk.cyan(`   📊 ${file}`));
+                });
                 }
 
                 console.log('');
@@ -714,7 +729,7 @@ class HotlineCLI {
                     
                     if (selectedStat.count === 0) {
                         console.log(chalk.red(`   ⚠️  В этой категории нет товаров`));
-                    } else {
+            } else {
                         const color = selectedStat.count > 100 ? chalk.green : selectedStat.count > 50 ? chalk.yellow : chalk.cyan;
                         console.log(color(`   📊 Статус: ${selectedStat.count > 100 ? 'Отлично' : selectedStat.count > 50 ? 'Хорошо' : 'Нормально'}`));
                     }
@@ -1019,6 +1034,79 @@ class HotlineCLI {
             .replace(/компьютер/g, 'компьютеры')
             .replace(/планшет/g, 'планшеты')
             .replace(/монитор/g, 'мониторы');
+    }
+
+    // Парсинг выбранного файла
+    async parseSelectedFile() {
+        this.showHeader();
+        console.log(chalk.blue('📦 Парсинг выбранного файла'));
+        console.log(chalk.cyan(`📁 Используется файл: ${this.selectedCategoriesFile}`));
+        console.log('');
+
+        try {
+            // Проверяем наличие файла категорий
+            const fs = require('fs').promises;
+            let categories;
+            
+            try {
+                const content = await fs.readFile(this.selectedCategoriesFile, 'utf8');
+                categories = content
+                    .split('\n')
+                    .map(line => line.trim())
+                    .filter(line => line.length > 0 && !line.startsWith('#'))
+                    .filter(line => line.includes('hotline.ua'));
+            } catch (error) {
+                console.log(chalk.red(`❌ Файл ${this.selectedCategoriesFile} не найден!`));
+                await this.waitForEnter();
+                return;
+            }
+
+            if (categories.length === 0) {
+                console.log(chalk.red('❌ В файле нет валидных URL!'));
+                await this.waitForEnter();
+                return;
+            }
+
+            console.log(chalk.green(`✅ Найдено ${categories.length} категорий:`));
+            categories.forEach((url, index) => {
+                const categoryName = this.parser.extractPathFromUrl(url);
+                console.log(chalk.cyan(`   ${index + 1}. ${categoryName}`));
+            });
+
+            console.log('');
+            const { confirm } = await inquirer.prompt([
+                {
+                    type: 'confirm',
+                    name: 'confirm',
+                    message: 'Начать парсинг всех категорий?',
+                    default: true
+                }
+            ]);
+
+            if (!confirm) {
+                return;
+            }
+
+            // Показываем прогресс
+            const spinner = ora('🚀 Запуск парсера...').start();
+            
+            const results = await this.parser.parseAllCategories(
+                categories, 
+                this.config.saveProgressively, 
+                this.config.batchSize, 
+                this.config.autoGetTokens
+            );
+
+            spinner.succeed('✅ Парсинг завершен!');
+
+            // Показываем результаты
+            this.showParseResults(results);
+
+        } catch (error) {
+            console.log(chalk.red(`❌ Ошибка: ${error.message}`));
+        }
+
+        await this.waitForEnter();
     }
 
     // Ручное сопоставление категорий
