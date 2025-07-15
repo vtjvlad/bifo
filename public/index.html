@@ -3,121 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BIFO - Интернет-магазин с огромным ассортиментом товаров</title>
-    <meta name="description" content="BIFO - ваш надежный интернет-магазин с огромным ассортиментом товаров от военного снаряжения до электроники">
-    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    <title>BIFO - Интернет-магазин с огромным ассортиментом</title>
+    <meta name="description" content="BIFO - ваш надежный интернет-магазин с огромным ассортиментом товаров по лучшим ценам">
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/components.css">
+    
+    <!-- Иконки -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/images/bifo-logo.png">
 </head>
 <body>
-    <!-- Header Component -->
-    <div data-component="header"></div>
-
-    <!-- Hero Section -->
-    <section id="home" class="hero-section">
+    <!-- Header -->
+    <header class="header">
         <div class="container">
-            <div class="row align-items-center min-vh-100">
-                <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold text-white mb-4">
-                        Добро пожаловать в <span class="text-warning">BIFO</span>
-                    </h1>
-                    <p class="lead text-white-50 mb-4">
-                        Ваш надежный интернет-магазин с огромным ассортиментом товаров. 
-                        От военного снаряжения до электроники - у нас есть абсолютно все!
-                    </p>
-                    <div class="d-flex gap-3">
-                        <a href="#featured" class="btn btn-warning btn-lg">
-                            <i class="fas fa-percentage me-2"></i>Акционные товары
-                        </a>
-                        <a href="#categories" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-th-large me-2"></i>Все категории
-                        </a>
+            <div class="header-top">
+                <div class="logo">
+                    <a href="/">
+                        <img src="/images/bifo-logo.png" alt="BIFO" class="logo-img">
+                        <span class="logo-text">BIFO</span>
+                    </a>
+                </div>
+                
+                <div class="search-container">
+                    <form class="search-form" id="searchForm">
+                        <input 
+                            type="text" 
+                            class="search-input" 
+                            placeholder="Поиск товаров..."
+                            id="searchInput"
+                        >
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="action-btn" id="compareBtn">
+                        <i class="fas fa-balance-scale"></i>
+                        <span>Сравнить</span>
+                        <span class="badge" id="compareBadge">0</span>
+                    </button>
+                    <button class="action-btn" id="favoritesBtn">
+                        <i class="fas fa-heart"></i>
+                        <span>Избранное</span>
+                        <span class="badge" id="favoritesBadge">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="container">
+            <div class="nav-content">
+                <button class="categories-btn" id="categoriesBtn">
+                    <i class="fas fa-bars"></i>
+                    <span>Все категории</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                
+                <ul class="nav-links">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/catalog">Каталог</a></li>
+                    <li><a href="#" data-section="Бытовая техника">Техника</a></li>
+                    <li><a href="#" data-section="Компьютеры и ноутбуки">Компьютеры</a></li>
+                    <li><a href="#" data-section="Мобильные телефоны">Телефоны</a></li>
+                    <li><a href="#" data-section="Дом и быт">Дом и быт</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Categories Dropdown -->
+    <div class="categories-dropdown" id="categoriesDropdown">
+        <div class="container">
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Категории будут загружены через JavaScript -->
+                <div class="loading">Загрузка категорий...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-slider" id="heroSlider">
+                <div class="hero-slide active">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h1 class="hero-title">Огромный ассортимент товаров</h1>
+                            <p class="hero-subtitle">Найдите лучшие предложения от тысяч продавцов в одном месте</p>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" onclick="window.location.href='/catalog'">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Перейти в каталог
+                                </button>
+                                <button class="btn btn-outline" onclick="document.getElementById('searchInput').focus()">
+                                    <i class="fas fa-search"></i>
+                                    Начать поиск
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center">
-                    <img src="images/bifo-logo.png" alt="BIFO Logo" class="img-fluid hero-logo">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categories Section -->
-    <section id="categories" class="py-5 bg-light">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold">Категории товаров</h2>
-                <p class="lead text-muted">Выберите интересующую вас категорию</p>
-            </div>
-            <div class="row" id="categoriesGrid">
-                <!-- Categories will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Featured Products -->
-    <section id="featured" class="py-5">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold">Акционные товары</h2>
-                <p class="lead text-muted">Специальные предложения и скидки</p>
-            </div>
-            <div class="row" id="featuredProducts">
-                <!-- Featured products will be loaded here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about" class="py-5 bg-dark text-white">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <h2 class="display-5 fw-bold mb-4">О компании BIFO</h2>
-                    <p class="lead mb-4">
-                        Мы специализируемся на предоставлении широкого ассортимента товаров 
-                        для всех сфер жизни. Наша миссия - сделать качественные товары 
-                        доступными для каждого.
-                    </p>
-                    <div class="row text-center">
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <i class="fas fa-shipping-fast fa-3x text-warning"></i>
+                <div class="hero-slide">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h1 class="hero-title">Сравнение цен в реальном времени</h1>
+                            <p class="hero-subtitle">Выбирайте лучшие предложения и экономьте на покупках</p>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" onclick="window.location.href='/catalog?sort=price_asc'">
+                                    <i class="fas fa-tags"></i>
+                                    Лучшие цены
+                                </button>
                             </div>
-                            <h5>Быстрая доставка</h5>
-                            <p class="text-muted">Доставляем по всей стране</p>
-                        </div>
-                        <div class="col-6">
-                            <div class="mb-3">
-                                <i class="fas fa-shield-alt fa-3x text-warning"></i>
-                            </div>
-                            <h5>Гарантия качества</h5>
-                            <p class="text-muted">Только проверенные товары</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center">
-                    <img src="images/bifo-logo.png" alt="BIFO" class="img-fluid" style="max-width: 300px;">
+                <div class="hero-slide">
+                    <div class="container">
+                        <div class="hero-content">
+                            <h1 class="hero-title">Новинки и акции</h1>
+                            <p class="hero-subtitle">Будьте в курсе последних поступлений и специальных предложений</p>
+                            <div class="hero-actions">
+                                <button class="btn btn-primary" onclick="window.location.href='/catalog?sort=newest'">
+                                    <i class="fas fa-star"></i>
+                                    Новинки
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            
+            <div class="hero-slider-controls">
+                <button class="slider-btn prev" id="prevSlide">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="slider-dots" id="sliderDots"></div>
+                <button class="slider-btn next" id="nextSlide">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-box"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="productsCount">0</span>
+                                <span class="stat-label">товаров</span>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-th-large"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="categoriesCount">0</span>
+                                <span class="stat-label">категорий</span>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="vendorsCount">0</span>
+                                <span class="stat-label">брендов</span>
+                            </div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-content">
+                                <span class="stat-number" id="usersCount">10K+</span>
+                                <span class="stat-label">покупателей</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Categories -->
+        <section class="popular-categories">
+            <div class="container">
+                <h2 class="section-title">Популярные категории</h2>
+                <div class="categories-showcase" id="popularCategories">
+                    <!-- Категории будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- News and Promotions -->
+        <section class="news-promotions">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Новости и акции</h2>
+                    <a href="#" class="section-link">Все новости <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="news-grid">
+                    <article class="news-card featured">
+                        <div class="news-image">
+                            <img src="https://via.placeholder.com/400x250/2563eb/ffffff?text=Акция" alt="Специальная акция">
+                            <div class="news-badge">Акция</div>
+                        </div>
+                        <div class="news-content">
+                            <h3 class="news-title">Большая распродажа техники</h3>
+                            <p class="news-excerpt">Скидки до 50% на бытовую технику и электронику. Ограниченное время!</p>
+                            <div class="news-meta">
+                                <span class="news-date">15 июля 2024</span>
+                                <a href="#" class="news-link">Читать далее</a>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="news-card">
+                        <div class="news-image">
+                            <img src="https://via.placeholder.com/300x200/10b981/ffffff?text=Новинка" alt="Новые поступления">
+                            <div class="news-badge">Новинка</div>
+                        </div>
+                        <div class="news-content">
+                            <h3 class="news-title">Новые поступления в категории "Спорт"</h3>
+                            <p class="news-excerpt">Пополнение ассортимента спортивного инвентаря и одежды</p>
+                            <div class="news-meta">
+                                <span class="news-date">12 июля 2024</span>
+                                <a href="#" class="news-link">Читать далее</a>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="news-card">
+                        <div class="news-image">
+                            <img src="https://via.placeholder.com/300x200/f59e0b/ffffff?text=Обзор" alt="Обзор товаров">
+                            <div class="news-badge">Обзор</div>
+                        </div>
+                        <div class="news-content">
+                            <h3 class="news-title">Топ-10 смартфонов 2024 года</h3>
+                            <p class="news-excerpt">Лучшие модели по соотношению цена-качество</p>
+                            <div class="news-meta">
+                                <span class="news-date">10 июля 2024</span>
+                                <a href="#" class="news-link">Читать далее</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="featured-products">
+            <div class="container">
+                <h2 class="section-title">Рекомендуемые товары</h2>
+                <div class="products-grid" id="featuredProducts">
+                    <!-- Товары будут загружены через JavaScript -->
+                </div>
+                <div class="section-footer">
+                    <a href="/catalog" class="btn btn-outline">Посмотреть все товары</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Brands -->
+        <section class="popular-brands">
+            <div class="container">
+                <h2 class="section-title">Популярные бренды</h2>
+                <div class="brands-grid" id="popularBrands">
+                    <!-- Бренды будут загружены через JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">Отзывы наших покупателей</h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Отличный сервис! Нашел нужный товар за минуты, цены действительно лучшие на рынке."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4 class="author-name">Александр К.</h4>
+                                    <span class="author-location">Киев</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Удобное сравнение цен помогло сэкономить 30% на покупке ноутбука. Рекомендую!"</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4 class="author-name">Мария С.</h4>
+                                    <span class="author-location">Львов</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial">
+                        <div class="testimonial-content">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <p class="testimonial-text">"Быстрая доставка, качественные товары. Покупаю здесь уже второй год."</p>
+                            <div class="testimonial-author">
+                                <div class="author-avatar">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h4 class="author-name">Дмитрий В.</h4>
+                                    <span class="author-location">Харьков</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advantages -->
+        <section class="advantages">
+            <div class="container">
+                <h2 class="section-title">Почему выбирают BIFO</h2>
+                <div class="advantages-grid">
+                    <div class="advantage">
+                        <div class="advantage-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3 class="advantage-title">Умный поиск</h3>
+                        <p class="advantage-text">Находите нужные товары среди миллионов предложений за секунды</p>
+                    </div>
+                    <div class="advantage">
+                        <div class="advantage-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3 class="advantage-title">Сравнение цен</h3>
+                        <p class="advantage-text">Сравнивайте цены от разных продавцов и выбирайте лучшее предложение</p>
+                    </div>
+                    <div class="advantage">
+                        <div class="advantage-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="advantage-title">Надежность</h3>
+                        <p class="advantage-text">Работаем только с проверенными продавцами и поставщиками</p>
+                    </div>
+                    <div class="advantage">
+                        <div class="advantage-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="advantage-title">Актуальность</h3>
+                        <p class="advantage-text">Цены и наличие товаров обновляются в режиме реального времени</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <img src="/images/bifo-logo.png" alt="BIFO">
+                        <span>BIFO</span>
+                    </div>
+                    <p class="footer-description">
+                        Интернет-магазин с огромным ассортиментом товаров. 
+                        Находите лучшие предложения от тысяч продавцов.
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Покупателям</h4>
+                    <ul>
+                        <li><a href="/catalog">Каталог</a></li>
+                        <li><a href="#">Как сделать заказ</a></li>
+                        <li><a href="#">Доставка и оплата</a></li>
+                        <li><a href="#">Гарантия</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Компания</h4>
+                    <ul>
+                        <li><a href="#">О нас</a></li>
+                        <li><a href="#">Контакты</a></li>
+                        <li><a href="#">Новости</a></li>
+                        <li><a href="#">Работа у нас</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Поддержка</h4>
+                    <ul>
+                        <li><a href="#">Центр помощи</a></li>
+                        <li><a href="#">Обратная связь</a></li>
+                        <li><a href="#">Политика конфиденциальности</a></li>
+                        <li><a href="#">Пользовательское соглашение</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 BIFO. Все права защищены.</p>
+            </div>
         </div>
-    </section>
+    </footer>
 
-    <!-- Footer Component -->
-    <div data-component="footer"></div>
-
-    <!-- Modals Component -->
-    <div data-component="modals"></div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Component Loader -->
-    <script src="js/components.js"></script>
-    <!-- Custom JS -->
-    <script src="js/app.js"></script>
+    <!-- JavaScript -->
+    <script src="/js/utils.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html> 
