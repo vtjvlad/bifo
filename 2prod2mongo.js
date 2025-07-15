@@ -30,14 +30,17 @@ const productSchema = new mongoose.Schema({
   imageLinks: [Object],
   minPrice: { type: Number, required: true },
   maxPrice: { type: Number, required: true },
+  currentPrice: { type: Number, required: true },
+  initPrice: { type: Number, required: true },
   salesCount: { type: Number, default: 0 },
   isNew: { type: Number, default: 0 },
   colorsProduct: [Object],
   offerCount: { type: Number, default: 0 },
-  singleOffer: { type: mongoose.Schema.Types.Mixed, default: null },
+  offers: { type: Object, required: true },
+  // singleOffer: { type: mongoose.Schema.Types.Mixed, default: null },
   madeInUkraine: { type: Boolean, default: false },
   userSubscribed: { type: Boolean, default: false },
-  __typename: { type: String, default: 'Product' }
+  __typename: { type: String, default: 'Product' },
 }, {
   timestamps: true, // Добавляет поля createdAt и updatedAt
   collection: 'products' // Указывает имя коллекции в MongoDB
@@ -47,7 +50,7 @@ const productSchema = new mongoose.Schema({
 const Products = mongoose.model('Products', productSchema);
 
 // Чтение JSON-файла
-const jsonFilePath = './test.json'; 
+const jsonFilePath = './test_struct_10_random.json'; 
 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 // Функция для сохранения данных в MongoDB

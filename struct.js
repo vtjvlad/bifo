@@ -1,9 +1,77 @@
 const fs = require('fs');
 
-// Читаем оба файла
-const rawData1 = fs.readFileSync('./hotline-analnye-shariki.json', 'utf8');
+// Получаем аргументы командной строки
+const inputFile = process.argv[2];
+const testMode = process.argv[3] === '--test';
+const documentsCount = testMode ? parseInt(process.argv[4]) : null;
+const orderType = testMode ? process.argv[5] : null; // 'random' или 'sequential'
+
+// Проверяем, что файл указан
+if (!inputFile) {
+    console.error('Ошибка: Не указан входной файл');
+    console.log('Использование:');
+    console.log('  Полная обработка: node struct.js <входной_файл>');
+    console.log('  Тестовый режим: node struct.js <входной_файл> --test <количество_документов> <тип_порядка>');
+    console.log('');
+    console.log('Примеры:');
+    console.log('  node struct.js ./hotline-analnye-shariki.json');
+    console.log('  node struct.js ./hotline-analnye-shariki.json --test 10 random');
+    console.log('  node struct.js ./hotline-analnye-shariki.json --test 5 sequential');
+    process.exit(1);
+}
+
+// Проверяем, что файл существует
+if (!fs.existsSync(inputFile)) {
+    console.error(`Ошибка: Файл "${inputFile}" не найден`);
+    process.exit(1);
+}
+
+// Проверяем аргументы тестового режима
+if (testMode) {
+    if (!documentsCount || isNaN(documentsCount) || documentsCount <= 0) {
+        console.error('Ошибка: Укажите корректное количество документов для обработки');
+        process.exit(1);
+    }
+    
+    if (!orderType || !['random', 'sequential'].includes(orderType)) {
+        console.error('Ошибка: Тип порядка должен быть "random" или "sequential"');
+        process.exit(1);
+    }
+}
+
+// Читаем файл
+const rawData1 = fs.readFileSync(inputFile, 'utf8');
 
 const products = JSON.parse(rawData1);
+
+// Функция для выбора документов в тестовом режиме
+function selectTestDocuments(products, count, orderType) {
+    if (count >= products.length) {
+        console.log(`Предупреждение: Запрошено ${count} документов, но в файле только ${products.length}. Обрабатываем все документы.`);
+        return products;
+    }
+    
+    if (orderType === 'random') {
+        // Создаем копию массива и перемешиваем
+        const shuffled = [...products];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled.slice(0, count);
+    } else {
+        // sequential - берем первые count документов
+        return products.slice(0, count);
+    }
+}
+
+// Выбираем документы для обработки
+const productsToProcess = testMode ? selectTestDocuments(products, documentsCount, orderType) : products;
+
+console.log(`Обрабатываем ${productsToProcess.length} документов из ${products.length} доступных`);
+if (testMode) {
+    console.log(`Режим: тестовый, порядок: ${orderType}`);
+}
 
 function destructureNestedObjects(products) {
     const destructuredProducts = products.map(product => {
@@ -104,9 +172,12 @@ function destructureNestedObjects(products) {
     return destructuredProducts;
 }
 
-// Выполняем деструктуризацию с учетом второго файла
-const processedProducts = destructureNestedObjects(products);
+// Выполняем деструктуризацию
+const processedProducts = destructureNestedObjects(productsToProcess);
+
+// Определяем имя выходного файла
+const outputFile = testMode ? `./test_struct_${documentsCount}_${orderType}.json` : './test_struct.json';
 
 // Сохраняем результат в новый файл
-fs.writeFileSync('./test_struct.json', JSON.stringify(processedProducts, null, 2));
-console.log('Обработанные данные сохранены в test_struct.json');
+fs.writeFileSync(outputFile, JSON.stringify(processedProducts, null, 2));
+console.log(`Обработанные данные сохранены в ${outputFile}`);
