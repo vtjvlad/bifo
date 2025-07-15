@@ -1,0 +1,255 @@
+<!-- Mega Menu Component -->
+<div class="mega-menu-wrapper" id="megaMenuWrapper" style="display: none;">
+    <div class="mega-menu-overlay" id="megaMenuOverlay"></div>
+    <div class="mega-menu" id="megaMenu">
+        <div class="mega-menu-header">
+            <h5 class="mega-menu-title">Категории товаров</h5>
+            <button class="mega-menu-close" id="megaMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mega-menu-content">
+            <div class="mega-menu-categories" id="megaMenuCategories">
+                <!-- Categories will be loaded here -->
+            </div>
+            <div class="mega-menu-subcategories" id="megaMenuSubcategories">
+                <!-- Subcategories will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.mega-menu-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1050;
+}
+
+.mega-menu-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+}
+
+.mega-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    overflow: hidden;
+    animation: megaMenuSlideIn 0.3s ease-out;
+}
+
+@keyframes megaMenuSlideIn {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.mega-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mega-menu-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.mega-menu-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mega-menu-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.mega-menu-content {
+    display: flex;
+    height: calc(100% - 80px);
+}
+
+.mega-menu-categories {
+    width: 300px;
+    background: rgba(255, 255, 255, 0.05);
+    overflow-y: auto;
+    padding: 1rem 0;
+}
+
+.mega-menu-category {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mega-menu-category:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-left-color: #fff;
+}
+
+.mega-menu-category.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-left-color: #fff;
+}
+
+.mega-menu-category-icon {
+    width: 24px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.mega-menu-category-name {
+    flex: 1;
+    font-weight: 500;
+}
+
+.mega-menu-category-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    min-width: 30px;
+    text-align: center;
+}
+
+.mega-menu-subcategories {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.mega-menu-subcategory-section {
+    margin-bottom: 2rem;
+}
+
+.mega-menu-subcategory-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #fff;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 0.5rem;
+}
+
+.mega-menu-subcategory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.mega-menu-subcategory-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mega-menu-subcategory-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mega-menu-subcategory-name {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.mega-menu-subcategory-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+.mega-menu-subcategory-count {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .mega-menu-content {
+        flex-direction: column;
+    }
+    
+    .mega-menu-categories {
+        width: 100%;
+        height: 200px;
+    }
+    
+    .mega-menu-subcategories {
+        height: calc(100% - 200px);
+    }
+    
+    .mega-menu-subcategory-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Scrollbar Styling */
+.mega-menu-categories::-webkit-scrollbar,
+.mega-menu-subcategories::-webkit-scrollbar {
+    width: 6px;
+}
+
+.mega-menu-categories::-webkit-scrollbar-track,
+.mega-menu-subcategories::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.mega-menu-categories::-webkit-scrollbar-thumb,
+.mega-menu-subcategories::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.mega-menu-categories::-webkit-scrollbar-thumb:hover,
+.mega-menu-subcategories::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+</style> 

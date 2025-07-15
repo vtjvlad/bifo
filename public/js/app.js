@@ -22,7 +22,7 @@ class BifoApp {
 
     async waitForComponents() {
         return new Promise((resolve) => {
-            const requiredComponents = ['header', 'footer', 'modals'];
+            const requiredComponents = ['header', 'footer', 'modals', 'mega-menu'];
             const checkComponents = () => {
                 if (window.componentLoader && 
                     requiredComponents.every(comp => window.componentLoader.isComponentLoaded(comp))) {
@@ -40,6 +40,12 @@ class BifoApp {
         document.getElementById('loginBtn').addEventListener('click', () => this.showLoginModal());
         document.getElementById('cartBtn').addEventListener('click', () => this.showCartModal());
         document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+        
+        // Mega Menu
+        document.getElementById('megaMenuBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showMegaMenu();
+        });
         
         // Search
         document.getElementById('searchForm').addEventListener('submit', (e) => {
@@ -64,6 +70,20 @@ class BifoApp {
         
         // Checkout
         document.getElementById('checkoutBtn').addEventListener('click', () => this.checkout());
+        
+        // Mega Menu Events
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'megaMenuClose' || e.target.id === 'megaMenuOverlay') {
+                this.hideMegaMenu();
+            }
+        });
+        
+        // Keyboard events for mega menu
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('megaMenuWrapper').style.display !== 'none') {
+                this.hideMegaMenu();
+            }
+        });
     }
 
     // API Methods
@@ -209,34 +229,199 @@ class BifoApp {
     }
 
     renderCategoriesDropdown(categories) {
-        const container = document.getElementById('categoriesDropdown');
+        // This method is now deprecated in favor of mega menu
+        // Keeping for backward compatibility
+    }
+
+    // Mega Menu Methods
+    showMegaMenu() {
+        const wrapper = document.getElementById('megaMenuWrapper');
+        wrapper.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        this.loadMegaMenuCategories();
+    }
+
+    hideMegaMenu() {
+        const wrapper = document.getElementById('megaMenuWrapper');
+        wrapper.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    async loadMegaMenuCategories() {
+        try {
+            // Try to load from API first
+            const response = await this.apiRequest('/categories');
+            this.renderMegaMenuCategories(response.data);
+        } catch (error) {
+            console.log('API not available, using mock data for mega menu');
+            // Fallback to mock data
+            const mockCategories = this.getMockCategories();
+            this.renderMegaMenuCategories(mockCategories);
+        }
+    }
+
+    getMockCategories() {
+        return [
+            { slug: 'computer', name: 'Компьютеры и электроника', level: 0, productCount: 1250 },
+            { slug: 'auto', name: 'Автотовары', level: 0, productCount: 890 },
+            { slug: 'fashion', name: 'Одежда и мода', level: 0, productCount: 2100 },
+            { slug: 'dom', name: 'Дом и сад', level: 0, productCount: 1560 },
+            { slug: 'dacha_sad', name: 'Дача и сад', level: 0, productCount: 720 },
+            { slug: 'deti', name: 'Детские товары', level: 0, productCount: 980 },
+            { slug: 'krasota', name: 'Красота и здоровье', level: 0, productCount: 650 },
+            { slug: 'pobutova_himiia', name: 'Бытовая химия', level: 0, productCount: 320 },
+            { slug: 'musical_instruments', name: 'Музыкальные инструменты', level: 0, productCount: 450 },
+            { slug: 'mobile', name: 'Мобильные устройства', level: 0, productCount: 1100 },
+            { slug: 'remont', name: 'Ремонт и строительство', level: 0, productCount: 830 },
+            { slug: 'sport', name: 'Спорт и отдых', level: 0, productCount: 1200 },
+            { slug: 'zootovary', name: 'Зоотовары', level: 0, productCount: 540 },
+            { slug: 'tools', name: 'Инструменты', level: 0, productCount: 670 },
+            { slug: 'bt', name: 'Бытовая техника', level: 0, productCount: 890 },
+            { slug: 'av', name: 'Аудио и видео', level: 0, productCount: 760 },
+            { slug: 'adult', name: 'Товары для взрослых', level: 0, productCount: 420 },
+            { slug: 'military', name: 'Военное снаряжение', level: 0, productCount: 380 }
+        ];
+    }
+
+    getMockSubcategories(categorySlug) {
+        const subcategoriesMap = {
+            'computer': [
+                { slug: 'noutbuki-netbuki', name: 'Ноутбуки и нетбуки', description: 'Портативные компьютеры для работы и учебы', productCount: 150 },
+                { slug: 'nastolnye-kompyutery', name: 'Настольные компьютеры', description: 'Мощные ПК для игр и работы', productCount: 120 },
+                { slug: 'monitory', name: 'Мониторы', description: 'Экраны для компьютеров и ноутбуков', productCount: 200 },
+                { slug: 'klaviatury', name: 'Клавиатуры', description: 'Устройства ввода для компьютеров', productCount: 180 },
+                { slug: 'myshi-klaviatury', name: 'Мыши', description: 'Компьютерные мыши и аксессуары', productCount: 160 },
+                { slug: 'printery-kopiry-mfu', name: 'Принтеры и МФУ', description: 'Печатающие устройства', productCount: 90 }
+            ],
+            'dom': [
+                { slug: 'mebel', name: 'Мебель', description: 'Мебель для дома и офиса', productCount: 300 },
+                { slug: 'osveschenie-electrica', name: 'Освещение', description: 'Светильники и лампы', productCount: 250 },
+                { slug: 'posuda', name: 'Посуда', description: 'Кухонная посуда и столовые приборы', productCount: 400 },
+                { slug: 'tekstil', name: 'Текстиль', description: 'Постельное белье и домашний текстиль', productCount: 280 },
+                { slug: 'dekor', name: 'Декор', description: 'Предметы декора для дома', productCount: 200 }
+            ],
+            'sport': [
+                { slug: 'futbol', name: 'Футбол', description: 'Футбольное снаряжение и мячи', productCount: 150 },
+                { slug: 'basketbol', name: 'Баскетбол', description: 'Баскетбольные мячи и кольца', productCount: 120 },
+                { slug: 'tennis', name: 'Теннис', description: 'Теннисные ракетки и мячи', productCount: 100 },
+                { slug: 'fitness', name: 'Фитнес', description: 'Тренажеры и спортивное питание', productCount: 300 },
+                { slug: 'turizm', name: 'Туризм', description: 'Туристическое снаряжение', productCount: 250 }
+            ],
+            'auto': [
+                { slug: 'avtohimia', name: 'Автохимия', description: 'Средства для ухода за автомобилем', productCount: 200 },
+                { slug: 'avtoaksessuary', name: 'Автоаксессуары', description: 'Аксессуары для автомобиля', productCount: 350 },
+                { slug: 'avtozapchasti', name: 'Автозапчасти', description: 'Запчасти для автомобилей', productCount: 400 },
+                { slug: 'avtoelektronika', name: 'Автоэлектроника', description: 'Электроника для автомобиля', productCount: 180 }
+            ]
+        };
         
-        // Group categories by parent
+        return subcategoriesMap[categorySlug] || [
+            { slug: 'podkategoriya-1', name: 'Подкатегория 1', description: 'Описание подкатегории', productCount: 50 },
+            { slug: 'podkategoriya-2', name: 'Подкатегория 2', description: 'Описание подкатегории', productCount: 75 },
+            { slug: 'podkategoriya-3', name: 'Подкатегория 3', description: 'Описание подкатегории', productCount: 60 }
+        ];
+    }
+
+    renderMegaMenuCategories(categories) {
+        const container = document.getElementById('megaMenuCategories');
+        const categoryIcons = {
+            'computer': 'fas fa-laptop',
+            'auto': 'fas fa-car',
+            'fashion': 'fas fa-tshirt',
+            'dom': 'fas fa-home',
+            'dacha_sad': 'fas fa-seedling',
+            'deti': 'fas fa-baby',
+            'krasota': 'fas fa-heartbeat',
+            'pobutova_himiia': 'fas fa-spray-can',
+            'musical_instruments': 'fas fa-music',
+            'mobile': 'fas fa-mobile-alt',
+            'remont': 'fas fa-tools',
+            'sport': 'fas fa-dumbbell',
+            'zootovary': 'fas fa-paw',
+            'tools': 'fas fa-wrench',
+            'bt': 'fas fa-tv',
+            'av': 'fas fa-headphones',
+            'adult': 'fas fa-gift',
+            'military': 'fas fa-shield-alt'
+        };
+
+        // Filter only main categories (level 0)
         const mainCategories = categories.filter(cat => cat.level === 0);
-        const subCategories = categories.filter(cat => cat.level === 1);
-        
-        let dropdownHTML = '';
-        
-        mainCategories.forEach(mainCat => {
-            const subCats = subCategories.filter(subCat => subCat.parent === mainCat.slug);
-            
-            if (subCats.length > 0) {
-                dropdownHTML += `
-                    <li><h6 class="dropdown-header">${mainCat.name}</h6></li>
-                    ${subCats.slice(0, 5).map(subCat => `
-                        <li><a class="dropdown-item" href="#" onclick="app.showCategory('${subCat.slug}')">${subCat.name}</a></li>
-                    `).join('')}
-                    ${subCats.length > 5 ? `<li><a class="dropdown-item text-muted" href="#" onclick="app.showCategory('${mainCat.slug}')">Показать все...</a></li>` : ''}
-                    <li><hr class="dropdown-divider"></li>
-                `;
-            } else {
-                dropdownHTML += `
-                    <li><a class="dropdown-item" href="#" onclick="app.showCategory('${mainCat.slug}')">${mainCat.name}</a></li>
-                `;
-            }
+
+        container.innerHTML = mainCategories.map(category => `
+            <div class="mega-menu-category" data-category="${category.slug}" onclick="app.selectMegaMenuCategory('${category.slug}')">
+                <div class="mega-menu-category-icon">
+                    <i class="${categoryIcons[category.slug] || 'fas fa-tag'}"></i>
+                </div>
+                <div class="mega-menu-category-name">${category.name}</div>
+                <div class="mega-menu-category-count">${category.productCount || 0}</div>
+            </div>
+        `).join('');
+
+        // Select first category by default
+        if (mainCategories.length > 0) {
+            this.selectMegaMenuCategory(mainCategories[0].slug);
+        }
+    }
+
+    async selectMegaMenuCategory(categorySlug) {
+        // Update active state
+        document.querySelectorAll('.mega-menu-category').forEach(cat => {
+            cat.classList.remove('active');
         });
+        document.querySelector(`[data-category="${categorySlug}"]`).classList.add('active');
+
+        // Load subcategories
+        try {
+            const response = await this.apiRequest(`/categories/${categorySlug}/subcategories`);
+            this.renderMegaMenuSubcategories(response.data, categorySlug);
+        } catch (error) {
+            console.log('API not available, using mock subcategories');
+            // Fallback to mock data
+            const mockSubcategories = this.getMockSubcategories(categorySlug);
+            this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
+        }
+    }
+
+    renderMegaMenuSubcategories(subcategories, categorySlug) {
+        const container = document.getElementById('megaMenuSubcategories');
         
-        container.innerHTML = dropdownHTML;
+        if (subcategories.length === 0) {
+            container.innerHTML = `
+                <div class="mega-menu-subcategory-section">
+                    <h3 class="mega-menu-subcategory-title">Нет подкатегорий</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7);">В этой категории пока нет подкатегорий</p>
+                </div>
+            `;
+            return;
+        }
+
+        // Group subcategories by sections (if they have sections)
+        const sections = this.groupSubcategoriesBySections(subcategories);
+        
+        container.innerHTML = sections.map(section => `
+            <div class="mega-menu-subcategory-section">
+                <h3 class="mega-menu-subcategory-title">${section.title}</h3>
+                <div class="mega-menu-subcategory-grid">
+                    ${section.items.map(item => `
+                        <div class="mega-menu-subcategory-item" onclick="app.showCategory('${item.slug}'); app.hideMegaMenu();">
+                            <div class="mega-menu-subcategory-name">${item.name}</div>
+                            <div class="mega-menu-subcategory-description">${item.description || 'Описание отсутствует'}</div>
+                            <div class="mega-menu-subcategory-count">${item.productCount || 0} товаров</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    groupSubcategoriesBySections(subcategories) {
+        // For now, just return all subcategories in one section
+        // This can be enhanced later to group by actual sections
+        return [{
+            title: 'Подкатегории',
+            items: subcategories
+        }];
     }
 
     // Products
