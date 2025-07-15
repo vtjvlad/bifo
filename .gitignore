@@ -1,7 +1,9 @@
 node_modules
 .env
+JSON-try/
 JSON/
 CSV/
+CSV-try/
 # hotline-all-categories-report.json
 # hotline-mobilnye-telefony-i-smartfony.json
 # hotline-noutbuki-netbuki.json
