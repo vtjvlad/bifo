@@ -84,6 +84,50 @@ class BifoApp {
                 this.hideMegaMenu();
             }
         });
+
+        // Add to cart buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.add-to-cart-btn')) {
+                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
+                this.addToCart(productId);
+            }
+        });
+
+        // Cart quantity buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.decrease-btn')) {
+                const productId = e.target.closest('.decrease-btn').dataset.productId;
+                const quantity = parseInt(e.target.closest('.decrease-btn').dataset.quantity);
+                this.updateCartItem(productId, quantity);
+            }
+            if (e.target.closest('.increase-btn')) {
+                const productId = e.target.closest('.increase-btn').dataset.productId;
+                const quantity = parseInt(e.target.closest('.increase-btn').dataset.quantity);
+                this.updateCartItem(productId, quantity);
+            }
+            if (e.target.closest('.remove-from-cart-btn')) {
+                const productId = e.target.closest('.remove-from-cart-btn').dataset.productId;
+                this.removeFromCart(productId);
+            }
+        });
+
+        // Cart quantity input
+        document.addEventListener('change', (e) => {
+            if (e.target.classList.contains('quantity-input')) {
+                const productId = e.target.dataset.productId;
+                const quantity = parseInt(e.target.value);
+                this.updateCartItem(productId, quantity);
+            }
+        });
+
+        // Category links
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.show-category-link')) {
+                e.preventDefault();
+                const slug = e.target.closest('.show-category-link').dataset.slug;
+                this.showCategory(slug);
+            }
+        });
     }
 
     // API Methods
@@ -108,7 +152,10 @@ class BifoApp {
             return data;
         } catch (error) {
             console.error('API Error:', error);
-            this.showAlert(error.message, 'danger');
+            // Don't show alert for API errors in mega menu context
+            if (!endpoint.includes('/categories')) {
+                this.showAlert(error.message, 'danger');
+            }
             throw error;
         }
     }
@@ -180,12 +227,21 @@ class BifoApp {
 
     // Categories
     async loadCategories() {
+        if (!this.isServerAvailable()) {
+            console.log('Server not available, using mock categories');
+            const mockCategories = this.getMockCategories();
+            this.renderCategories(mockCategories);
+            return;
+        }
+
         try {
             const response = await this.apiRequest('/categories');
             this.renderCategories(response.data);
             this.renderCategoriesDropdown(response.data);
         } catch (error) {
-            console.error('Error loading categories:', error);
+            console.log('API error, using mock categories');
+            const mockCategories = this.getMockCategories();
+            this.renderCategories(mockCategories);
         }
     }
 
@@ -217,7 +273,7 @@ class BifoApp {
 
         container.innerHTML = mainCategories.map(category => `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" onclick="app.showCategory('${category.slug}')">
+                <div class="category-card" data-action="show-category" data-slug="${category.slug}">
                     <div class="category-icon">
                         <i class="${categoryIcons[category.slug] || 'fas fa-box'}"></i>
                     </div>
@@ -226,6 +282,14 @@ class BifoApp {
                 </div>
             </div>
         `).join('');
+
+        // Add event listeners for category cards
+        container.querySelectorAll('[data-action="show-category"]').forEach(element => {
+            element.addEventListener('click', (e) => {
+                const slug = e.currentTarget.dataset.slug;
+                this.showCategory(slug);
+            });
+        });
     }
 
     renderCategoriesDropdown(categories) {
@@ -248,15 +312,34 @@ class BifoApp {
     }
 
     async loadMegaMenuCategories() {
+        // Check if server is available
+        if (!(await this.isServerAvailable())) {
+            console.log('Server not available, using mock data for mega menu');
+            const mockCategories = this.getMockCategories();
+            this.renderMegaMenuCategories(mockCategories);
+            return;
+        }
+
         try {
-            // Try to load from API first
             const response = await this.apiRequest('/categories');
             this.renderMegaMenuCategories(response.data);
         } catch (error) {
-            console.log('API not available, using mock data for mega menu');
-            // Fallback to mock data
+            console.log('API error, using mock data for mega menu');
             const mockCategories = this.getMockCategories();
             this.renderMegaMenuCategories(mockCategories);
+        }
+    }
+
+    async isServerAvailable() {
+        // Check if server is running by making a test request
+        try {
+            const response = await fetch('/api/categories', { 
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            return response.ok;
+        } catch (error) {
+            return false;
         }
     }
 
@@ -312,6 +395,80 @@ class BifoApp {
                 { slug: 'avtoaksessuary', name: 'Автоаксессуары', description: 'Аксессуары для автомобиля', productCount: 350 },
                 { slug: 'avtozapchasti', name: 'Автозапчасти', description: 'Запчасти для автомобилей', productCount: 400 },
                 { slug: 'avtoelektronika', name: 'Автоэлектроника', description: 'Электроника для автомобиля', productCount: 180 }
+            ],
+            'fashion': [
+                { slug: 'muzhskaya-odezhda', name: 'Мужская одежда', description: 'Одежда для мужчин', productCount: 500 },
+                { slug: 'zhenskaia-odezhda', name: 'Женская одежда', description: 'Одежда для женщин', productCount: 800 },
+                { slug: 'detskaia-odezhda', name: 'Детская одежда', description: 'Одежда для детей', productCount: 400 },
+                { slug: 'obuv', name: 'Обувь', description: 'Обувь для всей семьи', productCount: 600 },
+                { slug: 'aksessuary', name: 'Аксессуары', description: 'Сумки, ремни, украшения', productCount: 350 }
+            ],
+            'dacha_sad': [
+                { slug: 'sadovye-instrumenty', name: 'Садовые инструменты', description: 'Инструменты для сада', productCount: 200 },
+                { slug: 'semena-i-rassada', name: 'Семена и рассада', description: 'Семена растений и рассада', productCount: 300 },
+                { slug: 'udobreniia', name: 'Удобрения', description: 'Удобрения для растений', productCount: 150 },
+                { slug: 'sadovaia-mebel', name: 'Садовая мебель', description: 'Мебель для сада и дачи', productCount: 100 }
+            ],
+            'deti': [
+                { slug: 'igrushki', name: 'Игрушки', description: 'Игрушки для детей всех возрастов', productCount: 600 },
+                { slug: 'detskaia-mebel', name: 'Детская мебель', description: 'Мебель для детской комнаты', productCount: 200 },
+                { slug: 'detskoe-pitanie', name: 'Детское питание', description: 'Питание для детей', productCount: 300 },
+                { slug: 'detskaia-odezhda', name: 'Детская одежда', description: 'Одежда для детей', productCount: 400 }
+            ],
+            'krasota': [
+                { slug: 'kosmetika', name: 'Косметика', description: 'Декоративная косметика', productCount: 400 },
+                { slug: 'ukhod-za-kozhei', name: 'Уход за кожей', description: 'Средства по уходу за кожей', productCount: 350 },
+                { slug: 'ukhod-za-volosami', name: 'Уход за волосами', description: 'Средства по уходу за волосами', productCount: 300 },
+                { slug: 'parfumeria', name: 'Парфюмерия', description: 'Духи и туалетная вода', productCount: 250 }
+            ],
+            'pobutova_himiia': [
+                { slug: 'stirka', name: 'Стирка', description: 'Средства для стирки', productCount: 200 },
+                { slug: 'uborka', name: 'Уборка', description: 'Средства для уборки', productCount: 250 },
+                { slug: 'posuda', name: 'Мытье посуды', description: 'Средства для мытья посуды', productCount: 150 }
+            ],
+            'musical_instruments': [
+                { slug: 'gitary', name: 'Гитары', description: 'Акустические и электрогитары', productCount: 100 },
+                { slug: 'klavishnye', name: 'Клавишные', description: 'Пианино и синтезаторы', productCount: 80 },
+                { slug: 'dukhovye', name: 'Духовые', description: 'Духовые инструменты', productCount: 60 },
+                { slug: 'udarnye', name: 'Ударные', description: 'Барабаны и перкуссия', productCount: 70 }
+            ],
+            'mobile': [
+                { slug: 'smartfony', name: 'Смартфоны', description: 'Мобильные телефоны', productCount: 300 },
+                { slug: 'planshety', name: 'Планшеты', description: 'Планшетные компьютеры', productCount: 150 },
+                { slug: 'aksessuary-dlia-telefonov', name: 'Аксессуары', description: 'Чехлы, зарядки, наушники', productCount: 400 }
+            ],
+            'remont': [
+                { slug: 'instrumenty', name: 'Инструменты', description: 'Строительные инструменты', productCount: 300 },
+                { slug: 'materialy', name: 'Материалы', description: 'Строительные материалы', productCount: 500 },
+                { slug: 'santehnika', name: 'Сантехника', description: 'Сантехническое оборудование', productCount: 200 }
+            ],
+            'zootovary': [
+                { slug: 'korm-dlia-koshek', name: 'Корм для кошек', description: 'Питание для кошек', productCount: 150 },
+                { slug: 'korm-dlia-sobak', name: 'Корм для собак', description: 'Питание для собак', productCount: 200 },
+                { slug: 'aksessuary-dlia-zhivotnykh', name: 'Аксессуары', description: 'Игрушки, поводки, миски', productCount: 250 }
+            ],
+            'tools': [
+                { slug: 'ruchnye-instrumenty', name: 'Ручные инструменты', description: 'Молотки, отвертки, ключи', productCount: 200 },
+                { slug: 'elektroinstrumenty', name: 'Электроинструменты', description: 'Дрели, пилы, шлифмашины', productCount: 150 },
+                { slug: 'izmeritelnye-pribory', name: 'Измерительные приборы', description: 'Линейки, уровни, рулетки', productCount: 100 }
+            ],
+            'bt': [
+                { slug: 'televizory', name: 'Телевизоры', description: 'Телевизоры и Smart TV', productCount: 200 },
+                { slug: 'kamera', name: 'Камеры', description: 'Фото и видеокамеры', productCount: 150 },
+                { slug: 'proektory', name: 'Проекторы', description: 'Мультимедийные проекторы', productCount: 80 }
+            ],
+            'av': [
+                { slug: 'naushniki', name: 'Наушники', description: 'Наушники и гарнитуры', productCount: 300 },
+                { slug: 'kolonki', name: 'Колонки', description: 'Акустические системы', productCount: 200 },
+                { slug: 'mikrofony', name: 'Микрофоны', description: 'Микрофоны и звуковое оборудование', productCount: 100 }
+            ],
+            'adult': [
+                { slug: 'podarki', name: 'Подарки', description: 'Подарки для взрослых', productCount: 200 },
+                { slug: 'hobby', name: 'Хобби', description: 'Товары для хобби', productCount: 300 }
+            ],
+            'military': [
+                { slug: 'voennaia-forma', name: 'Военная форма', description: 'Военная одежда и обувь', productCount: 100 },
+                { slug: 'voennoe-snaryazhenie', name: 'Военное снаряжение', description: 'Снаряжение для военных', productCount: 150 }
             ]
         };
         
@@ -349,7 +506,7 @@ class BifoApp {
         const mainCategories = categories.filter(cat => cat.level === 0);
 
         container.innerHTML = mainCategories.map(category => `
-            <div class="mega-menu-category" data-category="${category.slug}" onclick="app.selectMegaMenuCategory('${category.slug}')">
+            <div class="mega-menu-category" data-category="${category.slug}" data-action="select-category">
                 <div class="mega-menu-category-icon">
                     <i class="${categoryIcons[category.slug] || 'fas fa-tag'}"></i>
                 </div>
@@ -358,6 +515,14 @@ class BifoApp {
             </div>
         `).join('');
 
+        // Add event listeners for category selection
+        container.querySelectorAll('[data-action="select-category"]').forEach(element => {
+            element.addEventListener('click', (e) => {
+                const categorySlug = e.currentTarget.dataset.category;
+                this.selectMegaMenuCategory(categorySlug);
+            });
+        });
+
         // Select first category by default
         if (mainCategories.length > 0) {
             this.selectMegaMenuCategory(mainCategories[0].slug);
@@ -365,18 +530,38 @@ class BifoApp {
     }
 
     async selectMegaMenuCategory(categorySlug) {
-        // Update active state
-        document.querySelectorAll('.mega-menu-category').forEach(cat => {
-            cat.classList.remove('active');
-        });
-        document.querySelector(`[data-category="${categorySlug}"]`).classList.add('active');
-
-        // Load subcategories
         try {
-            const response = await this.apiRequest(`/categories/${categorySlug}/subcategories`);
-            this.renderMegaMenuSubcategories(response.data, categorySlug);
+            // Update active state
+            document.querySelectorAll('.mega-menu-category').forEach(cat => {
+                cat.classList.remove('active');
+            });
+            const activeCategory = document.querySelector(`[data-category="${categorySlug}"]`);
+            if (activeCategory) {
+                activeCategory.classList.add('active');
+            }
+
+            // Load subcategories
+            if (!(await this.isServerAvailable())) {
+                console.log('Server not available, using mock subcategories');
+                const mockSubcategories = this.getMockSubcategories(categorySlug);
+                this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
+                return;
+            }
+
+            try {
+                const response = await this.apiRequest(`/categories/${categorySlug}/subcategories`);
+                if (response && response.data) {
+                    this.renderMegaMenuSubcategories(response.data, categorySlug);
+                } else {
+                    throw new Error('Invalid response format');
+                }
+            } catch (error) {
+                console.log('API error, using mock subcategories:', error.message);
+                const mockSubcategories = this.getMockSubcategories(categorySlug);
+                this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
+            }
         } catch (error) {
-            console.log('API not available, using mock subcategories');
+            console.error('Error selecting mega menu category:', error);
             // Fallback to mock data
             const mockSubcategories = this.getMockSubcategories(categorySlug);
             this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
@@ -386,7 +571,8 @@ class BifoApp {
     renderMegaMenuSubcategories(subcategories, categorySlug) {
         const container = document.getElementById('megaMenuSubcategories');
         
-        if (subcategories.length === 0) {
+        // Check if subcategories is valid array
+        if (!Array.isArray(subcategories) || subcategories.length === 0) {
             container.innerHTML = `
                 <div class="mega-menu-subcategory-section">
                     <h3 class="mega-menu-subcategory-title">Нет подкатегорий</h3>
@@ -404,7 +590,7 @@ class BifoApp {
                 <h3 class="mega-menu-subcategory-title">${section.title}</h3>
                 <div class="mega-menu-subcategory-grid">
                     ${section.items.map(item => `
-                        <div class="mega-menu-subcategory-item" onclick="app.showCategory('${item.slug}'); app.hideMegaMenu();">
+                        <div class="mega-menu-subcategory-item" data-action="show-subcategory" data-slug="${item.slug}">
                             <div class="mega-menu-subcategory-name">${item.name}</div>
                             <div class="mega-menu-subcategory-description">${item.description || 'Описание отсутствует'}</div>
                             <div class="mega-menu-subcategory-count">${item.productCount || 0} товаров</div>
@@ -413,6 +599,15 @@ class BifoApp {
                 </div>
             </div>
         `).join('');
+
+        // Add event listeners for subcategory selection
+        container.querySelectorAll('[data-action="show-subcategory"]').forEach(element => {
+            element.addEventListener('click', (e) => {
+                const slug = e.currentTarget.dataset.slug;
+                this.showCategory(slug);
+                this.hideMegaMenu();
+            });
+        });
     }
 
     groupSubcategoriesBySections(subcategories) {
@@ -426,12 +621,66 @@ class BifoApp {
 
     // Products
     async loadFeaturedProducts() {
+        if (!this.isServerAvailable()) {
+            console.log('Server not available, using mock featured products');
+            const mockProducts = this.getMockFeaturedProducts();
+            this.renderFeaturedProducts(mockProducts);
+            return;
+        }
+
         try {
             const response = await this.apiRequest('/products/promo/list');
             this.renderFeaturedProducts(response.data);
         } catch (error) {
-            console.error('Error loading promo products:', error);
+            console.log('API error, using mock featured products');
+            const mockProducts = this.getMockFeaturedProducts();
+            this.renderFeaturedProducts(mockProducts);
         }
+    }
+
+    getMockFeaturedProducts() {
+        return [
+            {
+                _id: 'mock-1',
+                title: 'Ноутбук игровой ASUS ROG',
+                currentPrice: 89990,
+                initPrice: 99990,
+                imageLinks: ['https://via.placeholder.com/300x200?text=Gaming+Laptop'],
+                vendor: { name: 'ASUS' },
+                isPromo: true,
+                reviewsCount: 45
+            },
+            {
+                _id: 'mock-2',
+                title: 'Смартфон iPhone 15 Pro',
+                currentPrice: 129990,
+                initPrice: 139990,
+                imageLinks: ['https://via.placeholder.com/300x200?text=iPhone+15+Pro'],
+                vendor: { name: 'Apple' },
+                isPromo: true,
+                reviewsCount: 128
+            },
+            {
+                _id: 'mock-3',
+                title: 'Наушники Sony WH-1000XM5',
+                currentPrice: 29990,
+                initPrice: 34990,
+                imageLinks: ['https://via.placeholder.com/300x200?text=Sony+Headphones'],
+                vendor: { name: 'Sony' },
+                isPromo: true,
+                reviewsCount: 89
+            },
+            {
+                _id: 'mock-4',
+                title: 'Умные часы Apple Watch Series 9',
+                currentPrice: 45990,
+                initPrice: 49990,
+                imageLinks: ['https://via.placeholder.com/300x200?text=Apple+Watch'],
+                vendor: { name: 'Apple' },
+                isPromo: false,
+                reviewsCount: 67
+            }
+        ];
     }
 
     renderFeaturedProducts(products) {
@@ -472,8 +721,8 @@ class BifoApp {
                                 Отзывов: ${product.reviewsCount || 0}
                             </small>
                         </div>
-                        <button class="btn btn-primary btn-sm w-100" 
-                                onclick="app.addToCart('${product._id}')">
+                        <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" 
+                                data-product-id="${product._id}">
                             <i class="fas fa-cart-plus me-2"></i>
                             В корзину
                         </button>
@@ -605,12 +854,12 @@ class BifoApp {
                     <div class="cart-item-price">${item.product.currentPrice.toLocaleString()} ₽</div>
                 </div>
                 <div class="cart-item-quantity">
-                    <button class="quantity-btn" onclick="app.updateCartItem('${item.product._id}', ${item.quantity - 1})">-</button>
+                    <button class="quantity-btn decrease-btn" data-product-id="${item.product._id}" data-quantity="${item.quantity - 1}">-</button>
                     <input type="number" class="quantity-input" value="${item.quantity}" 
-                           onchange="app.updateCartItem('${item.product._id}', this.value)" min="1">
-                    <button class="quantity-btn" onclick="app.updateCartItem('${item.product._id}', ${item.quantity + 1})">+</button>
+                           data-product-id="${item.product._id}" min="1">
+                    <button class="quantity-btn increase-btn" data-product-id="${item.product._id}" data-quantity="${item.quantity + 1}">+</button>
                 </div>
-                <button class="btn btn-sm btn-outline-danger" onclick="app.removeFromCart('${item.product._id}')">
+                <button class="btn btn-sm btn-outline-danger remove-from-cart-btn" data-product-id="${item.product._id}">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -728,31 +977,77 @@ class BifoApp {
     }
 
     showCategory(categorySlug) {
-        // Find category by slug
-        const category = this.categories.find(cat => cat.slug === categorySlug);
+        // Try to find category in loaded categories first
+        let category = this.categories ? this.categories.find(cat => cat.slug === categorySlug) : null;
+        
+        if (!category) {
+            // Fallback to mock categories
+            const mockCategories = this.getMockCategories();
+            category = mockCategories.find(cat => cat.slug === categorySlug);
+        }
+        
         if (!category) {
             console.error('Category not found:', categorySlug);
             return;
         }
 
-        let categoryProducts = [];
-        
-        if (category.level === 0) {
-            // Main category - show all products from this category and its subcategories
-            const subCategories = this.categories.filter(cat => cat.parent === category.slug);
-            const allCategorySlugs = [category.slug, ...subCategories.map(sub => sub.slug)];
-            
-            categoryProducts = this.products.filter(product => 
-                product.section && allCategorySlugs.includes(product.section.name)
-            );
-        } else {
-            // Subcategory - show only products from this specific subcategory
-            categoryProducts = this.products.filter(product => 
-                product.section && product.section.name === category.slug
-            );
+        // Load products for this category
+        this.loadCategoryProducts(categorySlug, category.name);
+    }
+
+    async loadCategoryProducts(categorySlug, categoryName) {
+        if (!this.isServerAvailable()) {
+            console.log('Server not available, using mock category products');
+            const mockProducts = this.getMockCategoryProducts(categorySlug);
+            this.renderProducts(mockProducts, `Товары в категории: ${categoryName}`);
+            return;
         }
 
-        this.renderProducts(categoryProducts, `Товары в категории: ${category.name}`);
+        try {
+            const response = await this.apiRequest(`/products/category/${categorySlug}`);
+            this.renderProducts(response.data, `Товары в категории: ${categoryName}`);
+        } catch (error) {
+            console.log('API error, using mock category products');
+            const mockProducts = this.getMockCategoryProducts(categorySlug);
+            this.renderProducts(mockProducts, `Товары в категории: ${categoryName}`);
+        }
+    }
+
+    getMockCategoryProducts(categorySlug) {
+        // Return different products based on category
+        const productsMap = {
+            'computer': [
+                { _id: 'comp-1', title: 'Ноутбук Dell XPS 13', currentPrice: 89990, imageLinks: ['https://via.placeholder.com/300x200?text=Dell+XPS'], vendor: { name: 'Dell' }, reviewsCount: 34 },
+                { _id: 'comp-2', title: 'Монитор Samsung 27"', currentPrice: 25990, imageLinks: ['https://via.placeholder.com/300x200?text=Samsung+Monitor'], vendor: { name: 'Samsung' }, reviewsCount: 56 },
+                { _id: 'comp-3', title: 'Клавиатура Logitech MX Keys', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Keyboard'], vendor: { name: 'Logitech' }, reviewsCount: 23 },
+                { _id: 'comp-4', title: 'Мышь Logitech MX Master 3', currentPrice: 5990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Mouse'], vendor: { name: 'Logitech' }, reviewsCount: 45 }
+            ],
+            'dom': [
+                { _id: 'dom-1', title: 'Диван угловой "Комфорт"', currentPrice: 45990, imageLinks: ['https://via.placeholder.com/300x200?text=Sofa'], vendor: { name: 'МебельМаркет' }, reviewsCount: 12 },
+                { _id: 'dom-2', title: 'Люстра хрустальная', currentPrice: 15990, imageLinks: ['https://via.placeholder.com/300x200?text=Chandelier'], vendor: { name: 'СветЛюкс' }, reviewsCount: 8 },
+                { _id: 'dom-3', title: 'Набор посуды 12 предметов', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Cookware'], vendor: { name: 'КухняПро' }, reviewsCount: 45 },
+                { _id: 'dom-4', title: 'Постельное белье "Уют"', currentPrice: 3990, imageLinks: ['https://via.placeholder.com/300x200?text=Bedding'], vendor: { name: 'ТекстильЛюкс' }, reviewsCount: 67 }
+            ],
+            'sport': [
+                { _id: 'sport-1', title: 'Беговая дорожка ProForm', currentPrice: 89990, imageLinks: ['https://via.placeholder.com/300x200?text=Treadmill'], vendor: { name: 'ProForm' }, reviewsCount: 67 },
+                { _id: 'sport-2', title: 'Футбольный мяч Adidas', currentPrice: 2990, imageLinks: ['https://via.placeholder.com/300x200?text=Football'], vendor: { name: 'Adidas' }, reviewsCount: 89 },
+                { _id: 'sport-3', title: 'Велосипед горный GT', currentPrice: 129990, imageLinks: ['https://via.placeholder.com/300x200?text=Bicycle'], vendor: { name: 'GT Bicycles' }, reviewsCount: 34 },
+                { _id: 'sport-4', title: 'Гантели набор 20кг', currentPrice: 5990, imageLinks: ['https://via.placeholder.com/300x200?text=Dumbbells'], vendor: { name: 'SportPro' }, reviewsCount: 23 }
+            ],
+            'auto': [
+                { _id: 'auto-1', title: 'Автомобильный пылесос', currentPrice: 3990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Vacuum'], vendor: { name: 'AutoClean' }, reviewsCount: 34 },
+                { _id: 'auto-2', title: 'Автомобильное зарядное устройство', currentPrice: 2990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Charger'], vendor: { name: 'PowerTech' }, reviewsCount: 56 },
+                { _id: 'auto-3', title: 'Автомобильный холодильник', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Fridge'], vendor: { name: 'CoolTech' }, reviewsCount: 12 },
+                { _id: 'auto-4', title: 'Автомобильный компрессор', currentPrice: 4990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Compressor'], vendor: { name: 'AirTech' }, reviewsCount: 45 }
+            ]
+        };
+        
+        return productsMap[categorySlug] || [
+            { _id: 'default-1', title: 'Товар 1', currentPrice: 9990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+1'], vendor: { name: 'Производитель' }, reviewsCount: 5 },
+            { _id: 'default-2', title: 'Товар 2', currentPrice: 15990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+2'], vendor: { name: 'Производитель' }, reviewsCount: 12 },
+            { _id: 'default-3', title: 'Товар 3', currentPrice: 7990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+3'], vendor: { name: 'Производитель' }, reviewsCount: 8 },
+            { _id: 'default-4', title: 'Товар 4', currentPrice: 12990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+4'], vendor: { name: 'Производитель' }, reviewsCount: 15 }
+        ];
     }
 
     renderProducts(products, title = 'Товары') {
@@ -819,8 +1114,8 @@ class BifoApp {
                                     Отзывов: ${product.reviewsCount || 0}
                                 </small>
                             </div>
-                            <button class="btn btn-primary btn-sm w-100" 
-                                    onclick="app.addToCart('${product._id}')">
+                            <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" 
+                                    data-product-id="${product._id}">
                                 <i class="fas fa-cart-plus me-2"></i>
                                 В корзину
                             </button>
@@ -883,7 +1178,7 @@ class BifoApp {
                                 <div class="row">
                                     ${subCats.slice(0, 6).map(subCat => `
                                         <div class="col-6 mb-2">
-                                            <a href="#" class="text-decoration-none" onclick="app.showCategory('${subCat.slug}')">
+                                            <a href="#" class="text-decoration-none show-category-link" data-slug="${subCat.slug}">
                                                 <i class="fas fa-chevron-right me-1 text-primary"></i>
                                                 ${subCat.name}
                                             </a>
@@ -891,7 +1186,7 @@ class BifoApp {
                                     `).join('')}
                                     ${subCats.length > 6 ? `
                                         <div class="col-12">
-                                            <a href="#" class="text-decoration-none" onclick="app.showCategory('${mainCat.slug}')">
+                                            <a href="#" class="text-decoration-none show-category-link" data-slug="${mainCat.slug}">
                                                 <i class="fas fa-ellipsis-h me-1 text-primary"></i>
                                                 Показать все (${subCats.length})
                                             </a>
@@ -899,7 +1194,7 @@ class BifoApp {
                                     ` : ''}
                                 </div>
                             ` : `
-                                <a href="#" class="btn btn-outline-primary btn-sm" onclick="app.showCategory('${mainCat.slug}')">
+                                <a href="#" class="btn btn-outline-primary btn-sm show-category-link" data-slug="${mainCat.slug}">
                                     Перейти в категорию
                                 </a>
                             `}
