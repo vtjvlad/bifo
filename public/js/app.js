@@ -9,12 +9,30 @@ class BifoApp {
         this.init();
     }
 
-    init() {
+    async init() {
+        // Ждем загрузки компонентов
+        await this.waitForComponents();
+        
         this.setupEventListeners();
         this.loadCategories();
         this.loadFeaturedProducts();
         this.updateUI();
         this.loadCart();
+    }
+
+    async waitForComponents() {
+        return new Promise((resolve) => {
+            const requiredComponents = ['header', 'footer', 'modals'];
+            const checkComponents = () => {
+                if (window.componentLoader && 
+                    requiredComponents.every(comp => window.componentLoader.isComponentLoaded(comp))) {
+                    resolve();
+                } else {
+                    setTimeout(checkComponents, 100);
+                }
+            };
+            checkComponents();
+        });
     }
 
     setupEventListeners() {
@@ -630,11 +648,90 @@ class BifoApp {
         const bootstrapModal = new bootstrap.Modal(modal);
         bootstrapModal.show();
     }
+
+    renderAllCategories(categories) {
+        const container = document.getElementById('allCategoriesGrid');
+        if (!container) return;
+
+        const categoryIcons = {
+            'computer': 'fas fa-laptop',
+            'auto': 'fas fa-car',
+            'fashion': 'fas fa-tshirt',
+            'dom': 'fas fa-home',
+            'dacha_sad': 'fas fa-seedling',
+            'deti': 'fas fa-baby',
+            'krasota': 'fas fa-heartbeat',
+            'pobutova_himiia': 'fas fa-spray-can',
+            'musical_instruments': 'fas fa-music',
+            'mobile': 'fas fa-mobile-alt',
+            'remont': 'fas fa-tools',
+            'sport': 'fas fa-dumbbell',
+            'zootovary': 'fas fa-paw',
+            'tools': 'fas fa-wrench',
+            'bt': 'fas fa-tv',
+            'av': 'fas fa-headphones',
+            'adult': 'fas fa-gift',
+            'military': 'fas fa-shield-alt'
+        };
+
+        // Группируем категории по уровням
+        const mainCategories = categories.filter(cat => cat.level === 0);
+        const subCategories = categories.filter(cat => cat.level === 1);
+
+        let html = '';
+
+        mainCategories.forEach(mainCat => {
+            const subCats = subCategories.filter(subCat => subCat.parent === mainCat.slug);
+            
+            html += `
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="${categoryIcons[mainCat.slug] || 'fas fa-box'} me-2"></i>
+                                ${mainCat.name}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">${mainCat.description || 'Широкий ассортимент товаров'}</p>
+                            ${subCats.length > 0 ? `
+                                <div class="row">
+                                    ${subCats.slice(0, 6).map(subCat => `
+                                        <div class="col-6 mb-2">
+                                            <a href="#" class="text-decoration-none" onclick="app.showCategory('${subCat.slug}')">
+                                                <i class="fas fa-chevron-right me-1 text-primary"></i>
+                                                ${subCat.name}
+                                            </a>
+                                        </div>
+                                    `).join('')}
+                                    ${subCats.length > 6 ? `
+                                        <div class="col-12">
+                                            <a href="#" class="text-decoration-none" onclick="app.showCategory('${mainCat.slug}')">
+                                                <i class="fas fa-ellipsis-h me-1 text-primary"></i>
+                                                Показать все (${subCats.length})
+                                            </a>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ` : `
+                                <a href="#" class="btn btn-outline-primary btn-sm" onclick="app.showCategory('${mainCat.slug}')">
+                                    Перейти в категорию
+                                </a>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    }
 }
 
 // Initialize app when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     window.app = new BifoApp();
+    await window.app.init();
 });
 
 // Smooth scrolling for navigation links
