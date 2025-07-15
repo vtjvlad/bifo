@@ -50,7 +50,7 @@ const productSchema = new mongoose.Schema({
 const Products = mongoose.model('Products', productSchema);
 
 // Чтение JSON-файла
-const jsonFilePath = './test_struct_10_random.json'; 
+const jsonFilePath = './test_struct_15_random.json'; 
 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 // Функция для сохранения данных в MongoDB

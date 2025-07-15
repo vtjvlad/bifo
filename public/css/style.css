@@ -168,22 +168,16 @@ body {
     margin-bottom: 1rem;
 }
 
-.product-stock {
+.product-vendor {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+}
+
+.product-reviews {
     font-size: 0.9rem;
     color: var(--text-light);
     margin-bottom: 1rem;
-}
-
-.stock-in {
-    color: #28a745;
-}
-
-.stock-low {
-    color: #ffc107;
-}
-
-.stock-out {
-    color: var(--accent-color);
 }
 
 /* Buttons */

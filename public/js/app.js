@@ -154,19 +154,32 @@ class BifoApp {
     renderCategories(categories) {
         const container = document.getElementById('categoriesGrid');
         const categoryIcons = {
-            'electronics': 'fas fa-laptop',
-            'clothing': 'fas fa-tshirt',
-            'furniture': 'fas fa-couch',
-            'sports': 'fas fa-dumbbell',
-            'books': 'fas fa-book',
-            'automotive': 'fas fa-car',
-            'health': 'fas fa-heartbeat',
-            'toys': 'fas fa-gamepad'
+            'computer': 'fas fa-laptop',
+            'auto': 'fas fa-car',
+            'fashion': 'fas fa-tshirt',
+            'dom': 'fas fa-home',
+            'dacha_sad': 'fas fa-seedling',
+            'deti': 'fas fa-baby',
+            'krasota': 'fas fa-heartbeat',
+            'pobutova_himiia': 'fas fa-spray-can',
+            'musical_instruments': 'fas fa-music',
+            'mobile': 'fas fa-mobile-alt',
+            'remont': 'fas fa-tools',
+            'sport': 'fas fa-dumbbell',
+            'zootovary': 'fas fa-paw',
+            'tools': 'fas fa-wrench',
+            'bt': 'fas fa-tv',
+            'av': 'fas fa-headphones',
+            'adult': 'fas fa-gift',
+            'military': 'fas fa-shield-alt'
         };
 
-        container.innerHTML = categories.slice(0, 8).map(category => `
+        // Filter only main categories (level 0)
+        const mainCategories = categories.filter(cat => cat.level === 0).slice(0, 8);
+
+        container.innerHTML = mainCategories.map(category => `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" onclick="app.showCategory('${category._id}')">
+                <div class="category-card" onclick="app.showCategory('${category.slug}')">
                     <div class="category-icon">
                         <i class="${categoryIcons[category.slug] || 'fas fa-box'}"></i>
                     </div>
@@ -179,18 +192,42 @@ class BifoApp {
 
     renderCategoriesDropdown(categories) {
         const container = document.getElementById('categoriesDropdown');
-        container.innerHTML = categories.map(category => `
-            <li><a class="dropdown-item" href="#" onclick="app.showCategory('${category._id}')">${category.name}</a></li>
-        `).join('');
+        
+        // Group categories by parent
+        const mainCategories = categories.filter(cat => cat.level === 0);
+        const subCategories = categories.filter(cat => cat.level === 1);
+        
+        let dropdownHTML = '';
+        
+        mainCategories.forEach(mainCat => {
+            const subCats = subCategories.filter(subCat => subCat.parent === mainCat.slug);
+            
+            if (subCats.length > 0) {
+                dropdownHTML += `
+                    <li><h6 class="dropdown-header">${mainCat.name}</h6></li>
+                    ${subCats.slice(0, 5).map(subCat => `
+                        <li><a class="dropdown-item" href="#" onclick="app.showCategory('${subCat.slug}')">${subCat.name}</a></li>
+                    `).join('')}
+                    ${subCats.length > 5 ? `<li><a class="dropdown-item text-muted" href="#" onclick="app.showCategory('${mainCat.slug}')">Показать все...</a></li>` : ''}
+                    <li><hr class="dropdown-divider"></li>
+                `;
+            } else {
+                dropdownHTML += `
+                    <li><a class="dropdown-item" href="#" onclick="app.showCategory('${mainCat.slug}')">${mainCat.name}</a></li>
+                `;
+            }
+        });
+        
+        container.innerHTML = dropdownHTML;
     }
 
     // Products
     async loadFeaturedProducts() {
         try {
-            const response = await this.apiRequest('/products/featured/list');
+            const response = await this.apiRequest('/products/promo/list');
             this.renderFeaturedProducts(response.data);
         } catch (error) {
-            console.error('Error loading featured products:', error);
+            console.error('Error loading promo products:', error);
         }
     }
 
@@ -213,26 +250,29 @@ class BifoApp {
         container.innerHTML = products.map(product => `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                 <div class="product-card">
-                    <img src="${product.images[0] || 'https://via.placeholder.com/300x200?text=No+Image'}" 
-                         alt="${product.name}" class="product-image">
+                    <img src="${product.imageLinks && product.imageLinks[0] ? product.imageLinks[0] : 'https://via.placeholder.com/300x200?text=No+Image'}" 
+                         alt="${product.title}" class="product-image">
                     <div class="product-info">
-                        <h6 class="product-title">${product.name}</h6>
+                        <h6 class="product-title">${product.title}</h6>
+                        <div class="product-vendor">
+                            <small class="text-muted">${product.vendor ? product.vendor.name : 'Неизвестный производитель'}</small>
+                        </div>
                         <div class="product-price">
-                            ${product.price.toLocaleString()} ₽
-                            ${product.originalPrice ? `<span class="product-original-price">${product.originalPrice.toLocaleString()} ₽</span>` : ''}
+                            ${product.currentPrice.toLocaleString()} ₽
+                            ${product.initPrice && product.initPrice > product.currentPrice ? 
+                                `<span class="product-original-price">${product.initPrice.toLocaleString()} ₽</span>` : ''}
                         </div>
-                        <div class="product-rating">
-                            ${this.generateStars(product.rating.average)}
-                            <small class="text-muted">(${product.rating.count})</small>
-                        </div>
-                        <div class="product-stock ${this.getStockClass(product.stock)}">
-                            ${this.getStockText(product.stock)}
+                        ${product.isPromo ? '<span class="badge bg-danger mb-2">Акция</span>' : ''}
+                        <div class="product-reviews">
+                            <small class="text-muted">
+                                <i class="fas fa-star text-warning"></i>
+                                Отзывов: ${product.reviewsCount || 0}
+                            </small>
                         </div>
                         <button class="btn btn-primary btn-sm w-100" 
-                                onclick="app.addToCart('${product._id}')"
-                                ${product.stock === 0 ? 'disabled' : ''}>
+                                onclick="app.addToCart('${product._id}')">
                             <i class="fas fa-cart-plus me-2"></i>
-                            ${product.stock === 0 ? 'Нет в наличии' : 'В корзину'}
+                            В корзину
                         </button>
                     </div>
                 </div>
@@ -248,18 +288,6 @@ class BifoApp {
         return '★'.repeat(fullStars) + 
                (hasHalfStar ? '☆' : '') + 
                '☆'.repeat(emptyStars);
-    }
-
-    getStockClass(stock) {
-        if (stock === 0) return 'stock-out';
-        if (stock <= 5) return 'stock-low';
-        return 'stock-in';
-    }
-
-    getStockText(stock) {
-        if (stock === 0) return 'Нет в наличии';
-        if (stock <= 5) return `Осталось: ${stock} шт.`;
-        return 'В наличии';
     }
 
     async searchProducts() {
@@ -367,11 +395,11 @@ class BifoApp {
 
         container.innerHTML = this.cart.map(item => `
             <div class="cart-item">
-                <img src="${item.product.images[0] || 'https://via.placeholder.com/60x60?text=No+Image'}" 
-                     alt="${item.product.name}" class="cart-item-image">
+                <img src="${item.product.imageLinks && item.product.imageLinks[0] ? item.product.imageLinks[0] : 'https://via.placeholder.com/60x60?text=No+Image'}" 
+                     alt="${item.product.title}" class="cart-item-image">
                 <div class="cart-item-info">
-                    <div class="cart-item-title">${item.product.name}</div>
-                    <div class="cart-item-price">${item.product.price.toLocaleString()} ₽</div>
+                    <div class="cart-item-title">${item.product.title}</div>
+                    <div class="cart-item-price">${item.product.currentPrice.toLocaleString()} ₽</div>
                 </div>
                 <div class="cart-item-quantity">
                     <button class="quantity-btn" onclick="app.updateCartItem('${item.product._id}', ${item.quantity - 1})">-</button>
@@ -496,9 +524,111 @@ class BifoApp {
         }, 5000);
     }
 
-    showCategory(categoryId) {
-        // Navigate to category page or show category products
-        console.log('Show category:', categoryId);
+    showCategory(categorySlug) {
+        // Find category by slug
+        const category = this.categories.find(cat => cat.slug === categorySlug);
+        if (!category) {
+            console.error('Category not found:', categorySlug);
+            return;
+        }
+
+        let categoryProducts = [];
+        
+        if (category.level === 0) {
+            // Main category - show all products from this category and its subcategories
+            const subCategories = this.categories.filter(cat => cat.parent === category.slug);
+            const allCategorySlugs = [category.slug, ...subCategories.map(sub => sub.slug)];
+            
+            categoryProducts = this.products.filter(product => 
+                product.section && allCategorySlugs.includes(product.section.name)
+            );
+        } else {
+            // Subcategory - show only products from this specific subcategory
+            categoryProducts = this.products.filter(product => 
+                product.section && product.section.name === category.slug
+            );
+        }
+
+        this.renderProducts(categoryProducts, `Товары в категории: ${category.name}`);
+    }
+
+    renderProducts(products, title = 'Товары') {
+        // Create modal for products display
+        const modalId = 'productsModal';
+        let modal = document.getElementById(modalId);
+        
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.id = modalId;
+            modal.innerHTML = `
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="productsModalTitle">${title}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row" id="productsModalGrid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        const titleElement = modal.querySelector('#productsModalTitle');
+        const gridElement = modal.querySelector('#productsModalGrid');
+        
+        titleElement.textContent = title;
+        
+        if (products.length === 0) {
+            gridElement.innerHTML = `
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <h4>Товары не найдены</h4>
+                        <p>В данной категории пока нет товаров</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            gridElement.innerHTML = products.map(product => `
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="product-card">
+                        <img src="${product.imageLinks && product.imageLinks[0] ? product.imageLinks[0] : 'https://via.placeholder.com/300x200?text=No+Image'}" 
+                             alt="${product.title}" class="product-image">
+                        <div class="product-info">
+                            <h6 class="product-title">${product.title}</h6>
+                            <div class="product-vendor">
+                                <small class="text-muted">${product.vendor ? product.vendor.name : 'Неизвестный производитель'}</small>
+                            </div>
+                            <div class="product-price">
+                                ${product.currentPrice.toLocaleString()} ₽
+                                ${product.initPrice && product.initPrice > product.currentPrice ? 
+                                    `<span class="product-original-price">${product.initPrice.toLocaleString()} ₽</span>` : ''}
+                            </div>
+                            ${product.isPromo ? '<span class="badge bg-danger mb-2">Акция</span>' : ''}
+                            <div class="product-reviews">
+                                <small class="text-muted">
+                                    <i class="fas fa-star text-warning"></i>
+                                    Отзывов: ${product.reviewsCount || 0}
+                                </small>
+                            </div>
+                            <button class="btn btn-primary btn-sm w-100" 
+                                    onclick="app.addToCart('${product._id}')">
+                                <i class="fas fa-cart-plus me-2"></i>
+                                В корзину
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
     }
 }
 

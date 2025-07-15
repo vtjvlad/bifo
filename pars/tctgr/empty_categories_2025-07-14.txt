@@ -1,0 +1,26 @@
+# Список пустых категорий (14 шт.)
+# Дата создания: 14.07.2025, 08:00:56
+# Всего категорий в анализе: 80
+# Включены ссылки на категории
+
+totalCategories (файл: hotline-all-categories-report.json)
+totalProducts (файл: hotline-all-categories-report.json)
+categories (файл: hotline-all-categories-report.json)
+timestamp (файл: hotline-all-categories-report.json)
+hotline-analnye-stimulyatory (файл: hotline-analnye-stimulyatory.json)
+hotline-audio (файл: hotline-audio.json)
+https://hotline.ua/ua/av/audio
+hotline-domashnie-kinoteatry (файл: hotline-domashnie-kinoteatry.json)
+https://hotline.ua/ua/av/domashnie-kinoteatry
+hotline-eroticheskaya-odezhda (файл: hotline-eroticheskaya-odezhda.json)
+hotline-fotoapparaty-obektivy (файл: hotline-fotoapparaty-obektivy.json)
+https://hotline.ua/ua/av/fotoapparaty
+hotline-intim (файл: hotline-intim.json)
+hotline-projectors (файл: hotline-projectors.json)
+https://hotline.ua/ua/av/projectors
+hotline-televizionnye-antenny (файл: hotline-televizionnye-antenny.json)
+https://hotline.ua/ua/av/televizionnye-antenny
+hotline-televizory-proektory (файл: hotline-televizory-proektory.json)
+https://hotline.ua/ua/av/proektory
+hotline-videokamery-i-videooborudovanie (файл: hotline-videokamery-i-videooborudovanie.json)
+https://hotline.ua/ua/av/videokamery

@@ -9,58 +9,62 @@ router.get('/', async (req, res) => {
         const {
             page = 1,
             limit = 12,
-            category,
+            section,
             search,
             minPrice,
             maxPrice,
             sort = 'createdAt',
             order = 'desc',
-            featured
+            isPromo
         } = req.query;
 
-        const query = { isActive: true };
+        const query = {};
 
-        // Category filter
-        if (category) {
-            query.category = category;
+        // Section filter
+        if (section) {
+            query['section.id'] = section;
         }
 
         // Search filter
         if (search) {
-            query.$text = { $search: search };
+            query.$or = [
+                { title: { $regex: search, $options: 'i' } },
+                { 'vendor.name': { $regex: search, $options: 'i' } }
+            ];
         }
 
         // Price filter
         if (minPrice || maxPrice) {
-            query.price = {};
-            if (minPrice) query.price.$gte = parseFloat(minPrice);
-            if (maxPrice) query.price.$lte = parseFloat(maxPrice);
+            query.currentPrice = {};
+            if (minPrice) query.currentPrice.$gte = parseFloat(minPrice);
+            if (maxPrice) query.currentPrice.$lte = parseFloat(maxPrice);
         }
 
-        // Featured filter
-        if (featured === 'true') {
-            query.isFeatured = true;
+        // Promo filter
+        if (isPromo === 'true') {
+            query.isPromo = true;
         }
 
-        const options = {
-            page: parseInt(page),
-            limit: parseInt(limit),
-            sort: { [sort]: order === 'desc' ? -1 : 1 },
-            populate: 'category'
-        };
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const sortObj = { [sort]: order === 'desc' ? -1 : 1 };
 
-        const products = await Product.paginate(query, options);
+        const products = await Product.find(query)
+            .sort(sortObj)
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        const total = await Product.countDocuments(query);
 
         res.json({
             success: true,
-            data: products.docs,
+            data: products,
             pagination: {
-                page: products.page,
-                limit: products.limit,
-                totalPages: products.totalPages,
-                totalDocs: products.totalDocs,
-                hasNextPage: products.hasNextPage,
-                hasPrevPage: products.hasPrevPage
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(total / parseInt(limit)),
+                totalDocs: total,
+                hasNextPage: skip + products.length < total,
+                hasPrevPage: parseInt(page) > 1
             }
         });
     } catch (error) {
@@ -71,9 +75,7 @@ router.get('/', async (req, res) => {
 // Get single product by ID
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id)
-            .populate('category')
-            .populate('rating.reviews');
+        const product = await Product.findById(req.params.id);
 
         if (!product) {
             return res.status(404).json({ success: false, error: 'Product not found' });
@@ -85,30 +87,30 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Get products by category
-router.get('/category/:categoryId', async (req, res) => {
+// Get products by section
+router.get('/section/:sectionId', async (req, res) => {
     try {
         const { page = 1, limit = 12 } = req.query;
         
-        const options = {
-            page: parseInt(page),
-            limit: parseInt(limit),
-            populate: 'category'
-        };
+        const skip = (parseInt(page) - 1) * parseInt(limit);
 
-        const products = await Product.paginate(
-            { category: req.params.categoryId, isActive: true },
-            options
-        );
+        const products = await Product.find(
+            { 'section.id': req.params.sectionId }
+        )
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit));
+
+        const total = await Product.countDocuments({ 'section.id': req.params.sectionId });
 
         res.json({
             success: true,
-            data: products.docs,
+            data: products,
             pagination: {
-                page: products.page,
-                limit: products.limit,
-                totalPages: products.totalPages,
-                totalDocs: products.totalDocs
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(total / parseInt(limit)),
+                totalDocs: total
             }
         });
     } catch (error) {
@@ -121,28 +123,30 @@ router.get('/search/:query', async (req, res) => {
     try {
         const { page = 1, limit = 12 } = req.query;
         
-        const options = {
-            page: parseInt(page),
-            limit: parseInt(limit),
-            populate: 'category'
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+
+        const query = {
+            $or: [
+                { title: { $regex: req.params.query, $options: 'i' } },
+                { 'vendor.name': { $regex: req.params.query, $options: 'i' } }
+            ]
         };
 
-        const products = await Product.paginate(
-            { 
-                $text: { $search: req.params.query },
-                isActive: true 
-            },
-            options
-        );
+        const products = await Product.find(query)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        const total = await Product.countDocuments(query);
 
         res.json({
             success: true,
-            data: products.docs,
+            data: products,
             pagination: {
-                page: products.page,
-                limit: products.limit,
-                totalPages: products.totalPages,
-                totalDocs: products.totalDocs
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(total / parseInt(limit)),
+                totalDocs: total
             }
         });
     } catch (error) {
@@ -150,14 +154,12 @@ router.get('/search/:query', async (req, res) => {
     }
 });
 
-// Get featured products
-router.get('/featured/list', async (req, res) => {
+// Get promo products
+router.get('/promo/list', async (req, res) => {
     try {
         const products = await Product.find({ 
-            isFeatured: true, 
-            isActive: true 
+            isPromo: true 
         })
-        .populate('category')
         .limit(8)
         .sort({ createdAt: -1 });
 
@@ -169,11 +171,11 @@ router.get('/featured/list', async (req, res) => {
 
 // Create new product (Admin only)
 router.post('/', [
-    body('name').notEmpty().withMessage('Name is required'),
-    body('description').notEmpty().withMessage('Description is required'),
-    body('price').isFloat({ min: 0 }).withMessage('Valid price is required'),
-    body('category').isMongoId().withMessage('Valid category ID is required'),
-    body('sku').notEmpty().withMessage('SKU is required')
+    body('title').notEmpty().withMessage('Title is required'),
+    body('currentPrice').isFloat({ min: 0 }).withMessage('Valid price is required'),
+    body('vendor').isObject().withMessage('Vendor information is required'),
+    body('section').isObject().withMessage('Section information is required'),
+    body('url').isURL().withMessage('Valid URL is required')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);

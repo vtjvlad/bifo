@@ -1,0 +1,1370 @@
+[
+  {
+    "id": 24964574,
+    "title": "28DSEA + ATS42/12",
+    "date": "2023-10-02",
+    "vendor": {
+      "title": "AGT"
+    },
+    "section": {
+      "productCategoryName": "Генераторы",
+      "_id": 402,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-generatory"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Дизельний генератор",
+      " система пуску: електричний старт / автоматичний старт",
+      " номінальна потужність: 20 кВт",
+      " тривалість автономної роботи: 14 г"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Дизельний генератор",
+        "isNoMargin": false
+      },
+      {
+        "key": "система пуску",
+        "value": "електричний старт / автоматичний старт",
+        "isNoMargin": false
+      },
+      {
+        "key": "номінальна потужність",
+        "value": "20 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "тривалість автономної роботи",
+        "value": "14 г",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-generatory/agt-28dsea-plus-ats4212/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/501/5017709570.jpg",
+        "basic": "https://hotline.ua/img/tx/501/5017709571.jpg",
+        "small": "https://hotline.ua/img/tx/501/501770957_s265.jpg",
+        "big": "https://hotline.ua/img/tx/501/5017709575.jpg"
+      }
+    ],
+    "minPrice": 407000,
+    "maxPrice": 407000,
+    "currentPrice": 407000,
+    "initPrice": 407000,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13480850069",
+            "price": 407000
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 23012863,
+    "title": "Семена  арбуз Трофи F1 5 шт. (4820119792223)",
+    "date": "2021-07-07",
+    "vendor": {
+      "title": "LedaAgro"
+    },
+    "section": {
+      "productCategoryName": "Семена овощей и трав",
+      "_id": 1229,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-semena-ovoschej"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Насіння",
+      " Кавун"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Насіння",
+        "isNoMargin": false
+      },
+      {
+        "value": "Кавун",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-semena-ovoschej/ledaagro-semena-arbuz-trofi-f1-5-sht-4820119792223/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/417/4171667250.jpg",
+        "basic": "https://hotline.ua/img/tx/417/4171667251.jpg",
+        "small": "https://hotline.ua/img/tx/417/417166725_s265.jpg",
+        "big": "https://hotline.ua/img/tx/417/4171667255.jpg"
+      }
+    ],
+    "minPrice": 31,
+    "maxPrice": 31,
+    "currentPrice": 31,
+    "initPrice": 31,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13402560351",
+            "price": 31
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 24394499,
+    "title": "Самовсмоктуючий насос для басейну  BC2543",
+    "date": "2023-02-06",
+    "vendor": {
+      "title": "Bridge"
+    },
+    "section": {
+      "productCategoryName": "Аксессуары для бассейнов",
+      "_id": 774,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-aksessuary-dlya-bassejnov"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "насос"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "насос",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-aksessuary-dlya-bassejnov/bridge-samovsmoktuyuchij-nasos-dlya-basejnu-bc2543/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/454/4548032190.jpg",
+        "basic": "https://hotline.ua/img/tx/454/4548032191.jpg",
+        "small": "https://hotline.ua/img/tx/454/454803219_s265.jpg",
+        "big": "https://hotline.ua/img/tx/454/4548032195.jpg"
+      }
+    ],
+    "minPrice": 14094,
+    "maxPrice": 14094,
+    "currentPrice": 14094,
+    "initPrice": 14094,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13535707493",
+            "price": 14094
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 18584023,
+    "title": "MAGNA1 100-120 F (97924233)",
+    "date": "2019-12-03",
+    "vendor": {
+      "title": "Grundfos"
+    },
+    "section": {
+      "productCategoryName": "Жидкостные электронасосы",
+      "_id": 275,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-nasosy-vodosnabzheniya"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 4,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Циркуляційний насос опалення",
+      " потужність двигуна: 1,5 кВт",
+      " максимальна продуктивність: 25000 л/год",
+      " висота нагнітання: 12 м",
+      " допустимий розмір часток у воді: для чистої води мм"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Циркуляційний насос опалення",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "1,5 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "максимальна продуктивність",
+        "value": "25000 л/год",
+        "isNoMargin": false
+      },
+      {
+        "key": "висота нагнітання",
+        "value": "12 м",
+        "isNoMargin": false
+      },
+      {
+        "key": "допустимий розмір часток у воді",
+        "value": "для чистої води мм",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-nasosy-vodosnabzheniya/grundfos-magna1-100-120-f-97924233/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/494/4943254860.jpg",
+        "basic": "https://hotline.ua/img/tx/494/4943254861.jpg",
+        "small": "https://hotline.ua/img/tx/494/494325486_s265.jpg",
+        "big": "https://hotline.ua/img/tx/494/4943254865.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/494/4943254880.jpg",
+        "basic": "https://hotline.ua/img/tx/494/4943254881.jpg",
+        "small": "https://hotline.ua/img/tx/494/494325488_s265.jpg",
+        "big": "https://hotline.ua/img/tx/494/4943254885.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/494/4943254900.jpg",
+        "basic": "https://hotline.ua/img/tx/494/4943254901.jpg",
+        "small": "https://hotline.ua/img/tx/494/494325490_s265.jpg",
+        "big": "https://hotline.ua/img/tx/494/4943254905.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/494/4943254910.jpg",
+        "basic": "https://hotline.ua/img/tx/494/4943254911.jpg",
+        "small": "https://hotline.ua/img/tx/494/494325491_s265.jpg",
+        "big": "https://hotline.ua/img/tx/494/4943254915.jpg"
+      }
+    ],
+    "minPrice": 99100,
+    "maxPrice": 99100,
+    "currentPrice": 99100,
+    "initPrice": 99100,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13351775167",
+            "price": 99100
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 23125225,
+    "title": "Комплект Casablanca черный, ротанг латте (546901)",
+    "date": "2021-07-30",
+    "vendor": {
+      "title": "Art Metal Furniture"
+    },
+    "section": {
+      "productCategoryName": "Садовая мебель",
+      "_id": 759,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-sadovaya-mebel"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Комплект садових меблів",
+      " матеріал: ротанг штучний"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Комплект садових меблів",
+        "isNoMargin": false
+      },
+      {
+        "key": "матеріал",
+        "value": "ротанг штучний",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-sadovaya-mebel/art-metal-furnitureamf-komplekt-casablanca-chernyj-rotang-latte-546901/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/528/5285850100.jpg",
+        "basic": "https://hotline.ua/img/tx/528/5285850101.jpg",
+        "small": "https://hotline.ua/img/tx/528/528585010_s265.jpg",
+        "big": "https://hotline.ua/img/tx/528/5285850105.jpg"
+      }
+    ],
+    "minPrice": 19125,
+    "maxPrice": 19125,
+    "currentPrice": 19125,
+    "initPrice": 19125,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13850510460",
+            "price": 19125
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": true,
+    "userSubscribed": false
+  },
+  {
+    "id": 26252614,
+    "title": "Основа для садової парасолі 45х45 см Білий",
+    "date": "2025-06-11",
+    "vendor": {
+      "title": "GardenLine"
+    },
+    "section": {
+      "productCategoryName": "Садовая мебель",
+      "_id": 759,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-sadovaya-mebel"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 2,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Аксесуари для парасольок садових"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Аксесуари для парасольок садових",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-sadovaya-mebel/gardenline-osnova-dlya-sadovo-parasol-45h45-sm-blij/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/531/5314361640.jpg",
+        "basic": "https://hotline.ua/img/tx/531/5314361641.jpg",
+        "small": "https://hotline.ua/img/tx/531/531436164_s265.jpg",
+        "big": "https://hotline.ua/img/tx/531/5314361645.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/531/5314361650.jpg",
+        "basic": "https://hotline.ua/img/tx/531/5314361651.jpg",
+        "small": "https://hotline.ua/img/tx/531/531436165_s265.jpg",
+        "big": "https://hotline.ua/img/tx/531/5314361655.jpg"
+      }
+    ],
+    "minPrice": 1248,
+    "maxPrice": 1349,
+    "currentPrice": 1299,
+    "initPrice": 1299,
+    "salesCount": 0,
+    "isNew": 1,
+    "colorsProduct": [],
+    "offerCount": 2,
+    "offers": {
+      "totalCount": 2,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13830077498",
+            "price": 1349
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13867567007",
+            "price": 1248
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 16163550,
+    "title": "S4 A 25 - M (504100232)",
+    "date": "2019-04-03",
+    "vendor": {
+      "title": "DAB"
+    },
+    "section": {
+      "productCategoryName": "Жидкостные электронасосы",
+      "_id": 275,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-nasosy-vodosnabzheniya"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Занурювальний свердловинний насос",
+      " потужність двигуна: 0,75 кВт",
+      " максимальна продуктивність: 1500 л/год",
+      " висота нагнітання: 159,4 м",
+      " допустимий розмір часток у воді: для чистої води мм"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Занурювальний свердловинний насос",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "0,75 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "максимальна продуктивність",
+        "value": "1500 л/год",
+        "isNoMargin": false
+      },
+      {
+        "key": "висота нагнітання",
+        "value": "159,4 м",
+        "isNoMargin": false
+      },
+      {
+        "key": "допустимий розмір часток у воді",
+        "value": "для чистої води мм",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-nasosy-vodosnabzheniya/dab-s4-a-25-m-504100232/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/506/5063115830.jpg",
+        "basic": "https://hotline.ua/img/tx/506/5063115831.jpg",
+        "small": "https://hotline.ua/img/tx/506/506311583_s265.jpg",
+        "big": "https://hotline.ua/img/tx/506/5063115835.jpg"
+      }
+    ],
+    "minPrice": 23500,
+    "maxPrice": 23500,
+    "currentPrice": 23500,
+    "initPrice": 23500,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13373436827",
+            "price": 23500
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 7475094,
+    "title": "светильник потолочный Hereford (BL21A BLACK)",
+    "date": "2016-06-06",
+    "vendor": {
+      "title": "Elstead"
+    },
+    "section": {
+      "productCategoryName": "Уличные светильники",
+      "_id": 808,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-sadovo-parkovye-svetilniki"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "вуличний світильник",
+      " тип лампочки: світлодіодна лампа LED, лампа розжарювання",
+      " тип патрона: E27 (стандарт)"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "вуличний світильник",
+        "isNoMargin": false
+      },
+      {
+        "key": "тип лампочки",
+        "value": "світлодіодна лампа LED, лампа розжарювання",
+        "isNoMargin": false
+      },
+      {
+        "key": "тип патрона",
+        "value": "E27 (стандарт)",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-sadovo-parkovye-svetilniki/elstead-svetilnik-potolochnyj-hereford-bl21a-black/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/334/3348155480.jpg",
+        "basic": "https://hotline.ua/img/tx/334/3348155481.jpg",
+        "small": "https://hotline.ua/img/tx/334/334815548_s265.jpg",
+        "big": "https://hotline.ua/img/tx/334/3348155485.jpg"
+      }
+    ],
+    "minPrice": 3183,
+    "maxPrice": 3183,
+    "currentPrice": 3183,
+    "initPrice": 3183,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13263287996",
+            "price": 3183
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 25428788,
+    "title": "Садовий стілець  CULIP J0600019NN02 Сірий",
+    "date": "2024-04-23",
+    "vendor": {
+      "title": "La Forma"
+    },
+    "section": {
+      "productCategoryName": "Садовая мебель",
+      "_id": 759,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-sadovaya-mebel"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Крісло, стілець садовий"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Крісло, стілець садовий",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-sadovaya-mebel/la-forma-sadovij-stlec-culip-j0600019nn02-srij/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/518/5189901780.jpg",
+        "basic": "https://hotline.ua/img/tx/518/5189901781.jpg",
+        "small": "https://hotline.ua/img/tx/518/518990178_s265.jpg",
+        "big": "https://hotline.ua/img/tx/518/5189901785.jpg"
+      }
+    ],
+    "minPrice": 9108,
+    "maxPrice": 9108,
+    "currentPrice": 9108,
+    "initPrice": 9108,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 2,
+    "offers": {
+      "totalCount": 2,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13416337349",
+            "price": 9108
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13862897644",
+            "price": 9108
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 834999,
+    "title": "ЕМК-420М (36891)",
+    "date": "2013-05-22",
+    "vendor": {
+      "title": "Forte"
+    },
+    "section": {
+      "productCategoryName": "Мотокосы, триммеры",
+      "_id": 210,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-motokosy-trimmery"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Електрокоса мережева",
+      " потужність двигуна: 1,4 кBт",
+      " ріжуча система: Волосінь",
+      " ширина покосу: 420 мм",
+      " штанга:  пряма, нерозбірна",
+      " вага: 5 кг"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Електрокоса мережева",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "1,4 кBт",
+        "isNoMargin": false
+      },
+      {
+        "key": "ріжуча система",
+        "value": "Волосінь",
+        "isNoMargin": false
+      },
+      {
+        "key": "ширина покосу",
+        "value": "420 мм",
+        "isNoMargin": false
+      },
+      {
+        "key": "штанга",
+        "value": " пряма, нерозбірна",
+        "isNoMargin": false
+      },
+      {
+        "key": "вага",
+        "value": "5 кг",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 1,
+    "questionsCount": 0,
+    "url": "/dacha_sad-motokosy-trimmery/forte-emk-420m/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/898/8985830.jpg",
+        "basic": "https://hotline.ua/img/tx/898/8985831.jpg",
+        "small": "https://hotline.ua/img/tx/898/898583_s265.jpg",
+        "big": "https://hotline.ua/img/tx/898/8985835.jpg"
+      }
+    ],
+    "minPrice": 2360,
+    "maxPrice": 3618,
+    "currentPrice": 2706,
+    "initPrice": 2730,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 18,
+    "offers": {
+      "totalCount": 18,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13374630112",
+            "price": 3300
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13453458821",
+            "price": 3595
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13490179728",
+            "price": 2360
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13567872142",
+            "price": 2730
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13580380907",
+            "price": 2360
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13657824905",
+            "price": 3499
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13719763148",
+            "price": 3448
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13737421504",
+            "price": 3164
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13774945817",
+            "price": 3145
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13792241825",
+            "price": 3468
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13804841730",
+            "price": 2730
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13810473169",
+            "price": 2909
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13813358984",
+            "price": 3407
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13813694950",
+            "price": 3306
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13838350014",
+            "price": 2706
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13846304107",
+            "price": 2706
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13857363240",
+            "price": 3618
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13862375287",
+            "price": 3407
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 17836073,
+    "title": "Подсветка светодиодная AL-245/10W NW LED IP44 (34-208)",
+    "date": "2019-09-09",
+    "vendor": {
+      "title": "Brille"
+    },
+    "section": {
+      "productCategoryName": "Уличные светильники",
+      "_id": 808,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-sadovo-parkovye-svetilniki"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 7,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "вуличний настінно-стельовий світильник",
+      " тип лампочки: світлодіодний ..."
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "вуличний настінно-стельовий світильник",
+        "isNoMargin": false
+      },
+      {
+        "key": "тип лампочки",
+        "value": "світлодіодний ...",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-sadovo-parkovye-svetilniki/brille-podsvetka-svetodiodnaya-al-24510w-nw-led-ip44-34-208/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921350.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921351.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292135_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921355.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921380.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921381.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292138_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921385.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921400.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921401.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292140_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921405.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921440.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921441.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292144_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921445.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921470.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921471.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292147_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921475.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921500.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921501.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292150_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921505.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/523/5232921530.jpg",
+        "basic": "https://hotline.ua/img/tx/523/5232921531.jpg",
+        "small": "https://hotline.ua/img/tx/523/523292153_s265.jpg",
+        "big": "https://hotline.ua/img/tx/523/5232921535.jpg"
+      }
+    ],
+    "minPrice": 1650,
+    "maxPrice": 1650,
+    "currentPrice": 1650,
+    "initPrice": 1650,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 2,
+    "offers": {
+      "totalCount": 2,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13820179241",
+            "price": 1650
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13852231353",
+            "price": 1650
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 26050370,
+    "title": "DGP 6000 INOX",
+    "date": "2025-02-26",
+    "vendor": {
+      "title": "Daewoo Power"
+    },
+    "section": {
+      "productCategoryName": "Жидкостные электронасосы",
+      "_id": 275,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-nasosy-vodosnabzheniya"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Поверхневий відцентровий насос",
+      " потужність двигуна: 1.5 кВт",
+      " максимальна продуктивність: 6000 л/год",
+      " висота нагнітання: 50 м",
+      " допустимий розмір часток у воді: для чистої води мм"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Поверхневий відцентровий насос",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "1.5 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "максимальна продуктивність",
+        "value": "6000 л/год",
+        "isNoMargin": false
+      },
+      {
+        "key": "висота нагнітання",
+        "value": "50 м",
+        "isNoMargin": false
+      },
+      {
+        "key": "допустимий розмір часток у воді",
+        "value": "для чистої води мм",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-nasosy-vodosnabzheniya/daewoo-power-dgp-6000-inox/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/512/5121304400.jpg",
+        "basic": "https://hotline.ua/img/tx/512/5121304401.jpg",
+        "small": "https://hotline.ua/img/tx/512/512130440_s265.jpg",
+        "big": "https://hotline.ua/img/tx/512/5121304405.jpg"
+      }
+    ],
+    "minPrice": 7043,
+    "maxPrice": 7043,
+    "currentPrice": 7043,
+    "initPrice": 7043,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13724745381",
+            "price": 7043
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 25804298,
+    "title": "CCM9902CR",
+    "date": "2024-10-13",
+    "vendor": {
+      "title": "Sturmax"
+    },
+    "section": {
+      "productCategoryName": "Бензопилы, электропилы",
+      "_id": 255,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-cepnye-pily"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Акумуляторна міні пила",
+      " швидкість обертання ланцюга: 4200 об / хв",
+      " довжина шини: 200 мм"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Акумуляторна міні пила",
+        "isNoMargin": false
+      },
+      {
+        "key": "швидкість обертання ланцюга",
+        "value": "4200 об / хв",
+        "isNoMargin": false
+      },
+      {
+        "key": "довжина шини",
+        "value": "200 мм",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-cepnye-pily/sturmax-ccm9902cr/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/522/5228726810.jpg",
+        "basic": "https://hotline.ua/img/tx/522/5228726811.jpg",
+        "small": "https://hotline.ua/img/tx/522/522872681_s265.jpg",
+        "big": "https://hotline.ua/img/tx/522/5228726815.jpg"
+      }
+    ],
+    "minPrice": 1854,
+    "maxPrice": 1854,
+    "currentPrice": 1854,
+    "initPrice": 1854,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 3,
+    "offers": {
+      "totalCount": 3,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13658036884",
+            "price": 1854
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13673198063",
+            "price": 1854
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13772540849",
+            "price": 1854
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 25340373,
+    "title": "ARM-GG002 (49051371032)",
+    "date": "2024-03-20",
+    "vendor": {
+      "title": "Armer"
+    },
+    "section": {
+      "productCategoryName": "Генераторы",
+      "_id": 402,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-generatory"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Бензиновий генератор",
+      " система пуску: ручний + електричний (комбі)",
+      " номінальна потужність: 7,2 кВт",
+      " тривалість автономної роботи: 7 г",
+      " рівень шуму: 75 (на відстані 7 м) дБ"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Бензиновий генератор",
+        "isNoMargin": false
+      },
+      {
+        "key": "система пуску",
+        "value": "ручний + електричний (комбі)",
+        "isNoMargin": false
+      },
+      {
+        "key": "номінальна потужність",
+        "value": "7,2 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "тривалість автономної роботи",
+        "value": "7 г",
+        "isNoMargin": false
+      },
+      {
+        "key": "рівень шуму",
+        "value": "75 (на відстані 7 м) дБ",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-generatory/armer-arm-gg002-49051371032/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/525/5253864570.jpg",
+        "basic": "https://hotline.ua/img/tx/525/5253864571.jpg",
+        "small": "https://hotline.ua/img/tx/525/525386457_s265.jpg",
+        "big": "https://hotline.ua/img/tx/525/5253864575.jpg"
+      }
+    ],
+    "minPrice": 34317,
+    "maxPrice": 34317,
+    "currentPrice": 34317,
+    "initPrice": 34317,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13763479480",
+            "price": 34317
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 10986054,
+    "title": "GT60 Favorite (2001106)",
+    "date": "2017-09-25",
+    "vendor": {
+      "title": "Iron Angel"
+    },
+    "section": {
+      "productCategoryName": "Культиваторы, мотоблоки",
+      "_id": 206,
+      "subCategory": "dacha_sad",
+      "category": "dacha_sad-kultivatory"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Культиватор",
+      " потужність двигуна: 6,5 к.с.",
+      " потужність двигуна: 4,78 кВт",
+      " живлення: бензин",
+      " ширина захвату культивації: 90 см"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Культиватор",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "6,5 к.с.",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність двигуна",
+        "value": "4,78 кВт",
+        "isNoMargin": false
+      },
+      {
+        "key": "живлення",
+        "value": "бензин",
+        "isNoMargin": false
+      },
+      {
+        "key": "ширина захвату культивації",
+        "value": "90 см",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/dacha_sad-kultivatory/iron-angel-gt-60/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/242/2422813640.jpg",
+        "basic": "https://hotline.ua/img/tx/242/2422813641.jpg",
+        "small": "https://hotline.ua/img/tx/242/242281364_s265.jpg",
+        "big": "https://hotline.ua/img/tx/242/2422813645.jpg"
+      }
+    ],
+    "minPrice": 14900,
+    "maxPrice": 14900,
+    "currentPrice": 14900,
+    "initPrice": 14900,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 1,
+    "offers": {
+      "totalCount": 1,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13490180858",
+            "price": 14900
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  }
+]

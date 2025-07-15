@@ -1,278 +1,126 @@
 [
   {
-    "id": 1201665,
-    "title": "RKT90-G",
-    "date": "2024-01-18",
+    "id": 25852210,
+    "title": "Diamond Booty Jewel Large (10575Pink)",
+    "date": "2024-11-12",
     "vendor": {
-      "title": "Rotex"
+      "title": "Toy Joy"
     },
     "section": {
-      "productCategoryName": "Электрочайники",
-      "_id": 128,
-      "subCategory": "bt",
-      "category": "bt-elektrochajniki"
+      "productCategoryName": "Анальные пробки",
+      "_id": 638,
+      "subCategory": "adult",
+      "category": "adult-analnye-probki"
     },
-    "isPromo": false,
+    "isPromo": true,
     "toOfficial": false,
     "lineName": "",
     "linePathNew": null,
-    "imagesCount": 9,
+    "imagesCount": 4,
     "videosCount": 0,
     "techShortSpecifications": [
-      "Електрочайник",
-      " потужність: 1500 Вт",
-      " об'єм: 1,8 л",
-      " матеріал корпусу: скло"
+      "Анальна пробка",
+      "Матеріал: Силікон",
+      " колір: Рожевий",
+      " довжина: 9 см",
+      " діаметр: 4,5 см",
+      "вібрація: +",
+      "присоска: +"
     ],
     "techShortSpecificationsList": [
       {
-        "value": "Електрочайник",
+        "value": "Анальна пробка",
         "isNoMargin": false
       },
       {
-        "key": "потужність",
-        "value": "1500 Вт",
+        "key": "Матеріал",
+        "value": "Силікон",
         "isNoMargin": false
       },
       {
-        "key": "об'єм",
-        "value": "1,8 л",
+        "key": "колір",
+        "value": "Рожевий",
         "isNoMargin": false
       },
       {
-        "key": "матеріал корпусу",
-        "value": "скло",
+        "key": "довжина",
+        "value": "9 см",
+        "isNoMargin": false
+      },
+      {
+        "key": "діаметр",
+        "value": "4,5 см",
+        "isNoMargin": false
+      },
+      {
+        "key": "вібрація",
+        "value": "+",
+        "isNoMargin": false
+      },
+      {
+        "key": "присоска",
+        "value": "+",
         "isNoMargin": false
       }
     ],
     "reviewsCount": 0,
     "questionsCount": 0,
-    "url": "/bt-elektrochajniki/rotex-rkt90-g/",
+    "url": "/adult-analnye-probki/toy-joy-analna-probka-z-kristalom-diamond-booty-jewel-rozhevij-large-tj10575/",
     "imageLinks": [
       {
-        "thumb": "https://hotline.ua/img/tx/440/4407005260.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005261.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700526_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005265.jpg"
+        "thumb": "https://hotline.ua/img/tx/530/5306190420.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306190421.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619042_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306190425.jpg"
       },
       {
-        "thumb": "https://hotline.ua/img/tx/440/4407005680.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005681.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700568_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005685.jpg"
+        "thumb": "https://hotline.ua/img/tx/530/5306190440.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306190441.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619044_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306190445.jpg"
       },
       {
-        "thumb": "https://hotline.ua/img/tx/440/4407005730.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005731.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700573_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005735.jpg"
+        "thumb": "https://hotline.ua/img/tx/530/5306190470.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306190471.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619047_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306190475.jpg"
       },
       {
-        "thumb": "https://hotline.ua/img/tx/440/4407005910.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005911.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700591_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005915.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4407005930.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005931.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700593_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005935.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4407005940.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005941.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700594_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005945.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4407005960.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005961.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700596_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005965.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4407005970.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005971.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700597_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005975.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4407005980.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4407005981.jpg",
-        "small": "https://hotline.ua/img/tx/440/440700598_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4407005985.jpg"
+        "thumb": "https://hotline.ua/img/tx/530/5306190490.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306190491.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619049_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306190495.jpg"
       }
     ],
-    "minPrice": 523,
-    "maxPrice": 797,
-    "currentPrice": 594,
-    "initPrice": 594,
+    "minPrice": 598,
+    "maxPrice": 598,
+    "currentPrice": 598,
+    "initPrice": 598,
     "salesCount": 0,
     "isNew": 0,
     "colorsProduct": [],
-    "offerCount": 23,
+    "offerCount": 1,
     "offers": {
-      "totalCount": 23,
+      "totalCount": 3,
       "edges": [
         {
           "node": {
-            "id": "/offers/13474327916",
-            "price": 597
+            "id": "/offers/13795169384",
+            "price": 598
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13753751013",
+            "id": "/offers/13849922663",
+            "price": 598
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13861362034",
             "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13828617725",
-            "price": 658
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13846274302",
-            "price": 594
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13857343732",
-            "price": 797
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862278549",
-            "price": 616
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862279520",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862341297",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862357320",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862413353",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862802004",
-            "price": 605
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862839465",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13863027800",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13863512156",
-            "price": 683
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13863574041",
-            "price": 594
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866417272",
-            "price": 569
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866482598",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866723600",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866886785",
-            "price": 523
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13868177020",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13868177279",
-            "price": 599
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13869138353",
-            "price": 690
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13869813750",
-            "price": 577
           },
           "__typename": "OfferEdge"
         }
@@ -283,17 +131,1189 @@
     "userSubscribed": false
   },
   {
-    "id": 19251757,
-    "title": "WCF 05",
-    "date": "2020-02-14",
+    "id": 26287990,
+    "title": "BDSM Kit 5 Burgundy (SO8274)",
+    "date": "2025-07-02",
     "vendor": {
-      "title": "Weilor"
+      "title": "Feral Feelings"
     },
     "section": {
-      "productCategoryName": "Аксессуары для вытяжек",
-      "_id": 822,
-      "subCategory": "bt",
-      "category": "bt-aksessuary-dlya-vytyazhek"
+      "productCategoryName": "Наручники, ошейники, фиксаторы",
+      "_id": 661,
+      "subCategory": "adult",
+      "category": "adult-naruchniki-oshejniki-fiksatory"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 2,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "БДСМ набір"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "БДСМ набір",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/adult-naruchniki-oshejniki-fiksatory/feral-feelings-bdsm-kit-5-burgundy-naruchniki-ponozh-hrestovina-maska-padl-so8274-02/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5305691070.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5305691071.jpg",
+        "small": "https://hotline.ua/img/tx/530/530569107_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5305691075.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5305691090.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5305691091.jpg",
+        "small": "https://hotline.ua/img/tx/530/530569109_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5305691095.jpg"
+      }
+    ],
+    "minPrice": 2362,
+    "maxPrice": 2779,
+    "currentPrice": 2640,
+    "initPrice": 2751,
+    "salesCount": 0,
+    "isNew": 1,
+    "colorsProduct": [],
+    "offerCount": 22,
+    "offers": {
+      "totalCount": 22,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13416176918",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13421766693",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13435035801",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13439168807",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13440765253",
+            "price": 2362
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13464898449",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13485909327",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13627213760",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13657090614",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13666630638",
+            "price": 2640
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13692572867",
+            "price": 2752
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13722933091",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13755858290",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13784792962",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13804942351",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13816690055",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13820684429",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13833069999",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13860754049",
+            "price": 2751
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13866647507",
+            "price": 2779
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13869576030",
+            "price": 2362
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13869633160",
+            "price": 2362
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 26221630,
+    "title": "UE55U8072F",
+    "date": "2025-05-23",
+    "vendor": {
+      "title": "Samsung"
+    },
+    "section": {
+      "productCategoryName": "Телевизоры",
+      "_id": 28,
+      "subCategory": "av",
+      "category": "av-televizory"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "U8072F",
+    "linePathNew": "/av/televizory/295115-21419573/",
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "LCD телевізор (LED)",
+      " Дисплей: 55\"",
+      " 3840x2160",
+      " 50 Гц",
+      " Smart TV: Samsung Smart TV",
+      " Wi-Fi: + (IEEE 802.11b / g / n / ас)",
+      " HDR: HDR, HDR10+"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "LCD телевізор (LED)",
+        "isNoMargin": false
+      },
+      {
+        "key": "Дисплей",
+        "value": "55\"",
+        "isNoMargin": true
+      },
+      {
+        "value": "3840x2160",
+        "isNoMargin": true
+      },
+      {
+        "value": "50 Гц",
+        "isNoMargin": false
+      },
+      {
+        "key": "Smart TV",
+        "value": "Samsung Smart TV",
+        "isNoMargin": false
+      },
+      {
+        "key": "Wi-Fi",
+        "value": "+ (IEEE 802.11b / g / n / ас)",
+        "isNoMargin": false
+      },
+      {
+        "key": "HDR",
+        "value": "HDR, HDR10+",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/av-televizory/samsung-ue55u8072f/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/531/5313269520.jpg",
+        "basic": "https://hotline.ua/img/tx/531/5313269521.jpg",
+        "small": "https://hotline.ua/img/tx/531/531326952_s265.jpg",
+        "big": "https://hotline.ua/img/tx/531/5313269525.jpg"
+      }
+    ],
+    "minPrice": 16420,
+    "maxPrice": 33118.14,
+    "currentPrice": 16560,
+    "initPrice": 16570,
+    "salesCount": 0,
+    "isNew": 1,
+    "colorsProduct": [],
+    "offerCount": 18,
+    "offers": {
+      "totalCount": 18,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13803812143",
+            "price": 16420
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13809446016",
+            "price": 16570
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13837678511",
+            "price": 17134
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13837841650",
+            "price": 16560
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13837858441",
+            "price": 16678
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13838518627",
+            "price": 16450
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13839190236",
+            "price": 16547
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13844270444",
+            "price": 19899
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13844753914",
+            "price": 16791
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13846383432",
+            "price": 17723
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13852977241",
+            "price": 16578
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13861484172",
+            "price": 18645
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13864119029",
+            "price": 33118.14
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13865893248",
+            "price": 17650
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13868722906",
+            "price": 17697
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13869441409",
+            "price": 32144
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13869500551",
+            "price": 23932
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13870667320",
+            "price": 17619
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 23656301,
+    "title": "BR13 Red",
+    "date": "2022-01-24",
+    "vendor": {
+      "title": "Borofone"
+    },
+    "section": {
+      "productCategoryName": "Акустические системы (колонки)",
+      "_id": 47,
+      "subCategory": "av",
+      "category": "av-akusticheskie-kolonki"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "BR13",
+    "linePathNew": "/av/akusticheskie-kolonki/630777-20634105/",
+    "imagesCount": 1,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Портативна колонка",
+      " потужність: 10 Вт",
+      " кількість каналів: 2.0",
+      " Bluetooth: + (5.0)"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Портативна колонка",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність",
+        "value": "10 Вт",
+        "isNoMargin": false
+      },
+      {
+        "key": "кількість каналів",
+        "value": "2.0",
+        "isNoMargin": false
+      },
+      {
+        "key": "Bluetooth",
+        "value": "+ (5.0)",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/av-akusticheskie-kolonki/borofone-br13-red/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/531/5314985630.jpg",
+        "basic": "https://hotline.ua/img/tx/531/5314985631.jpg",
+        "small": "https://hotline.ua/img/tx/531/531498563_s265.jpg",
+        "big": "https://hotline.ua/img/tx/531/5314985635.jpg"
+      }
+    ],
+    "minPrice": 431.75,
+    "maxPrice": 679,
+    "currentPrice": 555,
+    "initPrice": 555,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [
+      {
+        "id": 23774346,
+        "title": "BR13 Camouflage Green",
+        "imageId": 519192714,
+        "productPath": "borofone-br13-camouflage-green",
+        "sectionId": 47,
+        "colorId": 275,
+        "alias": "khaki",
+        "colorName": "камуфляж",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/519/5191927141.jpg",
+        "pathImgSmall": "/img/tx/519/519192714_s265.jpg",
+        "pathImgBig": "/img/tx/519/5191927145.jpg",
+        "path": "/av-akusticheskie-kolonki/borofone-br13-camouflage-green/"
+      },
+      {
+        "id": 24868321,
+        "title": "BR13 Blue",
+        "imageId": 526772423,
+        "productPath": "hoco-br13-blue",
+        "sectionId": 47,
+        "colorId": 2,
+        "alias": "blueazure",
+        "colorName": "Синій",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/526/5267724231.jpg",
+        "pathImgSmall": "/img/tx/526/526772423_s265.jpg",
+        "pathImgBig": "/img/tx/526/5267724235.jpg",
+        "path": "/av-akusticheskie-kolonki/hoco-br13-blue/"
+      },
+      {
+        "id": 23657762,
+        "title": "BR13 Gray",
+        "imageId": 530931956,
+        "productPath": "borofone-br13-gray",
+        "sectionId": 47,
+        "colorId": 18,
+        "alias": "graysilver",
+        "colorName": "сірий",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/530/5309319561.jpg",
+        "pathImgSmall": "/img/tx/530/530931956_s265.jpg",
+        "pathImgBig": "/img/tx/530/5309319565.jpg",
+        "path": "/av-akusticheskie-kolonki/borofone-br13-gray/"
+      },
+      {
+        "id": 23656300,
+        "title": "BR13 Black",
+        "imageId": 490924063,
+        "productPath": "borofone-br13-black",
+        "sectionId": 47,
+        "colorId": 1,
+        "alias": "black",
+        "colorName": "Чорний",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/490/4909240631.jpg",
+        "pathImgSmall": "/img/tx/490/490924063_s265.jpg",
+        "pathImgBig": "/img/tx/490/4909240635.jpg",
+        "path": "/av-akusticheskie-kolonki/borofone-br13-black/"
+      },
+      {
+        "id": 23656301,
+        "title": "BR13 Red",
+        "imageId": 531498563,
+        "productPath": "borofone-br13-red",
+        "sectionId": 47,
+        "colorId": 4,
+        "alias": "red",
+        "colorName": "Червоний",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/531/5314985631.jpg",
+        "pathImgSmall": "/img/tx/531/531498563_s265.jpg",
+        "pathImgBig": "/img/tx/531/5314985635.jpg",
+        "path": "/av-akusticheskie-kolonki/borofone-br13-red/"
+      }
+    ],
+    "offerCount": 3,
+    "offers": {
+      "totalCount": 3,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13517827806",
+            "price": 679
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13856748415",
+            "price": 431.75
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13869410787",
+            "price": 539
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 23642512,
+    "title": "Радужная анальная пробка GLEAMING LOVE MULTICOLOUR PLUG MEDIUM (DT21782)",
+    "date": "2022-01-18",
+    "vendor": {
+      "title": "Dream toys"
+    },
+    "section": {
+      "productCategoryName": "Анальные пробки",
+      "_id": 638,
+      "subCategory": "adult",
+      "category": "adult-analnye-probki"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 4,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Анальна пробка",
+      "Матеріал: Алюміній",
+      " колір: Райдужний",
+      " довжина: 8,3 см",
+      " діаметр: 3,4 см",
+      "вібрація: +",
+      "присоска: +"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Анальна пробка",
+        "isNoMargin": false
+      },
+      {
+        "key": "Матеріал",
+        "value": "Алюміній",
+        "isNoMargin": false
+      },
+      {
+        "key": "колір",
+        "value": "Райдужний",
+        "isNoMargin": false
+      },
+      {
+        "key": "довжина",
+        "value": "8,3 см",
+        "isNoMargin": false
+      },
+      {
+        "key": "діаметр",
+        "value": "3,4 см",
+        "isNoMargin": false
+      },
+      {
+        "key": "вібрація",
+        "value": "+",
+        "isNoMargin": false
+      },
+      {
+        "key": "присоска",
+        "value": "+",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/adult-analnye-probki/dream-toys-raduzhnaya-analnaya-probka-gleaming-love-multicolour-plug-medium-dt21782/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5306192710.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306192711.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619271_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306192715.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5306192740.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306192741.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619274_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306192745.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5306192770.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306192771.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619277_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306192775.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/530/5306192800.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5306192801.jpg",
+        "small": "https://hotline.ua/img/tx/530/530619280_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5306192805.jpg"
+      }
+    ],
+    "minPrice": 508,
+    "maxPrice": 860,
+    "currentPrice": 726,
+    "initPrice": 790,
+    "salesCount": 0,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 8,
+    "offers": {
+      "totalCount": 8,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13745061130",
+            "price": 726
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13745134068",
+            "price": 860
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13758905626",
+            "price": 626
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13760479329",
+            "price": 860
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13802301151",
+            "price": 860
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13848882500",
+            "price": 509
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13850628091",
+            "price": 508
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13857473358",
+            "price": 790
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 24690331,
+    "title": "Lora, розмір M, колір Чорний (SO6605)",
+    "date": "2023-05-30",
+    "vendor": {
+      "title": "Art of Sex"
+    },
+    "section": {
+      "productCategoryName": "Винил, кожа, латекс",
+      "_id": 643,
+      "subCategory": "adult",
+      "category": "adult-vinil-kozha-lateks"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 4,
+    "videosCount": 0,
+    "techShortSpecifications": [
+      "Рукавички",
+      " матеріал: Вініл"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Рукавички",
+        "isNoMargin": false
+      },
+      {
+        "key": "матеріал",
+        "value": "Вініл",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 0,
+    "questionsCount": 0,
+    "url": "/adult-vinil-kozha-lateks/art-of-sex-glyansov-vnlov-rukavichki-lora-rozmr-m-kolr-chornij-so6605/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/519/5197124160.jpg",
+        "basic": "https://hotline.ua/img/tx/519/5197124161.jpg",
+        "small": "https://hotline.ua/img/tx/519/519712416_s265.jpg",
+        "big": "https://hotline.ua/img/tx/519/5197124165.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/519/5197124190.jpg",
+        "basic": "https://hotline.ua/img/tx/519/5197124191.jpg",
+        "small": "https://hotline.ua/img/tx/519/519712419_s265.jpg",
+        "big": "https://hotline.ua/img/tx/519/5197124195.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/519/5197124220.jpg",
+        "basic": "https://hotline.ua/img/tx/519/5197124221.jpg",
+        "small": "https://hotline.ua/img/tx/519/519712422_s265.jpg",
+        "big": "https://hotline.ua/img/tx/519/5197124225.jpg"
+      },
+      {
+        "thumb": "https://hotline.ua/img/tx/519/5197124250.jpg",
+        "basic": "https://hotline.ua/img/tx/519/5197124251.jpg",
+        "small": "https://hotline.ua/img/tx/519/519712425_s265.jpg",
+        "big": "https://hotline.ua/img/tx/519/5197124255.jpg"
+      }
+    ],
+    "minPrice": 696,
+    "maxPrice": 819,
+    "currentPrice": 811,
+    "initPrice": 819,
+    "salesCount": 2,
+    "isNew": 0,
+    "colorsProduct": [],
+    "offerCount": 18,
+    "offers": {
+      "totalCount": 18,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13799134505",
+            "price": 811
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799316136",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799442930",
+            "price": 778
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799453377",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799596643",
+            "price": 811
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799597978",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799787778",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13799787813",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13800157251",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13800304441",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13803521662",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13804115618",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13804941418",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13816687566",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13820684031",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13833069370",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13849239578",
+            "price": 696
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13866645892",
+            "price": 819
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 21789966,
+    "title": "Xtreme 3 Camo (JBLXTREME3CAMO)",
+    "date": "2020-12-18",
+    "vendor": {
+      "title": "JBL"
+    },
+    "section": {
+      "productCategoryName": "Акустические системы (колонки)",
+      "_id": 47,
+      "subCategory": "av",
+      "category": "av-akusticheskie-kolonki"
+    },
+    "isPromo": false,
+    "toOfficial": false,
+    "lineName": "",
+    "linePathNew": null,
+    "imagesCount": 1,
+    "videosCount": 2,
+    "techShortSpecifications": [
+      "Портативна колонка",
+      " потужність: 100 (2х50) Вт",
+      " кількість каналів: 2.0",
+      " кількість смуг: 2",
+      " частотний діапазон: 53,5 Гц",
+      " Bluetooth: + (5.1)"
+    ],
+    "techShortSpecificationsList": [
+      {
+        "value": "Портативна колонка",
+        "isNoMargin": false
+      },
+      {
+        "key": "потужність",
+        "value": "100 (2х50) Вт",
+        "isNoMargin": false
+      },
+      {
+        "key": "кількість каналів",
+        "value": "2.0",
+        "isNoMargin": false
+      },
+      {
+        "key": "кількість смуг",
+        "value": "2",
+        "isNoMargin": false
+      },
+      {
+        "key": "частотний діапазон",
+        "value": "53,5 Гц",
+        "isNoMargin": false
+      },
+      {
+        "key": "Bluetooth",
+        "value": "+ (5.1)",
+        "isNoMargin": false
+      }
+    ],
+    "reviewsCount": 2,
+    "questionsCount": 1,
+    "url": "/av-akusticheskie-kolonki/jbl-xtreme-3-camo/",
+    "imageLinks": [
+      {
+        "thumb": "https://hotline.ua/img/tx/374/3745610710.jpg",
+        "basic": "https://hotline.ua/img/tx/374/3745610711.jpg",
+        "small": "https://hotline.ua/img/tx/374/374561071_s265.jpg",
+        "big": "https://hotline.ua/img/tx/374/3745610715.jpg"
+      }
+    ],
+    "minPrice": 10999,
+    "maxPrice": 13391,
+    "currentPrice": 12999,
+    "initPrice": 12999,
+    "salesCount": 1,
+    "isNew": 0,
+    "colorsProduct": [
+      {
+        "id": 21610177,
+        "title": "Xtreme 3 Black (JBLXTREME3BLK)",
+        "imageId": 263853549,
+        "productPath": "jbl-xtreme-3-black-jblxtreme3blk",
+        "sectionId": 47,
+        "colorId": 1,
+        "alias": "black",
+        "colorName": "Чорний",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/263/2638535491.jpg",
+        "pathImgSmall": "/img/tx/263/263853549_s265.jpg",
+        "pathImgBig": "/img/tx/263/2638535495.jpg",
+        "path": "/av-akusticheskie-kolonki/jbl-xtreme-3-black-jblxtreme3blk/"
+      },
+      {
+        "id": 21748619,
+        "title": "Xtreme 3 Blue (JBLXTREME3BLU)",
+        "imageId": 523389340,
+        "productPath": "jbl-xtreme-3-blue-jblxtreme3blu",
+        "sectionId": 47,
+        "colorId": 2,
+        "alias": "blueazure",
+        "colorName": "Синій",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/523/5233893401.jpg",
+        "pathImgSmall": "/img/tx/523/523389340_s265.jpg",
+        "pathImgBig": "/img/tx/523/5233893405.jpg",
+        "path": "/av-akusticheskie-kolonki/jbl-xtreme-3-blue-jblxtreme3blu/"
+      },
+      {
+        "id": 21789966,
+        "title": "Xtreme 3 Camo (JBLXTREME3CAMO)",
+        "imageId": 374561071,
+        "productPath": "jbl-xtreme-3-camo",
+        "sectionId": 47,
+        "colorId": 5841,
+        "alias": "khaki",
+        "colorName": "камуфляжний",
+        "sizeId": null,
+        "sizeName": null,
+        "sizeChart": null,
+        "pathImg": "/img/tx/374/3745610711.jpg",
+        "pathImgSmall": "/img/tx/374/374561071_s265.jpg",
+        "pathImgBig": "/img/tx/374/3745610715.jpg",
+        "path": "/av-akusticheskie-kolonki/jbl-xtreme-3-camo/"
+      }
+    ],
+    "offerCount": 7,
+    "offers": {
+      "totalCount": 7,
+      "edges": [
+        {
+          "node": {
+            "id": "/offers/13095193866",
+            "price": 12500
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13373641630",
+            "price": 12199
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13380286950",
+            "price": 10999
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13634934495",
+            "price": 12999
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13772250721",
+            "price": 12999
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13856396050",
+            "price": 13391
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13856407264",
+            "price": 13357
+          },
+          "__typename": "OfferEdge"
+        }
+      ],
+      "__typename": "OfferConnection"
+    },
+    "madeInUkraine": false,
+    "userSubscribed": false
+  },
+  {
+    "id": 26219934,
+    "title": "ES09MA Metal Gear Analog Servo (0102003013)",
+    "date": "2025-05-22",
+    "vendor": {
+      "title": "EMAX"
+    },
+    "section": {
+      "productCategoryName": "Аксессуары для квадрокоптеров",
+      "_id": 1499,
+      "subCategory": "av",
+      "category": "av-aksessuary-dlya-kvadrokopterov"
     },
     "isPromo": false,
     "toOfficial": false,
@@ -302,154 +1322,31 @@
     "imagesCount": 1,
     "videosCount": 0,
     "techShortSpecifications": [
-      "Комплект вугільних фільтрів (2шт.) PBS ..."
+      "Сервопривід для дрона"
     ],
     "techShortSpecificationsList": [
       {
-        "value": "Комплект вугільних фільтрів (2шт.) PBS ...",
+        "value": "Сервопривід для дрона",
         "isNoMargin": false
       }
     ],
     "reviewsCount": 0,
     "questionsCount": 0,
-    "url": "/bt-aksessuary-dlya-vytyazhek/weilor-wcf-05/",
+    "url": "/av-aksessuary-dlya-kvadrokopterov/emax-es09ma-metal-gear-analog-servo-0102003013/",
     "imageLinks": [
       {
-        "thumb": "https://hotline.ua/img/tx/527/5278892910.jpg",
-        "basic": "https://hotline.ua/img/tx/527/5278892911.jpg",
-        "small": "https://hotline.ua/img/tx/527/527889291_s265.jpg",
-        "big": "https://hotline.ua/img/tx/527/5278892915.jpg"
+        "thumb": "https://hotline.ua/img/tx/524/5247654790.jpg",
+        "basic": "https://hotline.ua/img/tx/524/5247654791.jpg",
+        "small": "https://hotline.ua/img/tx/524/524765479_s265.jpg",
+        "big": "https://hotline.ua/img/tx/524/5247654795.jpg"
       }
     ],
-    "minPrice": 500,
-    "maxPrice": 500,
-    "currentPrice": 500,
-    "initPrice": 500,
+    "minPrice": 497,
+    "maxPrice": 653,
+    "currentPrice": 557,
+    "initPrice": 653,
     "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 1,
-    "offers": {
-      "totalCount": 1,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13778613687",
-            "price": 500
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 25198796,
-    "title": "CA1010",
-    "date": "2024-01-26",
-    "vendor": {
-      "title": "Concept"
-    },
-    "section": {
-      "productCategoryName": "Увлажнители, очистители воздуха",
-      "_id": 152,
-      "subCategory": "bt",
-      "category": "bt-uvlazhniteli-ochistiteli-vozduha"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 8,
-    "videosCount": 0,
-    "techShortSpecifications": [
-      "Очищувач повітря",
-      " площа приміщення: 20 м²",
-      " тип очисника: на основі повітряних фільтрів",
-      " іонізатор: є"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "Очищувач повітря",
-        "isNoMargin": false
-      },
-      {
-        "key": "площа приміщення",
-        "value": "20 м²",
-        "isNoMargin": false
-      },
-      {
-        "key": "тип очисника",
-        "value": "на основі повітряних фільтрів",
-        "isNoMargin": false
-      },
-      {
-        "key": "іонізатор",
-        "value": "є",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 0,
-    "questionsCount": 0,
-    "url": "/bt-uvlazhniteli-ochistiteli-vozduha/concept-ca1010/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912590.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912591.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391259_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912595.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403915340.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403915341.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391534_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403915345.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912600.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912601.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391260_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912605.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912490.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912491.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391249_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912495.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912570.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912571.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391257_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912575.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912500.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912501.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391250_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912505.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912540.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912541.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391254_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912545.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/440/4403912560.jpg",
-        "basic": "https://hotline.ua/img/tx/440/4403912561.jpg",
-        "small": "https://hotline.ua/img/tx/440/440391256_s265.jpg",
-        "big": "https://hotline.ua/img/tx/440/4403912565.jpg"
-      }
-    ],
-    "minPrice": 2847,
-    "maxPrice": 8072,
-    "currentPrice": 7999,
-    "initPrice": 8072,
-    "salesCount": 0,
-    "isNew": 0,
+    "isNew": 1,
     "colorsProduct": [],
     "offerCount": 5,
     "offers": {
@@ -457,36 +1354,36 @@
       "edges": [
         {
           "node": {
-            "id": "/offers/13802370676",
-            "price": 2847
+            "id": "/offers/13781190632",
+            "price": 501
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13805350033",
-            "price": 8072
+            "id": "/offers/13781395651",
+            "price": 501
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13849131109",
-            "price": 7942
+            "id": "/offers/13782290167",
+            "price": 557
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13857844356",
-            "price": 7945
+            "id": "/offers/13782361548",
+            "price": 653
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13866234410",
-            "price": 7999
+            "id": "/offers/13802213760",
+            "price": 497
           },
           "__typename": "OfferEdge"
         }
@@ -497,571 +1394,17 @@
     "userSubscribed": false
   },
   {
-    "id": 4905639,
-    "title": "Multigroom 1000 MG1100/16",
-    "date": "2015-08-17",
+    "id": 23482117,
+    "title": "BEEHIVE BLUE (DT21391)",
+    "date": "2021-11-23",
     "vendor": {
-      "title": "Philips"
+      "title": "Dream toys"
     },
     "section": {
-      "productCategoryName": "Машинки для стрижки (триммеры)",
-      "_id": 175,
-      "subCategory": "bt",
-      "category": "bt-mashinki-dlya-strizhki-trimmery"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 4,
-    "videosCount": 3,
-    "techShortSpecifications": [
-      "Тример для бороди та вусів",
-      " кількість насадок: 4",
-      " матеріал лез: сталь",
-      " живлення: батарейки"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "Тример для бороди та вусів",
-        "isNoMargin": false
-      },
-      {
-        "key": "кількість насадок",
-        "value": "4",
-        "isNoMargin": false
-      },
-      {
-        "key": "матеріал лез",
-        "value": "сталь",
-        "isNoMargin": false
-      },
-      {
-        "key": "живлення",
-        "value": "батарейки",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 5,
-    "questionsCount": 0,
-    "url": "/bt-mashinki-dlya-strizhki-trimmery/philips-mg110016/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/272/2726454390.jpg",
-        "basic": "https://hotline.ua/img/tx/272/2726454391.jpg",
-        "small": "https://hotline.ua/img/tx/272/272645439_s265.jpg",
-        "big": "https://hotline.ua/img/tx/272/2726454395.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/272/2726454400.jpg",
-        "basic": "https://hotline.ua/img/tx/272/2726454401.jpg",
-        "small": "https://hotline.ua/img/tx/272/272645440_s265.jpg",
-        "big": "https://hotline.ua/img/tx/272/2726454405.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/272/2726454410.jpg",
-        "basic": "https://hotline.ua/img/tx/272/2726454411.jpg",
-        "small": "https://hotline.ua/img/tx/272/272645441_s265.jpg",
-        "big": "https://hotline.ua/img/tx/272/2726454415.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/272/2726454420.jpg",
-        "basic": "https://hotline.ua/img/tx/272/2726454421.jpg",
-        "small": "https://hotline.ua/img/tx/272/272645442_s265.jpg",
-        "big": "https://hotline.ua/img/tx/272/2726454425.jpg"
-      }
-    ],
-    "minPrice": 933,
-    "maxPrice": 1993.26,
-    "currentPrice": 961,
-    "initPrice": 967,
-    "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 66,
-    "offers": {
-      "totalCount": 66,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13479470143",
-            "price": 969
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13692641080",
-            "price": 967
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13717171353",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13765225887",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13772160463",
-            "price": 1020
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13785883597",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13801823679",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13807621397",
-            "price": 1044
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13807816907",
-            "price": 1006
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13809464531",
-            "price": 1021
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13809529592",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13814828430",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13814961046",
-            "price": 977
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815028454",
-            "price": 1049
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815255734",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815761791",
-            "price": 1118
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815773430",
-            "price": 1012
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815935946",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815936158",
-            "price": 1106
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815968891",
-            "price": 1993.26
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13816061014",
-            "price": 1039
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13816448536",
-            "price": 943
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13816572474",
-            "price": 1055
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13820167579",
-            "price": 1049
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13821486920",
-            "price": 1003
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13823987084",
-            "price": 989
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13826995397",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13837034761",
-            "price": 999.5
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13837809781",
-            "price": 1034
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843391489",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843392950",
-            "price": 1089
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843408340",
-            "price": 985
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843409408",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843410702",
-            "price": 1211
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843444465",
-            "price": 1187
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843522168",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843580050",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843584885",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843593158",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843602233",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843612869",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843634973",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843679511",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843709346",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13843857123",
-            "price": 1065
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13844544561",
-            "price": 1110
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13844835159",
-            "price": 1068
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13844891187",
-            "price": 1201
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13845363420",
-            "price": 958.5
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13846848261",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13849047002",
-            "price": 981
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13856748268",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13859804734",
-            "price": 971
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13860616219",
-            "price": 1029
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13861408281",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13861447987",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862187761",
-            "price": 1017
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862418488",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13862923564",
-            "price": 1298
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13863626797",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13863761127",
-            "price": 981
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13864207628",
-            "price": 1100
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866502324",
-            "price": 961
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13866545849",
-            "price": 1099
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13867394487",
-            "price": 933
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13870473781",
-            "price": 999
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 25781531,
-    "title": "HW70-BP14929-S",
-    "date": "2024-09-30",
-    "vendor": {
-      "title": "Haier"
-    },
-    "section": {
-      "productCategoryName": "Стиральные машины",
-      "_id": 37,
-      "subCategory": "bt",
-      "category": "bt-stiralnye-i-sushilnye-mashiny"
+      "productCategoryName": "Вагинальные шарики",
+      "_id": 633,
+      "subCategory": "adult",
+      "category": "adult-vaginalnye-shariki"
     },
     "isPromo": false,
     "toOfficial": false,
@@ -1070,90 +1413,71 @@
     "imagesCount": 1,
     "videosCount": 0,
     "techShortSpecifications": [
-      "Пральна машина автоматична",
-      " окремостояча",
-      " фронтальна",
-      " А",
-      " Інверторний двигун",
-      " завантаження білизни під час прання: 7 кг",
-      " віджим: 1400 об / хв",
-      " клас віджиму: B",
-      " розміри (ШxВxГ): 59.5 x 85 x 47.7 см",
-      " колір: білий"
+      "Кульки",
+      "Матеріал: Силікон",
+      " колір: Блакитний",
+      " довжина: 3 см",
+      " діаметр: 3 см"
     ],
     "techShortSpecificationsList": [
       {
-        "value": "Пральна машина автоматична",
+        "value": "Кульки",
         "isNoMargin": false
       },
       {
-        "value": "окремостояча",
-        "isNoMargin": false
-      },
-      {
-        "value": "фронтальна",
-        "isNoMargin": false
-      },
-      {
-        "value": "А",
-        "isNoMargin": false
-      },
-      {
-        "value": "Інверторний двигун",
-        "isNoMargin": false
-      },
-      {
-        "key": "завантаження білизни під час прання",
-        "value": "7 кг",
-        "isNoMargin": false
-      },
-      {
-        "key": "віджим",
-        "value": "1400 об / хв",
-        "isNoMargin": false
-      },
-      {
-        "key": "клас віджиму",
-        "value": "B",
-        "isNoMargin": false
-      },
-      {
-        "key": "розміри (ШxВxГ)",
-        "value": "59.5 x 85 x 47.7 см",
+        "key": "Матеріал",
+        "value": "Силікон",
         "isNoMargin": false
       },
       {
         "key": "колір",
-        "value": "білий",
+        "value": "Блакитний",
+        "isNoMargin": false
+      },
+      {
+        "key": "довжина",
+        "value": "3 см",
+        "isNoMargin": false
+      },
+      {
+        "key": "діаметр",
+        "value": "3 см",
         "isNoMargin": false
       }
     ],
     "reviewsCount": 0,
     "questionsCount": 0,
-    "url": "/bt-stiralnye-i-sushilnye-mashiny/haier-hw70-bp14929-s/",
+    "url": "/adult-vaginalnye-shariki/dreamtoys-vaginalnye-vibroshariki-dream-toys-beehive-dt21391/",
     "imageLinks": [
       {
-        "thumb": "https://hotline.ua/img/tx/529/5296405430.jpg",
-        "basic": "https://hotline.ua/img/tx/529/5296405431.jpg",
-        "small": "https://hotline.ua/img/tx/529/529640543_s265.jpg",
-        "big": "https://hotline.ua/img/tx/529/5296405435.jpg"
+        "thumb": "https://hotline.ua/img/tx/530/5308522970.jpg",
+        "basic": "https://hotline.ua/img/tx/530/5308522971.jpg",
+        "small": "https://hotline.ua/img/tx/530/530852297_s265.jpg",
+        "big": "https://hotline.ua/img/tx/530/5308522975.jpg"
       }
     ],
-    "minPrice": 24018,
-    "maxPrice": 24018,
-    "currentPrice": 24018,
-    "initPrice": 24018,
-    "salesCount": 0,
+    "minPrice": 2850,
+    "maxPrice": 2850,
+    "currentPrice": 2850,
+    "initPrice": 2850,
+    "salesCount": 1,
     "isNew": 0,
     "colorsProduct": [],
-    "offerCount": 1,
+    "offerCount": 2,
     "offers": {
-      "totalCount": 1,
+      "totalCount": 2,
       "edges": [
         {
           "node": {
-            "id": "/offers/13869224814",
-            "price": 24018
+            "id": "/offers/13507057656",
+            "price": 2850
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13546652342",
+            "price": 2850
           },
           "__typename": "OfferEdge"
         }
@@ -1164,224 +1488,17 @@
     "userSubscribed": false
   },
   {
-    "id": 22825296,
-    "title": "Series 5400 EP5444/70",
-    "date": "2021-05-27",
+    "id": 23031252,
+    "title": "AUX Spring 1,2m Red (8886668686198)",
+    "date": "2021-07-12",
     "vendor": {
-      "title": "Philips"
+      "title": "Luxe Cube"
     },
     "section": {
-      "productCategoryName": "Кофеварки и кофемашины",
-      "_id": 101,
-      "subCategory": "bt",
-      "category": "bt-kofevarki"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 4,
-    "videosCount": 0,
-    "techShortSpecifications": [
-      "Кавомашина автоматична",
-      " настільна",
-      " 1500 Вт",
-      " кава: в зернах, мелена",
-      " функція \"cappuccino\": автоматичне приготування",
-      " резервуар для води: 1,8 л"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "Кавомашина автоматична",
-        "isNoMargin": false
-      },
-      {
-        "value": "настільна",
-        "isNoMargin": false
-      },
-      {
-        "value": "1500 Вт",
-        "isNoMargin": false
-      },
-      {
-        "key": "кава",
-        "value": "в зернах, мелена",
-        "isNoMargin": false
-      },
-      {
-        "key": "функція \"cappuccino\"",
-        "value": "автоматичне приготування",
-        "isNoMargin": false
-      },
-      {
-        "key": "резервуар для води",
-        "value": "1,8 л",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 0,
-    "questionsCount": 0,
-    "url": "/bt-kofevarki/philips-series-5400-ep544470/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/525/5258183550.jpg",
-        "basic": "https://hotline.ua/img/tx/525/5258183551.jpg",
-        "small": "https://hotline.ua/img/tx/525/525818355_s265.jpg",
-        "big": "https://hotline.ua/img/tx/525/5258183555.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/525/5258183560.jpg",
-        "basic": "https://hotline.ua/img/tx/525/5258183561.jpg",
-        "small": "https://hotline.ua/img/tx/525/525818356_s265.jpg",
-        "big": "https://hotline.ua/img/tx/525/5258183565.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/525/5258183570.jpg",
-        "basic": "https://hotline.ua/img/tx/525/5258183571.jpg",
-        "small": "https://hotline.ua/img/tx/525/525818357_s265.jpg",
-        "big": "https://hotline.ua/img/tx/525/5258183575.jpg"
-      },
-      {
-        "thumb": "https://hotline.ua/img/tx/525/5258183580.jpg",
-        "basic": "https://hotline.ua/img/tx/525/5258183581.jpg",
-        "small": "https://hotline.ua/img/tx/525/525818358_s265.jpg",
-        "big": "https://hotline.ua/img/tx/525/5258183585.jpg"
-      }
-    ],
-    "minPrice": 26119,
-    "maxPrice": 30777,
-    "currentPrice": 28020.81,
-    "initPrice": 28406,
-    "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 15,
-    "offers": {
-      "totalCount": 15,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13433214875",
-            "price": 27950
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13517586253",
-            "price": 27999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13607633543",
-            "price": 28020.81
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13699072512",
-            "price": 28449
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13738622369",
-            "price": 26119
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13804130406",
-            "price": 29839
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13815723365",
-            "price": 30581
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13823626179",
-            "price": 30498
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13823628997",
-            "price": 30495
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13823679781",
-            "price": 30501
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13828591998",
-            "price": 28406
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13845433076",
-            "price": 28999
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13854554632",
-            "price": 29893
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13856487096",
-            "price": 30777
-          },
-          "__typename": "OfferEdge"
-        },
-        {
-          "node": {
-            "id": "/offers/13865927418",
-            "price": 29048
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 25844476,
-    "title": "SOLARIA CARBON (OS-99610)",
-    "date": "2024-11-05",
-    "vendor": {
-      "title": "Olimpia Splendid"
-    },
-    "section": {
-      "productCategoryName": "Обогреватели",
-      "_id": 124,
-      "subCategory": "bt",
-      "category": "bt-obogrevateli"
+      "productCategoryName": "Аудио- и видеокабели",
+      "_id": 53,
+      "subCategory": "av",
+      "category": "av-audio--i-videokabeli"
     },
     "isPromo": false,
     "toOfficial": false,
@@ -1390,332 +1507,101 @@
     "imagesCount": 1,
     "videosCount": 0,
     "techShortSpecifications": [
-      " інфрачервоний обігрівач",
-      " підлоговий",
-      " потужність: 0,6 / 1,2 кВт",
-      "приміщення: 10-12 м²"
+      "Аудіокабель аналоговий",
+      " роз'єми: mini jack 3.5mm - mini jack 3.5mm",
+      " довжина: 1,2 м"
     ],
     "techShortSpecificationsList": [
       {
-        "value": "інфрачервоний обігрівач",
+        "value": "Аудіокабель аналоговий",
         "isNoMargin": false
       },
       {
-        "value": "підлоговий",
+        "key": "роз'єми",
+        "value": "mini jack 3.5mm - mini jack 3.5mm",
         "isNoMargin": false
       },
       {
-        "key": "потужність",
-        "value": "0,6 / 1,2 кВт",
-        "isNoMargin": false
-      },
-      {
-        "key": "приміщення",
-        "value": "10-12 м²",
+        "key": "довжина",
+        "value": "1,2 м",
         "isNoMargin": false
       }
     ],
     "reviewsCount": 0,
     "questionsCount": 0,
-    "url": "/bt-obogrevateli/olimpia-splendid-solaria-carbon-os-99610/",
+    "url": "/av-audio--i-videokabeli/luxe-cube-aux-spring-12m-red-8886668686198/",
     "imageLinks": [
       {
-        "thumb": "https://hotline.ua/img/tx/523/5238018440.jpg",
-        "basic": "https://hotline.ua/img/tx/523/5238018441.jpg",
-        "small": "https://hotline.ua/img/tx/523/523801844_s265.jpg",
-        "big": "https://hotline.ua/img/tx/523/5238018445.jpg"
+        "thumb": "https://hotline.ua/img/tx/529/5293174880.jpg",
+        "basic": "https://hotline.ua/img/tx/529/5293174881.jpg",
+        "small": "https://hotline.ua/img/tx/529/529317488_s265.jpg",
+        "big": "https://hotline.ua/img/tx/529/5293174885.jpg"
       }
     ],
-    "minPrice": 4373,
-    "maxPrice": 4499,
-    "currentPrice": 4499,
-    "initPrice": 4436,
-    "salesCount": 0,
+    "minPrice": 105,
+    "maxPrice": 154,
+    "currentPrice": 149,
+    "initPrice": 149,
+    "salesCount": 1,
     "isNew": 0,
     "colorsProduct": [],
-    "offerCount": 4,
+    "offerCount": 8,
     "offers": {
-      "totalCount": 4,
+      "totalCount": 8,
       "edges": [
         {
           "node": {
-            "id": "/offers/13732386278",
-            "price": 4499
+            "id": "/offers/13754059430",
+            "price": 149
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13769253399",
-            "price": 4435
+            "id": "/offers/13754631410",
+            "price": 149
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13815106126",
-            "price": 4499
+            "id": "/offers/13787907824",
+            "price": 149
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13826738627",
-            "price": 4373
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 24514219,
-    "title": "Smart kitchen scale CK10E Midnight Blue",
-    "date": "2023-03-24",
-    "vendor": {
-      "title": "Yolanda"
-    },
-    "section": {
-      "productCategoryName": "Весы кухонные",
-      "_id": 165,
-      "subCategory": "bt",
-      "category": "bt-kuhonnye-vesy"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 1,
-    "videosCount": 0,
-    "techShortSpecifications": [
-      "Ваги кухонні електронні",
-      " з плоскою платформою",
-      " максимальна вимірювана вага: 5 кг",
-      " Вимірювання об'єму рідини",
-      " Послідовне зважування в одній посуді (функція \"0\")"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "Ваги кухонні електронні",
-        "isNoMargin": false
-      },
-      {
-        "value": "з плоскою платформою",
-        "isNoMargin": false
-      },
-      {
-        "key": "максимальна вимірювана вага",
-        "value": "5 кг",
-        "isNoMargin": false
-      },
-      {
-        "value": "Вимірювання об'єму рідини",
-        "isNoMargin": false
-      },
-      {
-        "value": "Послідовне зважування в одній посуді (функція \"0\")",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 0,
-    "questionsCount": 0,
-    "url": "/bt-kuhonnye-vesy/yolanda-smart-kitchen-scale-ck10e-midnight-blue/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/507/5071474760.jpg",
-        "basic": "https://hotline.ua/img/tx/507/5071474761.jpg",
-        "small": "https://hotline.ua/img/tx/507/507147476_s265.jpg",
-        "big": "https://hotline.ua/img/tx/507/5071474765.jpg"
-      }
-    ],
-    "minPrice": 499,
-    "maxPrice": 499,
-    "currentPrice": 499,
-    "initPrice": 499,
-    "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 1,
-    "offers": {
-      "totalCount": 1,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13466469408",
-            "price": 499
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 25619111,
-    "title": "VERTIGO - KIT FILTER (spare part) (OS-B0925)",
-    "date": "2024-07-26",
-    "vendor": {
-      "title": "Olimpia Splendid"
-    },
-    "section": {
-      "productCategoryName": "Аксессуары для увлажнителей и воздухоочистителей",
-      "_id": 672,
-      "subCategory": "bt",
-      "category": "bt-aksessuary-dlya-uvlazhnitelej-i-vozduhoochistitelej"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 1,
-    "videosCount": 0,
-    "techShortSpecifications": [
-      "комбінований фільтр",
-      " сумісність: Olimpia Splendid VERTIGO (OS-99276)"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "комбінований фільтр",
-        "isNoMargin": false
-      },
-      {
-        "key": "сумісність",
-        "value": "Olimpia Splendid VERTIGO (OS-99276)",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 0,
-    "questionsCount": 0,
-    "url": "/bt-aksessuary-dlya-uvlazhnitelej-i-vozduhoochistitelej/olimpia-splendid-vertigo-kit-filter-spare-part-os-b0925/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/494/4942793670.jpg",
-        "basic": "https://hotline.ua/img/tx/494/4942793671.jpg",
-        "small": "https://hotline.ua/img/tx/494/494279367_s265.jpg",
-        "big": "https://hotline.ua/img/tx/494/4942793675.jpg"
-      }
-    ],
-    "minPrice": 2499,
-    "maxPrice": 2499,
-    "currentPrice": 2499,
-    "initPrice": 2499,
-    "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 1,
-    "offers": {
-      "totalCount": 1,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13675226935",
-            "price": 2499
-          },
-          "__typename": "OfferEdge"
-        }
-      ],
-      "__typename": "OfferConnection"
-    },
-    "madeInUkraine": false,
-    "userSubscribed": false
-  },
-  {
-    "id": 24183857,
-    "title": "SS-6305",
-    "date": "2022-10-14",
-    "vendor": {
-      "title": "SOGO"
-    },
-    "section": {
-      "productCategoryName": "Утюги, отпариватели",
-      "_id": 120,
-      "subCategory": "bt",
-      "category": "bt-utyugi"
-    },
-    "isPromo": false,
-    "toOfficial": false,
-    "lineName": "",
-    "linePathNew": null,
-    "imagesCount": 1,
-    "videosCount": 0,
-    "techShortSpecifications": [
-      "Відпарювач",
-      " підошва: алюміній",
-      " потужність: 1000 Вт",
-      " вага: 0,9 кг",
-      " об'єм резервуару для води: 250 мл"
-    ],
-    "techShortSpecificationsList": [
-      {
-        "value": "Відпарювач",
-        "isNoMargin": false
-      },
-      {
-        "key": "підошва",
-        "value": "алюміній",
-        "isNoMargin": false
-      },
-      {
-        "key": "потужність",
-        "value": "1000 Вт",
-        "isNoMargin": false
-      },
-      {
-        "key": "вага",
-        "value": "0,9 кг",
-        "isNoMargin": false
-      },
-      {
-        "key": "об'єм резервуару для води",
-        "value": "250 мл",
-        "isNoMargin": false
-      }
-    ],
-    "reviewsCount": 0,
-    "questionsCount": 0,
-    "url": "/bt-utyugi/sogo-pla-ss-6305/",
-    "imageLinks": [
-      {
-        "thumb": "https://hotline.ua/img/tx/531/5312416410.jpg",
-        "basic": "https://hotline.ua/img/tx/531/5312416411.jpg",
-        "small": "https://hotline.ua/img/tx/531/531241641_s265.jpg",
-        "big": "https://hotline.ua/img/tx/531/5312416415.jpg"
-      }
-    ],
-    "minPrice": 1436,
-    "maxPrice": 1534,
-    "currentPrice": 1485,
-    "initPrice": 1485,
-    "salesCount": 0,
-    "isNew": 0,
-    "colorsProduct": [],
-    "offerCount": 3,
-    "offers": {
-      "totalCount": 3,
-      "edges": [
-        {
-          "node": {
-            "id": "/offers/13771243699",
-            "price": 1534
+            "id": "/offers/13792379153",
+            "price": 154
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13828602563",
-            "price": 1517
+            "id": "/offers/13808275277",
+            "price": 149
           },
           "__typename": "OfferEdge"
         },
         {
           "node": {
-            "id": "/offers/13836438099",
-            "price": 1436
+            "id": "/offers/13832926456",
+            "price": 105
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13837014263",
+            "price": 145.5
+          },
+          "__typename": "OfferEdge"
+        },
+        {
+          "node": {
+            "id": "/offers/13865847632",
+            "price": 149
           },
           "__typename": "OfferEdge"
         }
