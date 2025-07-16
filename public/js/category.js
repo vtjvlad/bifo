@@ -254,18 +254,27 @@ class CategoryPage {
     }
 
     showLoading() {
-        document.getElementById('loadingSpinner').style.display = 'block';
-        document.getElementById('productsGrid').style.display = 'none';
-        document.getElementById('emptyState').style.display = 'none';
-        document.getElementById('pagination').style.display = 'none';
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const productsGrid = document.getElementById('productsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const pagination = document.getElementById('pagination');
+        
+        if (loadingSpinner) loadingSpinner.style.display = 'block';
+        if (productsGrid) productsGrid.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'none';
+        if (pagination) pagination.style.display = 'none';
     }
 
     showEmptyState() {
-        document.getElementById('loadingSpinner').style.display = 'none';
-        document.getElementById('productsGrid').style.display = 'none';
-        document.getElementById('emptyState').style.display = 'block';
-        document.getElementById('pagination').style.display = 'none';
-        document.getElementById('totalProducts').textContent = '0';
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const productsGrid = document.getElementById('productsGrid');
+        const emptyState = document.getElementById('emptyState');
+        const pagination = document.getElementById('pagination');
+        
+        if (loadingSpinner) loadingSpinner.style.display = 'none';
+        if (productsGrid) productsGrid.style.display = 'none';
+        if (emptyState) emptyState.style.display = 'block';
+        if (pagination) pagination.style.display = 'none';
     }
 
     renderProducts(products, pagination) {
