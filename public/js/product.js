@@ -7,7 +7,7 @@ class ProductPage {
         this.currentImageIndex = 0;
         this.images = [];
         
-        this.init();
+        // Не инициализируем автоматически - это будет сделано из HTML
     }
 
     async init() {

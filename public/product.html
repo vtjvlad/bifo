@@ -17,6 +17,9 @@
 <body class="product-page">
     <!-- Header Component -->
     <div data-component="header"></div>
+    
+    <!-- Mega Menu Component -->
+    <div data-component="mega-menu"></div>
 
     <!-- Main Content -->
     <div class="container-fluid">
@@ -248,5 +251,19 @@
     <script src="/js/app.js"></script>
     <!-- Product Page JS -->
     <script src="/js/product.js"></script>
+    <script>
+        // Инициализация основного приложения для работы шапки
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Инициализируем основное приложение
+            if (!window.app) {
+                window.app = new BifoApp();
+                await window.app.init();
+            }
+            
+            // Инициализируем страницу товара
+            window.productPage = new ProductPage();
+            await window.productPage.init();
+        });
+    </script>
 </body>
 </html> 

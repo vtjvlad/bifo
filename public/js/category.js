@@ -12,7 +12,7 @@ class CategoryPage {
         // Get category parameters from URL
         this.categoryParams = this.getCategoryParamsFromURL();
         
-        this.init();
+        // Не инициализируем автоматически - это будет сделано из HTML
     }
 
     async init() {
@@ -32,8 +32,27 @@ class CategoryPage {
 
     async waitForComponents() {
         return new Promise((resolve) => {
-            // Упрощаем ожидание - просто ждем немного для загрузки DOM
-            setTimeout(resolve, 500);
+            const checkComponents = () => {
+                const headerComponent = document.querySelector('[data-component="header"]');
+                const megaMenuComponent = document.querySelector('[data-component="mega-menu"]');
+                
+                // Если компоненты загружены или прошло достаточно времени, продолжаем
+                if ((headerComponent && headerComponent.innerHTML.trim() !== '') || 
+                    (megaMenuComponent && megaMenuComponent.innerHTML.trim() !== '') ||
+                    document.readyState === 'complete') {
+                    resolve();
+                } else {
+                    setTimeout(checkComponents, 100);
+                }
+            };
+            
+            // Начинаем проверку через 100мс
+            setTimeout(checkComponents, 100);
+            
+            // Максимальное время ожидания - 3 секунды
+            setTimeout(() => {
+                resolve();
+            }, 3000);
         });
     }
 
@@ -48,34 +67,52 @@ class CategoryPage {
 
     setupEventListeners() {
         // Filter events
-        document.getElementById('applyFilters').addEventListener('click', () => {
-            this.applyFilters();
-        });
+        const applyFiltersBtn = document.getElementById('applyFilters');
+        if (applyFiltersBtn) {
+            applyFiltersBtn.addEventListener('click', () => {
+                this.applyFilters();
+            });
+        }
 
         // Sort events
-        document.getElementById('sortSelect').addEventListener('change', (e) => {
-            this.currentSort = e.target.value;
-            this.currentPage = 1;
-            this.loadProducts();
-        });
+        const sortSelect = document.getElementById('sortSelect');
+        if (sortSelect) {
+            sortSelect.addEventListener('change', (e) => {
+                this.currentSort = e.target.value;
+                this.currentPage = 1;
+                this.loadProducts();
+            });
+        }
 
         // View mode events
-        document.getElementById('gridView').addEventListener('click', () => {
-            this.setViewMode('grid');
-        });
+        const gridViewBtn = document.getElementById('gridView');
+        if (gridViewBtn) {
+            gridViewBtn.addEventListener('click', () => {
+                this.setViewMode('grid');
+            });
+        }
 
-        document.getElementById('listView').addEventListener('click', () => {
-            this.setViewMode('list');
-        });
+        const listViewBtn = document.getElementById('listView');
+        if (listViewBtn) {
+            listViewBtn.addEventListener('click', () => {
+                this.setViewMode('list');
+            });
+        }
 
         // Enter key in price inputs
-        document.getElementById('minPrice').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.applyFilters();
-        });
+        const minPriceInput = document.getElementById('minPrice');
+        if (minPriceInput) {
+            minPriceInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.applyFilters();
+            });
+        }
 
-        document.getElementById('maxPrice').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.applyFilters();
-        });
+        const maxPriceInput = document.getElementById('maxPrice');
+        if (maxPriceInput) {
+            maxPriceInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.applyFilters();
+            });
+        }
 
         // Add to cart events (delegated)
         document.addEventListener('click', (e) => {
@@ -180,9 +217,13 @@ class CategoryPage {
     applyFilters() {
         this.currentFilters = {};
         
-        const minPrice = document.getElementById('minPrice').value;
-        const maxPrice = document.getElementById('maxPrice').value;
-        const isPromo = document.getElementById('promoFilter').checked;
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        const promoFilterInput = document.getElementById('promoFilter');
+        
+        const minPrice = minPriceInput ? minPriceInput.value : '';
+        const maxPrice = maxPriceInput ? maxPriceInput.value : '';
+        const isPromo = promoFilterInput ? promoFilterInput.checked : false;
 
         if (minPrice) this.currentFilters.minPrice = minPrice;
         if (maxPrice) this.currentFilters.maxPrice = maxPrice;

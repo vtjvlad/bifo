@@ -36,40 +36,73 @@ class BifoApp {
     }
 
     setupEventListeners() {
-        // Navigation
-        document.getElementById('loginBtn').addEventListener('click', () => this.showLoginModal());
-        document.getElementById('cartBtn').addEventListener('click', () => this.showCartModal());
-        document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+        // Navigation - добавляем проверки на существование элементов
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => this.showLoginModal());
+        }
+        
+        const cartBtn = document.getElementById('cartBtn');
+        if (cartBtn) {
+            cartBtn.addEventListener('click', () => this.showCartModal());
+        }
+        
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.logout());
+        }
         
         // Mega Menu
-        document.getElementById('megaMenuBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            this.showMegaMenu();
-        });
+        const megaMenuBtn = document.getElementById('megaMenuBtn');
+        if (megaMenuBtn) {
+            megaMenuBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showMegaMenu();
+            });
+        }
         
         // Search
-        document.getElementById('searchForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.searchProducts();
-        });
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.searchProducts();
+            });
+        }
         
         // Modals
-        document.getElementById('showRegisterForm').addEventListener('click', () => this.showRegisterModal());
-        document.getElementById('showLoginForm').addEventListener('click', () => this.showLoginModal());
+        const showRegisterForm = document.getElementById('showRegisterForm');
+        if (showRegisterForm) {
+            showRegisterForm.addEventListener('click', () => this.showRegisterModal());
+        }
+        
+        const showLoginForm = document.getElementById('showLoginForm');
+        if (showLoginForm) {
+            showLoginForm.addEventListener('click', () => this.showLoginModal());
+        }
         
         // Forms
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.login();
-        });
+        const loginForm = document.getElementById('loginForm');
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.login();
+            });
+        }
         
-        document.getElementById('registerForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.register();
-        });
+        const registerForm = document.getElementById('registerForm');
+        if (registerForm) {
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.register();
+            });
+        }
         
         // Checkout
-        document.getElementById('checkoutBtn').addEventListener('click', () => this.checkout());
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) {
+            checkoutBtn.addEventListener('click', () => this.checkout());
+        }
         
         // Mega Menu Events
         document.addEventListener('click', (e) => {
@@ -171,8 +204,13 @@ class BifoApp {
 
     // Authentication
     async login() {
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        
+        if (!emailInput || !passwordInput) return;
+        
+        const email = emailInput.value;
+        const password = passwordInput.value;
 
         try {
             const response = await this.apiRequest('/auth/login', {
@@ -196,12 +234,20 @@ class BifoApp {
     }
 
     async register() {
+        const emailInput = document.getElementById('registerEmail');
+        const passwordInput = document.getElementById('registerPassword');
+        const firstNameInput = document.getElementById('registerFirstName');
+        const lastNameInput = document.getElementById('registerLastName');
+        const phoneInput = document.getElementById('registerPhone');
+        
+        if (!emailInput || !passwordInput || !firstNameInput || !lastNameInput) return;
+        
         const formData = {
-            email: document.getElementById('registerEmail').value,
-            password: document.getElementById('registerPassword').value,
-            firstName: document.getElementById('registerFirstName').value,
-            lastName: document.getElementById('registerLastName').value,
-            phone: document.getElementById('registerPhone').value
+            email: emailInput.value,
+            password: passwordInput.value,
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            phone: phoneInput ? phoneInput.value : ''
         };
 
         try {
@@ -358,6 +404,7 @@ class BifoApp {
     // Mega Menu Methods
     showMegaMenu() {
         const wrapper = document.getElementById('megaMenuWrapper');
+        if (!wrapper) return;
         wrapper.style.display = 'block';
         document.body.style.overflow = 'hidden';
         this.loadMegaMenuCategories();
@@ -365,6 +412,7 @@ class BifoApp {
 
     hideMegaMenu() {
         const wrapper = document.getElementById('megaMenuWrapper');
+        if (!wrapper) return;
         wrapper.style.display = 'none';
         document.body.style.overflow = '';
     }
@@ -839,7 +887,10 @@ class BifoApp {
     }
 
     async searchProducts() {
-        const query = document.getElementById('searchInput').value.trim();
+        const searchInput = document.getElementById('searchInput');
+        if (!searchInput) return;
+        
+        const query = searchInput.value.trim();
         if (!query) return;
 
         try {
@@ -915,6 +966,8 @@ class BifoApp {
 
     updateCartUI() {
         const badge = document.getElementById('cartBadge');
+        if (!badge) return;
+        
         const total = this.cart.reduce((sum, item) => sum + item.quantity, 0);
         
         if (total > 0) {
@@ -928,6 +981,8 @@ class BifoApp {
     renderCart() {
         const container = document.getElementById('cartItems');
         const totalElement = document.getElementById('cartTotal');
+        
+        if (!container || !totalElement) return;
         
         if (this.cart.length === 0) {
             container.innerHTML = `
@@ -947,7 +1002,7 @@ class BifoApp {
                      alt="${item.product.title}" class="cart-item-image">
                 <div class="cart-item-info">
                     <div class="cart-item-title">${item.product.title}</div>
-                    <div class="cart-item-price">${item.product.currentPrice.toLocaleString()} ₽</div>
+                    <div class="cart-item-price">${item.product.currentPrice.toLocaleString()} грн.</div>
                 </div>
                 <div class="cart-item-quantity">
                     <button class="quantity-btn decrease-btn" data-product-id="${item.product._id}" data-quantity="${item.quantity - 1}">-</button>
@@ -971,41 +1026,53 @@ class BifoApp {
         const userDropdown = document.getElementById('userDropdown');
         const userName = document.getElementById('userName');
 
-        if (this.user) {
-            loginBtn.style.display = 'none';
-            userDropdown.style.display = 'block';
-            userName.textContent = this.user.firstName;
-        } else {
-            loginBtn.style.display = 'block';
-            userDropdown.style.display = 'none';
+        if (loginBtn && userDropdown && userName) {
+            if (this.user) {
+                loginBtn.style.display = 'none';
+                userDropdown.style.display = 'block';
+                userName.textContent = this.user.firstName;
+            } else {
+                loginBtn.style.display = 'block';
+                userDropdown.style.display = 'none';
+            }
         }
     }
 
     // Modal Controls
     showLoginModal() {
-        const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+        const modalElement = document.getElementById('loginModal');
+        if (!modalElement) return;
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
 
     hideLoginModal() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
-        modal.hide();
+        const modalElement = document.getElementById('loginModal');
+        if (!modalElement) return;
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) modal.hide();
     }
 
     showRegisterModal() {
         this.hideLoginModal();
-        const modal = new bootstrap.Modal(document.getElementById('registerModal'));
+        const modalElement = document.getElementById('registerModal');
+        if (!modalElement) return;
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
 
     hideRegisterModal() {
-        const modal = bootstrap.Modal.getInstance(document.getElementById('registerModal'));
-        modal.hide();
+        const modalElement = document.getElementById('registerModal');
+        if (!modalElement) return;
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        if (modal) modal.hide();
     }
 
     showCartModal() {
         this.renderCart();
-        const modal = new bootstrap.Modal(document.getElementById('cartModal'));
+        const modalElement = document.getElementById('cartModal');
+        if (!modalElement) return;
+        const modal = new bootstrap.Modal(modalElement);
         modal.show();
     }
 
@@ -1045,8 +1112,11 @@ class BifoApp {
             this.showAlert(`Заказ оформлен! Номер заказа: ${response.data.orderNumber}`, 'success');
             
             // Close cart modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('cartModal'));
-            modal.hide();
+            const modalElement = document.getElementById('cartModal');
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) modal.hide();
+            }
             
         } catch (error) {
             console.error('Checkout error:', error);
