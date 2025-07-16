@@ -9,6 +9,126 @@ class BifoApp {
         this.init();
     }
 
+    // LocalStorage methods for catalogs
+    saveCatalogsToLocalStorage(catalogs, type = 'main') {
+        try {
+            const key = `bifo_catalogs_${type}`;
+            const timestamp = Date.now();
+            const data = {
+                catalogs: catalogs,
+                timestamp: timestamp,
+                version: '1.0'
+            };
+            localStorage.setItem(key, JSON.stringify(data));
+            console.log(`Catalogs saved to localStorage: ${key}`, data);
+        } catch (error) {
+            console.error('Error saving catalogs to localStorage:', error);
+        }
+    }
+
+    getCatalogsFromLocalStorage(type = 'main') {
+        try {
+            const key = `bifo_catalogs_${type}`;
+            const data = localStorage.getItem(key);
+            if (!data) return null;
+
+            const parsed = JSON.parse(data);
+            
+            // Check if data is not too old (7 days)
+            const maxAge = 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+            if (Date.now() - parsed.timestamp > maxAge) {
+                console.log(`LocalStorage data for ${key} is too old, removing`);
+                localStorage.removeItem(key);
+                return null;
+            }
+
+            console.log(`Catalogs loaded from localStorage: ${key}`, parsed);
+            return parsed.catalogs;
+        } catch (error) {
+            console.error('Error loading catalogs from localStorage:', error);
+            return null;
+        }
+    }
+
+    clearCatalogsFromLocalStorage(type = 'main') {
+        try {
+            const key = `bifo_catalogs_${type}`;
+            localStorage.removeItem(key);
+            console.log(`Catalogs cleared from localStorage: ${key}`);
+        } catch (error) {
+            console.error('Error clearing catalogs from localStorage:', error);
+        }
+    }
+
+    // Force refresh catalogs from server
+    async refreshCatalogs(type = 'main') {
+        console.log(`Forcing refresh of catalogs: ${type}`);
+        
+        // Clear cached data
+        this.clearCatalogsFromLocalStorage(type);
+        
+        // Reload based on type
+        if (type === 'main') {
+            await this.loadCatalogs();
+        } else if (type === 'mega') {
+            await this.loadMegaMenuCategories();
+        } else if (type.startsWith('structure_')) {
+            const catalogSlug = type.replace('structure_', '');
+            const catalog = this.catalogs ? this.catalogs.find(cat => cat.slug === catalogSlug) : null;
+            if (catalog) {
+                await this.loadCatalogStructure(catalogSlug, catalog.name);
+            }
+        }
+    }
+
+    // Clear all catalog cache
+    clearAllCatalogCache() {
+        try {
+            const keys = Object.keys(localStorage);
+            const catalogKeys = keys.filter(key => key.startsWith('bifo_catalogs_'));
+            catalogKeys.forEach(key => {
+                localStorage.removeItem(key);
+                console.log(`Cleared catalog cache: ${key}`);
+            });
+            console.log('All catalog cache cleared');
+        } catch (error) {
+            console.error('Error clearing all catalog cache:', error);
+        }
+    }
+
+    // Get catalog cache info
+    getCatalogCacheInfo() {
+        try {
+            const keys = Object.keys(localStorage);
+            const catalogKeys = keys.filter(key => key.startsWith('bifo_catalogs_'));
+            const cacheInfo = {};
+            
+            catalogKeys.forEach(key => {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    const age = Date.now() - data.timestamp;
+                    const ageHours = Math.floor(age / (1000 * 60 * 60));
+                    
+                    cacheInfo[key] = {
+                        timestamp: data.timestamp,
+                        age: age,
+                        ageHours: ageHours,
+                        version: data.version,
+                        itemCount: Array.isArray(data.catalogs) ? data.catalogs.length : 'N/A'
+                    };
+                } catch (e) {
+                    cacheInfo[key] = { error: 'Invalid data' };
+                }
+            });
+            
+            console.log('Catalog cache info:', cacheInfo);
+            return cacheInfo;
+        } catch (error) {
+            console.error('Error getting catalog cache info:', error);
+            return {};
+        }
+    }
+
     async init() {
         // Ждем загрузки компонентов
         await this.waitForComponents();
@@ -282,22 +402,41 @@ class BifoApp {
 
     // Catalogs
     async loadCatalogs() {
+        // First try to load from localStorage
+        const cachedCatalogs = this.getCatalogsFromLocalStorage('main');
+        if (cachedCatalogs) {
+            console.log('Using cached catalogs from localStorage');
+            this.catalogs = cachedCatalogs;
+            this.renderCatalogs(cachedCatalogs);
+            this.renderCatalogsDropdown(cachedCatalogs);
+            return;
+        }
+
+        // If no cached data, check server availability
         if (!this.isServerAvailable()) {
             console.log('Server not available, using mock catalogs');
             const mockCatalogs = this.getMockCatalogs();
+            this.saveCatalogsToLocalStorage(mockCatalogs, 'main');
+            this.catalogs = mockCatalogs;
             this.renderCatalogs(mockCatalogs);
+            this.renderCatalogsDropdown(mockCatalogs);
             return;
         }
 
         try {
             const response = await this.apiRequest('/catalogs/main');
             this.catalogs = response.data;
+            // Save to localStorage for future use
+            this.saveCatalogsToLocalStorage(response.data, 'main');
             this.renderCatalogs(response.data);
             this.renderCatalogsDropdown(response.data);
         } catch (error) {
             console.log('API error, using mock catalogs');
             const mockCatalogs = this.getMockCatalogs();
+            this.saveCatalogsToLocalStorage(mockCatalogs, 'main');
+            this.catalogs = mockCatalogs;
             this.renderCatalogs(mockCatalogs);
+            this.renderCatalogsDropdown(mockCatalogs);
         }
     }
 
@@ -418,20 +557,32 @@ class BifoApp {
     }
 
     async loadMegaMenuCategories() {
+        // First try to load from localStorage
+        const cachedCatalogs = this.getCatalogsFromLocalStorage('mega');
+        if (cachedCatalogs) {
+            console.log('Using cached mega menu catalogs from localStorage');
+            this.renderMegaMenuCatalogs(cachedCatalogs);
+            return;
+        }
+
         // Check if server is available
         if (!(await this.isServerAvailable())) {
             console.log('Server not available, using mock data for mega menu');
             const mockCatalogs = this.getMockMegaMenuData();
+            this.saveCatalogsToLocalStorage(mockCatalogs, 'mega');
             this.renderMegaMenuCatalogs(mockCatalogs);
             return;
         }
 
         try {
             const response = await this.apiRequest('/catalogs');
+            // Save to localStorage for future use
+            this.saveCatalogsToLocalStorage(response.data, 'mega');
             this.renderMegaMenuCatalogs(response.data);
         } catch (error) {
             console.log('API error, using mock data for mega menu');
             const mockCatalogs = this.getMockMegaMenuData();
+            this.saveCatalogsToLocalStorage(mockCatalogs, 'mega');
             this.renderMegaMenuCatalogs(mockCatalogs);
         }
     }
@@ -854,7 +1005,7 @@ class BifoApp {
                             <small class="text-muted">${product.vendor ? product.vendor.name : 'Неизвестный производитель'}</small>
                         </div>
                         <div class="product-price">
-                            ${product.currentPrice.toLocaleString()} ₽
+                            ${product.currentPrice.toLocaleString()} грн.
                             ${product.initPrice && product.initPrice > product.currentPrice ? 
                                 `<span class="product-original-price">${product.initPrice.toLocaleString()} ₽</span>` : ''}
                         </div>
@@ -1162,19 +1313,31 @@ class BifoApp {
     }
 
     async loadCatalogStructure(catalogSlug, catalogName) {
+        // First try to load from localStorage
+        const cachedStructure = this.getCatalogsFromLocalStorage(`structure_${catalogSlug}`);
+        if (cachedStructure) {
+            console.log(`Using cached catalog structure from localStorage: ${catalogSlug}`);
+            this.renderCatalogStructure(cachedStructure, catalogName);
+            return;
+        }
+
         if (!this.isServerAvailable()) {
             console.log('Server not available, using mock catalog structure');
             const mockStructure = this.getMockCatalogStructure(catalogSlug);
+            this.saveCatalogsToLocalStorage(mockStructure, `structure_${catalogSlug}`);
             this.renderCatalogStructure(mockStructure, catalogName);
             return;
         }
 
         try {
             const response = await this.apiRequest(`/catalogs/${catalogSlug}/structure`);
+            // Save to localStorage for future use
+            this.saveCatalogsToLocalStorage(response.data, `structure_${catalogSlug}`);
             this.renderCatalogStructure(response.data, catalogName);
         } catch (error) {
             console.log('API error, using mock catalog structure');
             const mockStructure = this.getMockCatalogStructure(catalogSlug);
+            this.saveCatalogsToLocalStorage(mockStructure, `structure_${catalogSlug}`);
             this.renderCatalogStructure(mockStructure, catalogName);
         }
     }
