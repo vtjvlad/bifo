@@ -87,6 +87,34 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Get single product by URL
+router.get('/url/:productUrl(*)', async (req, res) => {
+    try {
+        const productUrl = req.params.productUrl;
+        
+        console.log('🔍 API Debug - Product URL Request:');
+        console.log('   Raw URL param:', productUrl);
+        
+        // Decode URL if it was encoded
+        const decodedUrl = decodeURIComponent(productUrl);
+        console.log('   Decoded URL:', decodedUrl);
+        
+        const product = await Product.findOne({ url: decodedUrl });
+        console.log('   Found product:', product ? 'Yes' : 'No');
+
+        if (!product) {
+            console.log('   ❌ Product not found in database');
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        console.log('   ✅ Product found, returning data');
+        res.json({ success: true, data: product });
+    } catch (error) {
+        console.error('   ❌ Error in URL product lookup:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Get products by section
 router.get('/section/:sectionId', async (req, res) => {
     try {
@@ -164,6 +192,89 @@ router.get('/promo/list', async (req, res) => {
         .sort({ createdAt: -1 });
 
         res.json({ success: true, data: products });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get products by category
+router.get('/catalog/:catalogSlug/group/:groupSlug/category/:categorySlug', async (req, res) => {
+    try {
+        const { catalogSlug, groupSlug, categorySlug } = req.params;
+        const { page = 1, limit = 12, sort = 'createdAt', order = 'desc', minPrice, maxPrice, isPromo } = req.query;
+        
+        console.log('🔍 API Debug - Category Products Request:');
+        console.log('   Params:', { catalogSlug, groupSlug, categorySlug });
+        console.log('   Query:', req.query);
+        
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const sortObj = { [sort]: order === 'desc' ? -1 : 1 };
+
+        // First, try to get the category to find the productSearchField
+        let category = null;
+        try {
+            category = await require('../models/Catalog').findOne({ 
+                slug: categorySlug, 
+                level: 2,
+                isActive: true 
+            });
+        } catch (error) {
+            console.log('   Could not find category:', error.message);
+        }
+
+        // Build query based on category - try multiple possible field structures
+        const query = {
+            $or: [
+                // If category has productSearchField, use it
+                ...(category && category.productSearchField ? [
+                    { 'section.category': category.productSearchField },
+                    { 'section.category': { $regex: category.productSearchField + '$', $options: 'i' } }
+                ] : []),
+                // Fallback to original logic
+                { 'section.category': { $regex: categorySlug + '$', $options: 'i' } },
+                { 'section.category': categorySlug },
+                { 'section.id': categorySlug },
+                { 'section.slug': categorySlug },
+                { 'section.name': categorySlug },
+                { 'category': categorySlug },
+                { 'categorySlug': categorySlug },
+                { 'categoryId': categorySlug }
+            ]
+        };
+        
+        console.log('   MongoDB Query:', JSON.stringify(query, null, 2));
+
+        // Price filter
+        if (minPrice || maxPrice) {
+            query.currentPrice = {};
+            if (minPrice) query.currentPrice.$gte = parseFloat(minPrice);
+            if (maxPrice) query.currentPrice.$lte = parseFloat(maxPrice);
+        }
+
+        // Promo filter
+        if (isPromo === 'true') {
+            query.isPromo = true;
+        }
+
+        const products = await Product.find(query)
+            .sort(sortObj)
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        const total = await Product.countDocuments(query);
+
+        res.json({
+            success: true,
+            data: products,
+            pagination: {
+                page: parseInt(page),
+                limit: parseInt(limit),
+                totalPages: Math.ceil(total / parseInt(limit)),
+                totalDocs: total,
+                hasNextPage: skip + products.length < total,
+                hasPrevPage: parseInt(page) > 1
+            }
+        });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
     }

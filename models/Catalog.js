@@ -68,6 +68,11 @@ const catalogSchema = new mongoose.Schema({
     isReference: {
         type: Boolean,
         default: false
+    },
+    // Field for searching products in this category
+    productSearchField: {
+        type: String,
+        trim: true
     }
 }, {
     timestamps: true

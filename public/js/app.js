@@ -1197,8 +1197,9 @@ class BifoApp {
     }
 
     showCategory(catalogSlug, groupSlug, categorySlug) {
-        // Load products for this category
-        this.loadCategoryProducts(catalogSlug, groupSlug, categorySlug);
+        // Navigate to category page instead of showing modal
+        const url = `/category.html?catalog=${catalogSlug}&group=${groupSlug}&category=${categorySlug}`;
+        window.location.href = url;
     }
 
     async loadCategoryProducts(catalogSlug, groupSlug, categorySlug) {

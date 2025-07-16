@@ -11,15 +11,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+            defaultSrc: ["'self'"],
+            styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.googleapis.com", "https://use.fontawesome.com"],
+            scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com"],
+            imgSrc: ["'self'", "data:", "https://hotline.ua", "https://via.placeholder.com", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://use.fontawesome.com", "https://*.hotline.ua", "https://*.cdn.jsdelivr.net", "https://*.cdnjs.cloudflare.com", "https://*.googleusercontent.com", "https://*.amazonaws.com", "https://*.cloudinary.com", "https://*.imgur.com"],
+            fontSrc: ["'self'", "https://cdn.jsdelivr.net", "https://cdnjs.cloudflare.com", "https://fonts.gstatic.com", "https://use.fontawesome.com", "data:"],
+            connectSrc: ["'self'", "https://hotline.ua", "https://*.hotline.ua"],
+            frameSrc: ["'none'"],
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: []
+        }
+    }
+}));
 app.use(compression());
 app.use(morgan('combined'));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
@@ -36,6 +47,19 @@ app.use('/api/orders', require('./routes/orders'));
 // Serve main page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Serve category page
+app.get('/category.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'category.html'));
+});
+
+// Serve static files (after specific routes)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve product page - handle dynamic product URLs (after static files)
+app.get('/product/:productUrl(*)', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'product.html'));
 });
 
 // Error handling middleware

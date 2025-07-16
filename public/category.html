@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Категория товаров - BIFO</title>
+    <meta name="description" content="Товары в категории - интернет-магазин BIFO">
+    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="category-page">
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="category-container">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="container-fluid px-4 pt-4">
+                <ol class="breadcrumb" id="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/catalog.html">Каталоги</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Категория</li>
+                </ol>
+            </nav>
+
+            <!-- Category Content -->
+            <div class="container-fluid px-4 py-4">
+                <div class="row">
+                    <!-- Filters Sidebar -->
+                    <div class="col-lg-3 col-md-4 mb-4">
+                        <div class="filters-sidebar">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <i class="fas fa-filter me-2"></i>
+                                        Фильтры
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <!-- Price Filter -->
+                                    <div class="mb-4">
+                                        <h6>Цена</h6>
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <input type="number" class="form-control form-control-sm" 
+                                                       id="minPrice" placeholder="От" min="0">
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="number" class="form-control form-control-sm" 
+                                                       id="maxPrice" placeholder="До" min="0">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Promo Filter -->
+                                    <div class="mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="promoFilter">
+                                            <label class="form-check-label" for="promoFilter">
+                                                <i class="fas fa-tag me-2 text-warning"></i>
+                                                Только акционные товары
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Sort Options -->
+                                    <div class="mb-4">
+                                        <h6>Сортировка</h6>
+                                        <select class="form-select form-select-sm" id="sortSelect">
+                                            <option value="createdAt:desc">Сначала новые</option>
+                                            <option value="createdAt:asc">Сначала старые</option>
+                                            <option value="currentPrice:asc">По возрастанию цены</option>
+                                            <option value="currentPrice:desc">По убыванию цены</option>
+                                            <option value="title:asc">По названию А-Я</option>
+                                            <option value="title:desc">По названию Я-А</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Apply Filters Button -->
+                                    <button class="btn btn-primary btn-sm w-100" id="applyFilters">
+                                        <i class="fas fa-search me-2"></i>
+                                        Применить фильтры
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products Grid -->
+                    <div class="col-lg-9 col-md-8">
+                        <!-- Category Header -->
+                        <div class="category-header">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h1 id="categoryTitle" class="h3 mb-2">Товары в категории</h1>
+                                    <p id="categoryDescription" class="mb-0">
+                                        <i class="fas fa-boxes me-2"></i>
+                                        Найдено товаров: <span id="totalProducts" class="fw-bold">0</span>
+                                    </p>
+                                </div>
+                                <div class="view-mode-buttons d-flex gap-2">
+                                    <button class="btn btn-sm" id="gridView" title="Вид сеткой">
+                                        <i class="fas fa-th"></i>
+                                    </button>
+                                    <button class="btn btn-sm active" id="listView" title="Вид списком">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading Spinner -->
+                        <div id="loadingSpinner" class="loading-spinner text-center py-5" style="display: none;">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
+                            </div>
+                            <p class="mt-3 fw-semibold">Загружаем товары...</p>
+                        </div>
+
+                        <!-- Products Grid -->
+                        <div class="row g-4" id="productsGrid">
+                            <!-- Products will be loaded here -->
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="emptyState" class="empty-state" style="display: none;">
+                            <i class="fas fa-box-open"></i>
+                            <h4>Товары не найдены</h4>
+                            <p class="text-muted">Попробуйте изменить фильтры или вернуться к каталогу</p>
+                            <a href="/catalog.html" class="btn btn-primary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Вернуться к каталогу
+                            </a>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Products pagination" class="mt-4">
+                            <ul class="pagination justify-content-center" id="pagination">
+                                <!-- Pagination will be generated here -->
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <div data-component="footer"></div>
+
+    <!-- Modals Component -->
+    <div data-component="modals"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Component Loader -->
+    <script src="js/components.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    <!-- Category Page JS -->
+    <script src="js/category.js"></script>
+</body>
+</html> 

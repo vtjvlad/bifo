@@ -993,6 +993,7 @@ function parseCatalogContent(lines, catalogSlug) {
                     level: 2,
                     groupSlug: currentGroup.slug,
                     catalogSlug: catalogSlug,
+                    productSearchField: `${catalogSlug}-${categorySlug}`, // Добавляем поле для поиска товаров
                     sortOrder: currentGroup.categories.length
                 });
             }
@@ -1082,6 +1083,7 @@ async function createCategory(categoryData) {
             catalogSlug: categoryData.catalogSlug,
             isReference: categoryData.isReference || false,
             referenceTo: categoryData.referenceTo || null,
+            productSearchField: categoryData.productSearchField || null,
             sortOrder: categoryData.sortOrder
         });
 
