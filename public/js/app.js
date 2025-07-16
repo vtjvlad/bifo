@@ -539,10 +539,9 @@ class BifoApp {
 
     renderMegaMenuCatalogs(catalogs) {
         const catalogsContainer = document.getElementById('megaMenuCatalogs');
-        const groupsContainer = document.getElementById('megaMenuGroups');
         const categoriesContainer = document.getElementById('megaMenuCategories');
         
-        if (!catalogsContainer || !groupsContainer || !categoriesContainer) return;
+        if (!catalogsContainer || !categoriesContainer) return;
 
         // Фильтрация
         const mainCatalogs = catalogs.filter(cat => cat.level === 0);
@@ -597,86 +596,59 @@ class BifoApp {
         // Get groups for this catalog
         const groups = catalogs.filter(cat => cat.level === 1 && cat.isGroup && cat.catalogSlug === catalogSlug);
         const categories = catalogs.filter(cat => cat.level === 2);
-        
-        const groupsContainer = document.getElementById('megaMenuGroups');
-        if (!groupsContainer) return;
-
-        // Render groups
-        groupsContainer.innerHTML = groups.map(group => {
-            const groupCategories = categories.filter(cat => cat.groupSlug === group.slug);
-            return `
-                <div class="mega-menu-group" data-slug="${group.slug}" data-catalog="${catalogSlug}">
-                    <div class="mega-menu-group-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div class="mega-menu-group-name">${group.name}</div>
-                    <div class="mega-menu-group-count">${groupCategories.length}</div>
-                </div>
-            `;
-        }).join('');
-
-        // Add event listeners for groups
-        groupsContainer.querySelectorAll('.mega-menu-group').forEach(element => {
-            element.addEventListener('click', () => {
-                const groupSlug = element.dataset.slug;
-                const catalogSlug = element.dataset.catalog;
-                this.selectMegaMenuGroup(groupSlug, catalogSlug, catalogs);
-            });
-        });
-
-        // Select first group by default
-        if (groups.length > 0) {
-            this.selectMegaMenuGroup(groups[0].slug, catalogSlug, catalogs);
-        } else {
-            // Clear groups and categories if no groups
-            groupsContainer.innerHTML = '<div class="p-3 text-center text-muted">Нет групп в этом каталоге</div>';
-            document.getElementById('megaMenuCategories').innerHTML = '';
-        }
-    }
-
-    selectMegaMenuGroup(groupSlug, catalogSlug, catalogs) {
-        // Update active state
-        document.querySelectorAll('.mega-menu-group').forEach(el => {
-            el.classList.remove('active');
-        });
-        document.querySelector(`[data-slug="${groupSlug}"][data-catalog="${catalogSlug}"]`)?.classList.add('active');
-
-        // Get categories for this group
-        const categories = catalogs.filter(cat => cat.level === 2 && cat.groupSlug === groupSlug);
         const catalog = catalogs.find(cat => cat.slug === catalogSlug);
-        const group = catalogs.find(cat => cat.slug === groupSlug);
         
         const categoriesContainer = document.getElementById('megaMenuCategories');
         if (!categoriesContainer) return;
 
-        categoriesContainer.innerHTML = `
-            <div class="mega-menu-category-section">
-                <h6 class="mega-menu-category-title">
-                    <i class="fas fa-layer-group me-2"></i>
-                    ${group?.name || 'Группа'} - ${catalog?.name || 'Каталог'}
-                </h6>
-                <div class="mega-menu-category-grid">
-                    ${categories.map(category => `
-                        <div class="mega-menu-category-item" 
-                             data-catalog="${catalogSlug}" 
-                             data-group="${groupSlug}" 
-                             data-category="${category.slug}">
-                            <div class="mega-menu-category-name">
-                                ${category.name}
-                                ${category.isReference ? '<i class="fas fa-external-link-alt"></i>' : ''}
-                            </div>
-                            <div class="mega-menu-category-description">
-                                ${category.description || 'Описание категории'}
-                            </div>
-                            <div class="mega-menu-category-count">
-                                Товаров: ${Math.floor(Math.random() * 100) + 10}
-                            </div>
-                            ${category.isReference ? '<div class="mega-menu-category-reference">Ссылка</div>' : ''}
-                        </div>
-                    `).join('')}
+        if (groups.length === 0) {
+            // No groups - show empty state
+            categoriesContainer.innerHTML = `
+                <div class="mega-menu-group-section">
+                    <div class="mega-menu-group-title">
+                        <i class="fas fa-folder-open"></i>
+                        ${catalog?.name || 'Каталог'}
+                    </div>
+                    <div class="p-3 text-center text-muted">
+                        <i class="fas fa-info-circle"></i>
+                        Нет групп в этом каталоге
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+            return;
+        }
+
+        // Render all groups as sections with their categories
+        categoriesContainer.innerHTML = groups.map(group => {
+            const groupCategories = categories.filter(cat => cat.groupSlug === group.slug);
+            return `
+                <div class="mega-menu-group-section">
+                    <div class="mega-menu-group-title">
+                        <i class="mega-menu-group-icon fas fa-layer-group"></i>
+                        ${group.name}
+                        <div class="mega-menu-group-count">${groupCategories.length}</div>
+                    </div>
+                    <div class="mega-menu-category-grid">
+                        ${groupCategories.map(category => `
+                            <div class="mega-menu-category-item" 
+                                 data-catalog="${catalogSlug}" 
+                                 data-group="${group.slug}" 
+                                 data-category="${category.slug}">
+                                <div class="mega-menu-category-name">
+                                    ${category.name}
+                                    ${category.isReference ? '<i class="fas fa-external-link-alt"></i>' : ''}
+                                </div>
+                                <div class="mega-menu-category-count">
+                                    <i class="fas fa-box"></i>
+                                    ${Math.floor(Math.random() * 100) + 10}
+                                </div>
+                                ${category.isReference ? '<div class="mega-menu-category-reference">Ссылка</div>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }).join('');
 
         // Add event listeners for categories
         categoriesContainer.querySelectorAll('.mega-menu-category-item').forEach(element => {
@@ -689,6 +661,8 @@ class BifoApp {
             });
         });
     }
+
+
 
     renderMegaMenuSubcategories(subcategories, categorySlug) {
         const container = document.getElementById('megaMenuSubcategories');
@@ -1404,66 +1378,69 @@ class BifoApp {
 
         mainCatalogs.forEach(mainCat => {
             const catalogGroups = groups.filter(group => group.catalogSlug === mainCat.slug);
+            const totalCategories = categories.filter(cat => 
+                catalogGroups.some(group => group.slug === cat.groupSlug)
+            ).length;
             
             html += `
-                <div class="col-lg-6 col-md-12 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">
-                                <i class="${catalogIcons[mainCat.slug] || 'fas fa-box'} me-2"></i>
-                                ${mainCat.name}
-                            </h5>
+                <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+                    <div class="catalog-card">
+                        <div class="catalog-card-header">
+                            <div class="catalog-icon">
+                                <i class="${catalogIcons[mainCat.slug] || 'fas fa-box'}"></i>
+                            </div>
+                            <div class="catalog-info">
+                                <h5 class="catalog-title">${mainCat.name}</h5>
+                                <div class="catalog-stats">
+                                    <span class="catalog-groups">${catalogGroups.length} групп</span>
+                                    <span class="catalog-categories">${totalCategories} категорий</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="text-muted">${mainCat.description || 'Широкий ассортимент товаров'}</p>
+                        <div class="catalog-card-body">
+                            <p class="catalog-description">${mainCat.description || 'Широкий ассортимент товаров'}</p>
                             
                             ${catalogGroups.length > 0 ? `
-                                <div class="accordion" id="accordion-${mainCat.slug}">
-                                    ${catalogGroups.map((group, groupIndex) => {
+                                <div class="catalog-groups-list">
+                                    ${catalogGroups.slice(0, 3).map(group => {
                                         const groupCategories = categories.filter(cat => cat.groupSlug === group.slug);
                                         return `
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="heading-${group.slug}">
-                                                    <button class="accordion-button ${groupIndex > 0 ? 'collapsed' : ''}" 
-                                                            type="button" 
-                                                            data-bs-toggle="collapse" 
-                                                            data-bs-target="#collapse-${group.slug}" 
-                                                            aria-expanded="${groupIndex === 0 ? 'true' : 'false'}" 
-                                                            aria-controls="collapse-${group.slug}">
-                                                        <i class="fas fa-layer-group me-2"></i>
-                                                        ${group.name}
-                                                        <span class="badge bg-secondary ms-2">${groupCategories.length}</span>
-                                                    </button>
-                                                </h2>
-                                                <div id="collapse-${group.slug}" 
-                                                     class="accordion-collapse collapse ${groupIndex === 0 ? 'show' : ''}" 
-                                                     aria-labelledby="heading-${group.slug}" 
-                                                     data-bs-parent="#accordion-${mainCat.slug}">
-                                                    <div class="accordion-body">
-                                                        <div class="row">
-                                                            ${groupCategories.map(category => `
-                                                                <div class="col-6 mb-2">
-                                                                    <a href="#" class="text-decoration-none show-category-link" 
-                                                                       data-catalog="${mainCat.slug}" 
-                                                                       data-group="${group.slug}" 
-                                                                       data-category="${category.slug}">
-                                                                        <i class="fas fa-chevron-right me-1 text-primary"></i>
-                                                                        ${category.name}
-                                                                        ${category.isReference ? '<i class="fas fa-external-link-alt ms-1 text-muted"></i>' : ''}
-                                                                    </a>
-                                                                </div>
-                                                            `).join('')}
-                                                        </div>
-                                                    </div>
+                                            <div class="catalog-group-item">
+                                                <div class="group-header">
+                                                    <i class="fas fa-layer-group"></i>
+                                                    <span class="group-name">${group.name}</span>
+                                                    <span class="group-count">${groupCategories.length}</span>
+                                                </div>
+                                                <div class="group-categories">
+                                                    ${groupCategories.slice(0, 4).map(category => `
+                                                        <a href="#" class="category-link" 
+                                                           data-catalog="${mainCat.slug}" 
+                                                           data-group="${group.slug}" 
+                                                           data-category="${category.slug}">
+                                                            ${category.name}
+                                                            ${category.isReference ? '<i class="fas fa-external-link-alt"></i>' : ''}
+                                                        </a>
+                                                    `).join('')}
+                                                    ${groupCategories.length > 4 ? `
+                                                        <span class="more-categories">+${groupCategories.length - 4} еще</span>
+                                                    ` : ''}
                                                 </div>
                                             </div>
                                         `;
                                     }).join('')}
+                                    ${catalogGroups.length > 3 ? `
+                                        <div class="more-groups">
+                                            <a href="#" class="show-all-groups" data-catalog="${mainCat.slug}">
+                                                Показать все ${catalogGroups.length} групп
+                                                <i class="fas fa-chevron-right"></i>
+                                            </a>
+                                        </div>
+                                    ` : ''}
                                 </div>
                             ` : `
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    В данном каталоге пока нет групп
+                                <div class="empty-catalog">
+                                    <i class="fas fa-folder-open"></i>
+                                    <p>В данном каталоге пока нет групп</p>
                                 </div>
                             `}
                         </div>
@@ -1475,13 +1452,22 @@ class BifoApp {
         container.innerHTML = html;
 
         // Add event listeners for category links
-        container.querySelectorAll('.show-category-link').forEach(element => {
+        container.querySelectorAll('.category-link').forEach(element => {
             element.addEventListener('click', (e) => {
                 e.preventDefault();
                 const catalogSlug = e.currentTarget.dataset.catalog;
                 const groupSlug = e.currentTarget.dataset.group;
                 const categorySlug = e.currentTarget.dataset.category;
                 this.showCategory(catalogSlug, groupSlug, categorySlug);
+            });
+        });
+
+        // Add event listeners for "show all groups" links
+        container.querySelectorAll('.show-all-groups').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catalogSlug = e.currentTarget.dataset.catalog;
+                this.showCatalog(catalogSlug);
             });
         });
     }
