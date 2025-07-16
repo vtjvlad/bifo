@@ -14,7 +14,7 @@ class BifoApp {
         await this.waitForComponents();
         
         this.setupEventListeners();
-        this.loadCategories();
+        this.loadCatalogs();
         this.loadFeaturedProducts();
         this.updateUI();
         this.loadCart();
@@ -124,8 +124,17 @@ class BifoApp {
         document.addEventListener('click', (e) => {
             if (e.target.closest('.show-category-link')) {
                 e.preventDefault();
-                const slug = e.target.closest('.show-category-link').dataset.slug;
-                this.showCategory(slug);
+                const link = e.target.closest('.show-category-link');
+                const catalogSlug = link.dataset.catalog;
+                const groupSlug = link.dataset.group;
+                const categorySlug = link.dataset.category;
+                
+                if (catalogSlug && groupSlug && categorySlug) {
+                    this.showCategory(catalogSlug, groupSlug, categorySlug);
+                } else if (link.dataset.slug) {
+                    // Fallback for old structure
+                    this.showCatalog(link.dataset.slug);
+                }
             }
         });
     }
@@ -225,29 +234,30 @@ class BifoApp {
         this.showAlert('Вы вышли из системы', 'info');
     }
 
-    // Categories
-    async loadCategories() {
+    // Catalogs
+    async loadCatalogs() {
         if (!this.isServerAvailable()) {
-            console.log('Server not available, using mock categories');
-            const mockCategories = this.getMockCategories();
-            this.renderCategories(mockCategories);
+            console.log('Server not available, using mock catalogs');
+            const mockCatalogs = this.getMockCatalogs();
+            this.renderCatalogs(mockCatalogs);
             return;
         }
 
         try {
-            const response = await this.apiRequest('/categories');
-            this.renderCategories(response.data);
-            this.renderCategoriesDropdown(response.data);
+            const response = await this.apiRequest('/catalogs/main');
+            this.catalogs = response.data;
+            this.renderCatalogs(response.data);
+            this.renderCatalogsDropdown(response.data);
         } catch (error) {
-            console.log('API error, using mock categories');
-            const mockCategories = this.getMockCategories();
-            this.renderCategories(mockCategories);
+            console.log('API error, using mock catalogs');
+            const mockCatalogs = this.getMockCatalogs();
+            this.renderCatalogs(mockCatalogs);
         }
     }
 
-    renderCategories(categories) {
+    renderCatalogs(catalogs) {
         const container = document.getElementById('categoriesGrid');
-        const categoryIcons = {
+        const catalogIcons = {
             'computer': 'fas fa-laptop',
             'auto': 'fas fa-car',
             'fashion': 'fas fa-tshirt',
@@ -265,29 +275,77 @@ class BifoApp {
             'bt': 'fas fa-tv',
             'av': 'fas fa-headphones',
             'adult': 'fas fa-gift',
-            'military': 'fas fa-shield-alt'
+            'military': 'fas fa-shield-alt',
+            'power': 'fas fa-bolt',
+            'constructors-lego': 'fas fa-cubes'
         };
 
-        // Filter only main categories (level 0)
-        const mainCategories = categories.filter(cat => cat.level === 0).slice(0, 8);
+        // Filter only main catalogs (level 0)
+        const mainCatalogs = catalogs.filter(cat => cat.level === 0).slice(0, 8);
 
-        container.innerHTML = mainCategories.map(category => `
+        container.innerHTML = mainCatalogs.map(catalog => `
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="category-card" data-action="show-category" data-slug="${category.slug}">
+                <div class="category-card" data-action="show-catalog" data-slug="${catalog.slug}">
                     <div class="category-icon">
-                        <i class="${categoryIcons[category.slug] || 'fas fa-box'}"></i>
+                        <i class="${catalogIcons[catalog.slug] || 'fas fa-box'}"></i>
                     </div>
-                    <h5>${category.name}</h5>
-                    <p class="text-muted">${category.description || 'Широкий ассортимент товаров'}</p>
+                    <h5>${catalog.name}</h5>
+                    <p class="text-muted">${catalog.description || 'Широкий ассортимент товаров'}</p>
                 </div>
             </div>
         `).join('');
 
-        // Add event listeners for category cards
-        container.querySelectorAll('[data-action="show-category"]').forEach(element => {
+        // Add event listeners for catalog cards
+        container.querySelectorAll('[data-action="show-catalog"]').forEach(element => {
             element.addEventListener('click', (e) => {
                 const slug = e.currentTarget.dataset.slug;
-                this.showCategory(slug);
+                this.showCatalog(slug);
+            });
+        });
+    }
+
+    renderCatalogsDropdown(catalogs) {
+        const container = document.getElementById('categoriesDropdown');
+        if (!container) return;
+
+        const catalogIcons = {
+            'computer': 'fas fa-laptop',
+            'auto': 'fas fa-car',
+            'fashion': 'fas fa-tshirt',
+            'dom': 'fas fa-home',
+            'dacha_sad': 'fas fa-seedling',
+            'deti': 'fas fa-baby',
+            'krasota': 'fas fa-heartbeat',
+            'pobutova_himiia': 'fas fa-spray-can',
+            'musical_instruments': 'fas fa-music',
+            'mobile': 'fas fa-mobile-alt',
+            'remont': 'fas fa-tools',
+            'sport': 'fas fa-dumbbell',
+            'zootovary': 'fas fa-paw',
+            'tools': 'fas fa-wrench',
+            'bt': 'fas fa-tv',
+            'av': 'fas fa-headphones',
+            'adult': 'fas fa-gift',
+            'military': 'fas fa-shield-alt',
+            'power': 'fas fa-bolt',
+            'constructors-lego': 'fas fa-cubes'
+        };
+
+        const mainCatalogs = catalogs.filter(cat => cat.level === 0);
+
+        container.innerHTML = mainCatalogs.map(catalog => `
+            <a class="dropdown-item" href="#" data-action="show-catalog" data-slug="${catalog.slug}">
+                <i class="${catalogIcons[catalog.slug] || 'fas fa-box'} me-2"></i>
+                ${catalog.name}
+            </a>
+        `).join('');
+
+        // Add event listeners
+        container.querySelectorAll('[data-action="show-catalog"]').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const slug = e.currentTarget.dataset.slug;
+                this.showCatalog(slug);
             });
         });
     }
@@ -315,25 +373,25 @@ class BifoApp {
         // Check if server is available
         if (!(await this.isServerAvailable())) {
             console.log('Server not available, using mock data for mega menu');
-            const mockCategories = this.getMockCategories();
-            this.renderMegaMenuCategories(mockCategories);
+            const mockCatalogs = this.getMockMegaMenuData();
+            this.renderMegaMenuCatalogs(mockCatalogs);
             return;
         }
 
         try {
-            const response = await this.apiRequest('/categories');
-            this.renderMegaMenuCategories(response.data);
+            const response = await this.apiRequest('/catalogs');
+            this.renderMegaMenuCatalogs(response.data);
         } catch (error) {
             console.log('API error, using mock data for mega menu');
-            const mockCategories = this.getMockCategories();
-            this.renderMegaMenuCategories(mockCategories);
+            const mockCatalogs = this.getMockMegaMenuData();
+            this.renderMegaMenuCatalogs(mockCatalogs);
         }
     }
 
     async isServerAvailable() {
         // Check if server is running by making a test request
         try {
-            const response = await fetch('/api/categories', { 
+            const response = await fetch('/api/catalogs', { 
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -343,7 +401,7 @@ class BifoApp {
         }
     }
 
-    getMockCategories() {
+    getMockCatalogs() {
         return [
             { slug: 'computer', name: 'Компьютеры и электроника', level: 0, productCount: 1250 },
             { slug: 'auto', name: 'Автотовары', level: 0, productCount: 890 },
@@ -479,93 +537,157 @@ class BifoApp {
         ];
     }
 
-    renderMegaMenuCategories(categories) {
-        const container = document.getElementById('megaMenuCategories');
-        const categoryIcons = {
-            'computer': 'fas fa-laptop',
-            'auto': 'fas fa-car',
-            'fashion': 'fas fa-tshirt',
-            'dom': 'fas fa-home',
-            'dacha_sad': 'fas fa-seedling',
-            'deti': 'fas fa-baby',
-            'krasota': 'fas fa-heartbeat',
-            'pobutova_himiia': 'fas fa-spray-can',
-            'musical_instruments': 'fas fa-music',
-            'mobile': 'fas fa-mobile-alt',
-            'remont': 'fas fa-tools',
-            'sport': 'fas fa-dumbbell',
-            'zootovary': 'fas fa-paw',
-            'tools': 'fas fa-wrench',
-            'bt': 'fas fa-tv',
-            'av': 'fas fa-headphones',
-            'adult': 'fas fa-gift',
-            'military': 'fas fa-shield-alt'
-        };
+    renderMegaMenuCatalogs(catalogs) {
+        const catalogsContainer = document.getElementById('megaMenuCatalogs');
+        const groupsContainer = document.getElementById('megaMenuGroups');
+        const categoriesContainer = document.getElementById('megaMenuCategories');
+        
+        if (!catalogsContainer || !groupsContainer || !categoriesContainer) return;
 
-        // Filter only main categories (level 0)
-        const mainCategories = categories.filter(cat => cat.level === 0);
+        // Фильтрация
+        const mainCatalogs = catalogs.filter(cat => cat.level === 0);
+        const groups = catalogs.filter(cat => cat.level === 1 && cat.isGroup);
+        const categories = catalogs.filter(cat => cat.level === 2);
 
-        container.innerHTML = mainCategories.map(category => `
-            <div class="mega-menu-category" data-category="${category.slug}" data-action="select-category">
-                <div class="mega-menu-category-icon">
-                    <i class="${categoryIcons[category.slug] || 'fas fa-tag'}"></i>
+        // Диагностика
+        console.log('ВСЕ КАТАЛОГИ:', catalogs);
+        console.log('mainCatalogs:', mainCatalogs);
+        console.log('groups:', groups);
+        console.log('categories:', categories);
+
+        // Render main catalogs
+        catalogsContainer.innerHTML = mainCatalogs.map(catalog => {
+            const catalogGroups = groups.filter(group => group.catalogSlug === catalog.slug);
+            const totalCategories = categories.filter(cat => 
+                catalogGroups.some(group => group.slug === cat.groupSlug)
+            ).length;
+            
+            return `
+                <div class="mega-menu-catalog" data-slug="${catalog.slug}">
+                    <div class="mega-menu-catalog-icon">
+                        <i class="${this.getCatalogIcon(catalog.slug)}"></i>
+                    </div>
+                    <div class="mega-menu-catalog-name">${catalog.name}</div>
+                    <div class="mega-menu-catalog-count">${catalogGroups.length}</div>
                 </div>
-                <div class="mega-menu-category-name">${category.name}</div>
-                <div class="mega-menu-category-count">${category.productCount || 0}</div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
-        // Add event listeners for category selection
-        container.querySelectorAll('[data-action="select-category"]').forEach(element => {
-            element.addEventListener('click', (e) => {
-                const categorySlug = e.currentTarget.dataset.category;
-                this.selectMegaMenuCategory(categorySlug);
+        // Add event listeners for main catalogs
+        catalogsContainer.querySelectorAll('.mega-menu-catalog').forEach(element => {
+            element.addEventListener('click', () => {
+                const slug = element.dataset.slug;
+                this.selectMegaMenuCatalog(slug, catalogs);
             });
         });
 
-        // Select first category by default
-        if (mainCategories.length > 0) {
-            this.selectMegaMenuCategory(mainCategories[0].slug);
+        // Select first catalog by default
+        if (mainCatalogs.length > 0) {
+            this.selectMegaMenuCatalog(mainCatalogs[0].slug, catalogs);
         }
     }
 
-    async selectMegaMenuCategory(categorySlug) {
-        try {
-            // Update active state
-            document.querySelectorAll('.mega-menu-category').forEach(cat => {
-                cat.classList.remove('active');
+    selectMegaMenuCatalog(catalogSlug, catalogs) {
+        // Update active state
+        document.querySelectorAll('.mega-menu-catalog').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.querySelector(`[data-slug="${catalogSlug}"]`)?.classList.add('active');
+
+        // Get groups for this catalog
+        const groups = catalogs.filter(cat => cat.level === 1 && cat.isGroup && cat.catalogSlug === catalogSlug);
+        const categories = catalogs.filter(cat => cat.level === 2);
+        
+        const groupsContainer = document.getElementById('megaMenuGroups');
+        if (!groupsContainer) return;
+
+        // Render groups
+        groupsContainer.innerHTML = groups.map(group => {
+            const groupCategories = categories.filter(cat => cat.groupSlug === group.slug);
+            return `
+                <div class="mega-menu-group" data-slug="${group.slug}" data-catalog="${catalogSlug}">
+                    <div class="mega-menu-group-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="mega-menu-group-name">${group.name}</div>
+                    <div class="mega-menu-group-count">${groupCategories.length}</div>
+                </div>
+            `;
+        }).join('');
+
+        // Add event listeners for groups
+        groupsContainer.querySelectorAll('.mega-menu-group').forEach(element => {
+            element.addEventListener('click', () => {
+                const groupSlug = element.dataset.slug;
+                const catalogSlug = element.dataset.catalog;
+                this.selectMegaMenuGroup(groupSlug, catalogSlug, catalogs);
             });
-            const activeCategory = document.querySelector(`[data-category="${categorySlug}"]`);
-            if (activeCategory) {
-                activeCategory.classList.add('active');
-            }
+        });
 
-            // Load subcategories
-            if (!(await this.isServerAvailable())) {
-                console.log('Server not available, using mock subcategories');
-                const mockSubcategories = this.getMockSubcategories(categorySlug);
-                this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
-                return;
-            }
-
-            try {
-                const response = await this.apiRequest(`/categories/${categorySlug}/subcategories`);
-                if (response && response.data) {
-                    this.renderMegaMenuSubcategories(response.data, categorySlug);
-                } else {
-                    throw new Error('Invalid response format');
-                }
-            } catch (error) {
-                console.log('API error, using mock subcategories:', error.message);
-                const mockSubcategories = this.getMockSubcategories(categorySlug);
-                this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
-            }
-        } catch (error) {
-            console.error('Error selecting mega menu category:', error);
-            // Fallback to mock data
-            const mockSubcategories = this.getMockSubcategories(categorySlug);
-            this.renderMegaMenuSubcategories(mockSubcategories, categorySlug);
+        // Select first group by default
+        if (groups.length > 0) {
+            this.selectMegaMenuGroup(groups[0].slug, catalogSlug, catalogs);
+        } else {
+            // Clear groups and categories if no groups
+            groupsContainer.innerHTML = '<div class="p-3 text-center text-muted">Нет групп в этом каталоге</div>';
+            document.getElementById('megaMenuCategories').innerHTML = '';
         }
+    }
+
+    selectMegaMenuGroup(groupSlug, catalogSlug, catalogs) {
+        // Update active state
+        document.querySelectorAll('.mega-menu-group').forEach(el => {
+            el.classList.remove('active');
+        });
+        document.querySelector(`[data-slug="${groupSlug}"][data-catalog="${catalogSlug}"]`)?.classList.add('active');
+
+        // Get categories for this group
+        const categories = catalogs.filter(cat => cat.level === 2 && cat.groupSlug === groupSlug);
+        const catalog = catalogs.find(cat => cat.slug === catalogSlug);
+        const group = catalogs.find(cat => cat.slug === groupSlug);
+        
+        const categoriesContainer = document.getElementById('megaMenuCategories');
+        if (!categoriesContainer) return;
+
+        categoriesContainer.innerHTML = `
+            <div class="mega-menu-category-section">
+                <h6 class="mega-menu-category-title">
+                    <i class="fas fa-layer-group me-2"></i>
+                    ${group?.name || 'Группа'} - ${catalog?.name || 'Каталог'}
+                </h6>
+                <div class="mega-menu-category-grid">
+                    ${categories.map(category => `
+                        <div class="mega-menu-category-item" 
+                             data-catalog="${catalogSlug}" 
+                             data-group="${groupSlug}" 
+                             data-category="${category.slug}">
+                            <div class="mega-menu-category-name">
+                                ${category.name}
+                                ${category.isReference ? '<i class="fas fa-external-link-alt"></i>' : ''}
+                            </div>
+                            <div class="mega-menu-category-description">
+                                ${category.description || 'Описание категории'}
+                            </div>
+                            <div class="mega-menu-category-count">
+                                Товаров: ${Math.floor(Math.random() * 100) + 10}
+                            </div>
+                            ${category.isReference ? '<div class="mega-menu-category-reference">Ссылка</div>' : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        // Add event listeners for categories
+        categoriesContainer.querySelectorAll('.mega-menu-category-item').forEach(element => {
+            element.addEventListener('click', () => {
+                const catalogSlug = element.dataset.catalog;
+                const groupSlug = element.dataset.group;
+                const categorySlug = element.dataset.category;
+                this.showCategory(catalogSlug, groupSlug, categorySlug);
+                this.hideMegaMenu();
+            });
+        });
     }
 
     renderMegaMenuSubcategories(subcategories, categorySlug) {
@@ -976,77 +1098,194 @@ class BifoApp {
         }, 5000);
     }
 
-    showCategory(categorySlug) {
-        // Try to find category in loaded categories first
-        let category = this.categories ? this.categories.find(cat => cat.slug === categorySlug) : null;
+    showCatalog(catalogSlug) {
+        // Try to find catalog in loaded catalogs first
+        let catalog = this.catalogs ? this.catalogs.find(cat => cat.slug === catalogSlug) : null;
         
-        if (!category) {
-            // Fallback to mock categories
-            const mockCategories = this.getMockCategories();
-            category = mockCategories.find(cat => cat.slug === categorySlug);
+        if (!catalog) {
+            // Fallback to mock catalogs
+            const mockCatalogs = this.getMockCatalogs();
+            catalog = mockCatalogs.find(cat => cat.slug === catalogSlug);
         }
         
-        if (!category) {
-            console.error('Category not found:', categorySlug);
+        if (!catalog) {
+            console.error('Catalog not found:', catalogSlug);
             return;
         }
 
-        // Load products for this category
-        this.loadCategoryProducts(categorySlug, category.name);
+        // Load catalog structure (groups and categories)
+        this.loadCatalogStructure(catalogSlug, catalog.name);
     }
 
-    async loadCategoryProducts(categorySlug, categoryName) {
+    async loadCatalogStructure(catalogSlug, catalogName) {
         if (!this.isServerAvailable()) {
-            console.log('Server not available, using mock category products');
-            const mockProducts = this.getMockCategoryProducts(categorySlug);
-            this.renderProducts(mockProducts, `Товары в категории: ${categoryName}`);
+            console.log('Server not available, using mock catalog structure');
+            const mockStructure = this.getMockCatalogStructure(catalogSlug);
+            this.renderCatalogStructure(mockStructure, catalogName);
             return;
         }
 
         try {
-            const response = await this.apiRequest(`/products/category/${categorySlug}`);
-            this.renderProducts(response.data, `Товары в категории: ${categoryName}`);
+            const response = await this.apiRequest(`/catalogs/${catalogSlug}/structure`);
+            this.renderCatalogStructure(response.data, catalogName);
         } catch (error) {
-            console.log('API error, using mock category products');
-            const mockProducts = this.getMockCategoryProducts(categorySlug);
-            this.renderProducts(mockProducts, `Товары в категории: ${categoryName}`);
+            console.log('API error, using mock catalog structure');
+            const mockStructure = this.getMockCatalogStructure(catalogSlug);
+            this.renderCatalogStructure(mockStructure, catalogName);
         }
     }
 
-    getMockCategoryProducts(categorySlug) {
-        // Return different products based on category
-        const productsMap = {
-            'computer': [
-                { _id: 'comp-1', title: 'Ноутбук Dell XPS 13', currentPrice: 89990, imageLinks: ['https://via.placeholder.com/300x200?text=Dell+XPS'], vendor: { name: 'Dell' }, reviewsCount: 34 },
-                { _id: 'comp-2', title: 'Монитор Samsung 27"', currentPrice: 25990, imageLinks: ['https://via.placeholder.com/300x200?text=Samsung+Monitor'], vendor: { name: 'Samsung' }, reviewsCount: 56 },
-                { _id: 'comp-3', title: 'Клавиатура Logitech MX Keys', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Keyboard'], vendor: { name: 'Logitech' }, reviewsCount: 23 },
-                { _id: 'comp-4', title: 'Мышь Logitech MX Master 3', currentPrice: 5990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Mouse'], vendor: { name: 'Logitech' }, reviewsCount: 45 }
-            ],
-            'dom': [
-                { _id: 'dom-1', title: 'Диван угловой "Комфорт"', currentPrice: 45990, imageLinks: ['https://via.placeholder.com/300x200?text=Sofa'], vendor: { name: 'МебельМаркет' }, reviewsCount: 12 },
-                { _id: 'dom-2', title: 'Люстра хрустальная', currentPrice: 15990, imageLinks: ['https://via.placeholder.com/300x200?text=Chandelier'], vendor: { name: 'СветЛюкс' }, reviewsCount: 8 },
-                { _id: 'dom-3', title: 'Набор посуды 12 предметов', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Cookware'], vendor: { name: 'КухняПро' }, reviewsCount: 45 },
-                { _id: 'dom-4', title: 'Постельное белье "Уют"', currentPrice: 3990, imageLinks: ['https://via.placeholder.com/300x200?text=Bedding'], vendor: { name: 'ТекстильЛюкс' }, reviewsCount: 67 }
-            ],
-            'sport': [
-                { _id: 'sport-1', title: 'Беговая дорожка ProForm', currentPrice: 89990, imageLinks: ['https://via.placeholder.com/300x200?text=Treadmill'], vendor: { name: 'ProForm' }, reviewsCount: 67 },
-                { _id: 'sport-2', title: 'Футбольный мяч Adidas', currentPrice: 2990, imageLinks: ['https://via.placeholder.com/300x200?text=Football'], vendor: { name: 'Adidas' }, reviewsCount: 89 },
-                { _id: 'sport-3', title: 'Велосипед горный GT', currentPrice: 129990, imageLinks: ['https://via.placeholder.com/300x200?text=Bicycle'], vendor: { name: 'GT Bicycles' }, reviewsCount: 34 },
-                { _id: 'sport-4', title: 'Гантели набор 20кг', currentPrice: 5990, imageLinks: ['https://via.placeholder.com/300x200?text=Dumbbells'], vendor: { name: 'SportPro' }, reviewsCount: 23 }
-            ],
-            'auto': [
-                { _id: 'auto-1', title: 'Автомобильный пылесос', currentPrice: 3990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Vacuum'], vendor: { name: 'AutoClean' }, reviewsCount: 34 },
-                { _id: 'auto-2', title: 'Автомобильное зарядное устройство', currentPrice: 2990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Charger'], vendor: { name: 'PowerTech' }, reviewsCount: 56 },
-                { _id: 'auto-3', title: 'Автомобильный холодильник', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Fridge'], vendor: { name: 'CoolTech' }, reviewsCount: 12 },
-                { _id: 'auto-4', title: 'Автомобильный компрессор', currentPrice: 4990, imageLinks: ['https://via.placeholder.com/300x200?text=Car+Compressor'], vendor: { name: 'AirTech' }, reviewsCount: 45 }
+    renderCatalogStructure(structure, catalogName) {
+        // Create modal for catalog structure display
+        const modalId = 'catalogStructureModal';
+        let modal = document.getElementById(modalId);
+        
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.id = modalId;
+            modal.innerHTML = `
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="catalogStructureModalTitle">${catalogName}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row" id="catalogStructureGrid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        const titleElement = modal.querySelector('#catalogStructureModalTitle');
+        const gridElement = modal.querySelector('#catalogStructureGrid');
+        
+        titleElement.textContent = catalogName;
+        
+        if (!structure.groups || structure.groups.length === 0) {
+            gridElement.innerHTML = `
+                <div class="col-12">
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <h4>Группы не найдены</h4>
+                        <p>В данном каталоге пока нет групп</p>
+                    </div>
+                </div>
+            `;
+        } else {
+            gridElement.innerHTML = structure.groups.map(group => `
+                <div class="col-lg-6 col-md-12 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-layer-group me-2"></i>
+                                ${group.name}
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                ${group.categories ? group.categories.map(category => `
+                                    <div class="col-6 mb-2">
+                                        <a href="#" class="text-decoration-none show-category-link" 
+                                           data-catalog="${structure.catalog.slug}" 
+                                           data-group="${group.slug}" 
+                                           data-category="${category.slug}">
+                                            <i class="fas fa-chevron-right me-1 text-primary"></i>
+                                            ${category.name}
+                                            ${category.isReference ? '<i class="fas fa-external-link-alt ms-1 text-muted"></i>' : ''}
+                                        </a>
+                                    </div>
+                                `).join('') : ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Add event listeners for category links
+        gridElement.querySelectorAll('.show-category-link').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catalogSlug = e.currentTarget.dataset.catalog;
+                const groupSlug = e.currentTarget.dataset.group;
+                const categorySlug = e.currentTarget.dataset.category;
+                this.showCategory(catalogSlug, groupSlug, categorySlug);
+            });
+        });
+
+        const bootstrapModal = new bootstrap.Modal(modal);
+        bootstrapModal.show();
+    }
+
+    showCategory(catalogSlug, groupSlug, categorySlug) {
+        // Load products for this category
+        this.loadCategoryProducts(catalogSlug, groupSlug, categorySlug);
+    }
+
+    async loadCategoryProducts(catalogSlug, groupSlug, categorySlug) {
+        if (!this.isServerAvailable()) {
+            console.log('Server not available, using mock category products');
+            const mockProducts = this.getMockCategoryProducts(categorySlug);
+            this.renderProducts(mockProducts, `Товары в категории: ${categorySlug}`);
+            return;
+        }
+
+        try {
+            const response = await this.apiRequest(`/products/catalog/${catalogSlug}/group/${groupSlug}/category/${categorySlug}`);
+            this.renderProducts(response.data, `Товары в категории: ${categorySlug}`);
+        } catch (error) {
+            console.log('API error, using mock category products');
+            const mockProducts = this.getMockCategoryProducts(categorySlug);
+            this.renderProducts(mockProducts, `Товары в категории: ${categorySlug}`);
+        }
+    }
+
+    getMockCatalogStructure(catalogSlug) {
+        return {
+            catalog: { slug: catalogSlug, name: 'Компьютеры и электроника' },
+            groups: [
+                {
+                    slug: 'laptop-notebook',
+                    name: 'Ноутбуки и планшеты',
+                    categories: [
+                        { slug: 'noutbuki', name: 'Ноутбуки', isReference: false },
+                        { slug: 'netbuki', name: 'Нетбуки', isReference: false },
+                        { slug: 'planshety', name: 'Планшеты', isReference: false }
+                    ]
+                },
+                {
+                    slug: 'monitory',
+                    name: 'Мониторы',
+                    categories: [
+                        { slug: 'monitory-14', name: '14"', isReference: false },
+                        { slug: 'monitory-15', name: '15"', isReference: false },
+                        { slug: 'monitory-17', name: '17"', isReference: false }
+                    ]
+                },
+                {
+                    slug: 'klaviatury',
+                    name: 'Клавиатуры',
+                    categories: [
+                        { slug: 'klaviatury-mehanicheskie', name: 'Механические', isReference: false },
+                        { slug: 'klaviatury-membrannye', name: 'Мембранные', isReference: false },
+                        { slug: 'klaviatury-garnitury', name: 'Гарнитуры', isReference: false }
+                    ]
+                }
             ]
         };
-        
-        return productsMap[categorySlug] || [
-            { _id: 'default-1', title: 'Товар 1', currentPrice: 9990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+1'], vendor: { name: 'Производитель' }, reviewsCount: 5 },
-            { _id: 'default-2', title: 'Товар 2', currentPrice: 15990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+2'], vendor: { name: 'Производитель' }, reviewsCount: 12 },
-            { _id: 'default-3', title: 'Товар 3', currentPrice: 7990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+3'], vendor: { name: 'Производитель' }, reviewsCount: 8 },
-            { _id: 'default-4', title: 'Товар 4', currentPrice: 12990, imageLinks: ['https://via.placeholder.com/300x200?text=Product+4'], vendor: { name: 'Производитель' }, reviewsCount: 15 }
+    }
+
+    getMockCategoryProducts(categorySlug) {
+        return [
+            { _id: 'prod-1', title: 'Ноутбук ASUS ROG', currentPrice: 89990, imageLinks: ['https://via.placeholder.com/300x200?text=ASUS+ROG'], vendor: { name: 'ASUS' }, reviewsCount: 45 },
+            { _id: 'prod-2', title: 'Монитор Samsung 27"', currentPrice: 25990, imageLinks: ['https://via.placeholder.com/300x200?text=Samsung+Monitor'], vendor: { name: 'Samsung' }, reviewsCount: 56 },
+            { _id: 'prod-3', title: 'Клавиатура Logitech MX Keys', currentPrice: 8990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Keyboard'], vendor: { name: 'Logitech' }, reviewsCount: 23 },
+            { _id: 'prod-4', title: 'Мышь Logitech MX Master 3', currentPrice: 5990, imageLinks: ['https://via.placeholder.com/300x200?text=Logitech+Mouse'], vendor: { name: 'Logitech' }, reviewsCount: 45 }
         ];
     }
 
@@ -1129,11 +1368,11 @@ class BifoApp {
         bootstrapModal.show();
     }
 
-    renderAllCategories(categories) {
+    renderAllCatalogs(catalogs) {
         const container = document.getElementById('allCategoriesGrid');
         if (!container) return;
 
-        const categoryIcons = {
+        const catalogIcons = {
             'computer': 'fas fa-laptop',
             'auto': 'fas fa-car',
             'fashion': 'fas fa-tshirt',
@@ -1151,52 +1390,81 @@ class BifoApp {
             'bt': 'fas fa-tv',
             'av': 'fas fa-headphones',
             'adult': 'fas fa-gift',
-            'military': 'fas fa-shield-alt'
+            'military': 'fas fa-shield-alt',
+            'power': 'fas fa-bolt',
+            'constructors-lego': 'fas fa-cubes'
         };
 
-        // Группируем категории по уровням
-        const mainCategories = categories.filter(cat => cat.level === 0);
-        const subCategories = categories.filter(cat => cat.level === 1);
+        // Группируем каталоги по уровням
+        const mainCatalogs = catalogs.filter(cat => cat.level === 0);
+        const groups = catalogs.filter(cat => cat.level === 1 && cat.isGroup);
+        const categories = catalogs.filter(cat => cat.level === 2);
 
         let html = '';
 
-        mainCategories.forEach(mainCat => {
-            const subCats = subCategories.filter(subCat => subCat.parent === mainCat.slug);
+        mainCatalogs.forEach(mainCat => {
+            const catalogGroups = groups.filter(group => group.catalogSlug === mainCat.slug);
             
             html += `
                 <div class="col-lg-6 col-md-12 mb-4">
                     <div class="card h-100">
                         <div class="card-header bg-primary text-white">
                             <h5 class="mb-0">
-                                <i class="${categoryIcons[mainCat.slug] || 'fas fa-box'} me-2"></i>
+                                <i class="${catalogIcons[mainCat.slug] || 'fas fa-box'} me-2"></i>
                                 ${mainCat.name}
                             </h5>
                         </div>
                         <div class="card-body">
                             <p class="text-muted">${mainCat.description || 'Широкий ассортимент товаров'}</p>
-                            ${subCats.length > 0 ? `
-                                <div class="row">
-                                    ${subCats.slice(0, 6).map(subCat => `
-                                        <div class="col-6 mb-2">
-                                            <a href="#" class="text-decoration-none show-category-link" data-slug="${subCat.slug}">
-                                                <i class="fas fa-chevron-right me-1 text-primary"></i>
-                                                ${subCat.name}
-                                            </a>
-                                        </div>
-                                    `).join('')}
-                                    ${subCats.length > 6 ? `
-                                        <div class="col-12">
-                                            <a href="#" class="text-decoration-none show-category-link" data-slug="${mainCat.slug}">
-                                                <i class="fas fa-ellipsis-h me-1 text-primary"></i>
-                                                Показать все (${subCats.length})
-                                            </a>
-                                        </div>
-                                    ` : ''}
+                            
+                            ${catalogGroups.length > 0 ? `
+                                <div class="accordion" id="accordion-${mainCat.slug}">
+                                    ${catalogGroups.map((group, groupIndex) => {
+                                        const groupCategories = categories.filter(cat => cat.groupSlug === group.slug);
+                                        return `
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="heading-${group.slug}">
+                                                    <button class="accordion-button ${groupIndex > 0 ? 'collapsed' : ''}" 
+                                                            type="button" 
+                                                            data-bs-toggle="collapse" 
+                                                            data-bs-target="#collapse-${group.slug}" 
+                                                            aria-expanded="${groupIndex === 0 ? 'true' : 'false'}" 
+                                                            aria-controls="collapse-${group.slug}">
+                                                        <i class="fas fa-layer-group me-2"></i>
+                                                        ${group.name}
+                                                        <span class="badge bg-secondary ms-2">${groupCategories.length}</span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse-${group.slug}" 
+                                                     class="accordion-collapse collapse ${groupIndex === 0 ? 'show' : ''}" 
+                                                     aria-labelledby="heading-${group.slug}" 
+                                                     data-bs-parent="#accordion-${mainCat.slug}">
+                                                    <div class="accordion-body">
+                                                        <div class="row">
+                                                            ${groupCategories.map(category => `
+                                                                <div class="col-6 mb-2">
+                                                                    <a href="#" class="text-decoration-none show-category-link" 
+                                                                       data-catalog="${mainCat.slug}" 
+                                                                       data-group="${group.slug}" 
+                                                                       data-category="${category.slug}">
+                                                                        <i class="fas fa-chevron-right me-1 text-primary"></i>
+                                                                        ${category.name}
+                                                                        ${category.isReference ? '<i class="fas fa-external-link-alt ms-1 text-muted"></i>' : ''}
+                                                                    </a>
+                                                                </div>
+                                                            `).join('')}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('')}
                                 </div>
                             ` : `
-                                <a href="#" class="btn btn-outline-primary btn-sm show-category-link" data-slug="${mainCat.slug}">
-                                    Перейти в категорию
-                                </a>
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    В данном каталоге пока нет групп
+                                </div>
                             `}
                         </div>
                     </div>
@@ -1205,6 +1473,77 @@ class BifoApp {
         });
 
         container.innerHTML = html;
+
+        // Add event listeners for category links
+        container.querySelectorAll('.show-category-link').forEach(element => {
+            element.addEventListener('click', (e) => {
+                e.preventDefault();
+                const catalogSlug = e.currentTarget.dataset.catalog;
+                const groupSlug = e.currentTarget.dataset.group;
+                const categorySlug = e.currentTarget.dataset.category;
+                this.showCategory(catalogSlug, groupSlug, categorySlug);
+            });
+        });
+    }
+
+    getCatalogIcon(slug) {
+        const icons = {
+            'computer': 'fas fa-laptop',
+            'auto': 'fas fa-car',
+            'fashion': 'fas fa-tshirt',
+            'dom': 'fas fa-home',
+            'dacha_sad': 'fas fa-seedling',
+            'deti': 'fas fa-baby',
+            'krasota': 'fas fa-heartbeat',
+            'pobutova_himiia': 'fas fa-spray-can',
+            'musical_instruments': 'fas fa-music',
+            'mobile': 'fas fa-mobile-alt',
+            'remont': 'fas fa-tools',
+            'sport': 'fas fa-dumbbell',
+            'zootovary': 'fas fa-paw',
+            'tools': 'fas fa-wrench',
+            'bt': 'fas fa-tv',
+            'av': 'fas fa-headphones',
+            'adult': 'fas fa-gift',
+            'military': 'fas fa-shield-alt',
+            'power': 'fas fa-bolt',
+            'constructors-lego': 'fas fa-cubes'
+        };
+        return icons[slug] || 'fas fa-box';
+    }
+
+    getMockMegaMenuData() {
+        return [
+            // Main catalogs (level 0)
+            { slug: 'computer', name: 'Компьютеры и электроника', level: 0, description: 'Компьютеры, ноутбуки, планшеты' },
+            { slug: 'dom', name: 'Дом и сад', level: 0, description: 'Товары для дома' },
+            { slug: 'sport', name: 'Спорт и отдых', level: 0, description: 'Спортивные товары' },
+            
+            // Groups (level 1)
+            { slug: 'laptop-notebook', name: 'Ноутбуки и планшеты', level: 1, isGroup: true, catalogSlug: 'computer', description: 'Портативные устройства' },
+            { slug: 'monitory', name: 'Мониторы', level: 1, isGroup: true, catalogSlug: 'computer', description: 'Дисплеи и экраны' },
+            { slug: 'klaviatury', name: 'Клавиатуры', level: 1, isGroup: true, catalogSlug: 'computer', description: 'Устройства ввода' },
+            { slug: 'mebel', name: 'Мебель', level: 1, isGroup: true, catalogSlug: 'dom', description: 'Мебель для дома' },
+            { slug: 'dekor', name: 'Декор', level: 1, isGroup: true, catalogSlug: 'dom', description: 'Украшения для дома' },
+            { slug: 'fitness', name: 'Фитнес', level: 1, isGroup: true, catalogSlug: 'sport', description: 'Тренажеры и оборудование' },
+            { slug: 'outdoor', name: 'Активный отдых', level: 1, isGroup: true, catalogSlug: 'sport', description: 'Туризм и походы' },
+            
+            // Categories (level 2)
+            { slug: 'noutbuki', name: 'Ноутбуки', level: 2, groupSlug: 'laptop-notebook', description: 'Портативные компьютеры' },
+            { slug: 'planshety', name: 'Планшеты', level: 2, groupSlug: 'laptop-notebook', description: 'Планшетные компьютеры' },
+            { slug: 'monitory-14', name: '14"', level: 2, groupSlug: 'monitory', description: 'Мониторы 14 дюймов' },
+            { slug: 'monitory-15', name: '15"', level: 2, groupSlug: 'monitory', description: 'Мониторы 15 дюймов' },
+            { slug: 'klaviatury-mehanicheskie', name: 'Механические', level: 2, groupSlug: 'klaviatury', description: 'Механические клавиатуры' },
+            { slug: 'klaviatury-membrannye', name: 'Мембранные', level: 2, groupSlug: 'klaviatury', description: 'Мембранные клавиатуры' },
+            { slug: 'stoly', name: 'Столы', level: 2, groupSlug: 'mebel', description: 'Столы для дома и офиса' },
+            { slug: 'stulya', name: 'Стулья', level: 2, groupSlug: 'mebel', description: 'Стулья и кресла' },
+            { slug: 'svechi', name: 'Свечи', level: 2, groupSlug: 'dekor', description: 'Декоративные свечи' },
+            { slug: 'vazy', name: 'Вазы', level: 2, groupSlug: 'dekor', description: 'Вазы и цветочные горшки' },
+            { slug: 'trenazhery', name: 'Тренажеры', level: 2, groupSlug: 'fitness', description: 'Спортивные тренажеры' },
+            { slug: 'ganteli', name: 'Гантели', level: 2, groupSlug: 'fitness', description: 'Гантели и гири' },
+            { slug: 'palatki', name: 'Палатки', level: 2, groupSlug: 'outdoor', description: 'Туристические палатки' },
+            { slug: 'ryukzaki', name: 'Рюкзаки', level: 2, groupSlug: 'outdoor', description: 'Туристические рюкзаки' }
+        ];
     }
 }
 

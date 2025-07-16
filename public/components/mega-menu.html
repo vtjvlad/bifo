@@ -3,17 +3,20 @@
     <div class="mega-menu-overlay" id="megaMenuOverlay"></div>
     <div class="mega-menu" id="megaMenu">
         <div class="mega-menu-header">
-            <h5 class="mega-menu-title">Категории товаров</h5>
+            <h5 class="mega-menu-title">Каталоги товаров</h5>
             <button class="mega-menu-close" id="megaMenuClose">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="mega-menu-content">
+            <div class="mega-menu-catalogs" id="megaMenuCatalogs">
+                <!-- Main catalogs will be loaded here -->
+            </div>
+            <div class="mega-menu-groups" id="megaMenuGroups">
+                <!-- Groups will be loaded here -->
+            </div>
             <div class="mega-menu-categories" id="megaMenuCategories">
                 <!-- Categories will be loaded here -->
-            </div>
-            <div class="mega-menu-subcategories" id="megaMenuSubcategories">
-                <!-- Subcategories will be loaded here -->
             </div>
         </div>
     </div>
@@ -105,14 +108,15 @@
     height: calc(100% - 80px);
 }
 
-.mega-menu-categories {
-    width: 300px;
+.mega-menu-catalogs {
+    width: 280px;
     background: rgba(255, 255, 255, 0.05);
     overflow-y: auto;
     padding: 1rem 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.mega-menu-category {
+.mega-menu-catalog {
     padding: 1rem 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -122,28 +126,28 @@
     gap: 1rem;
 }
 
-.mega-menu-category:hover {
+.mega-menu-catalog:hover {
     background: rgba(255, 255, 255, 0.1);
     border-left-color: #fff;
 }
 
-.mega-menu-category.active {
+.mega-menu-catalog.active {
     background: rgba(255, 255, 255, 0.15);
     border-left-color: #fff;
 }
 
-.mega-menu-category-icon {
+.mega-menu-catalog-icon {
     width: 24px;
     text-align: center;
     font-size: 1.2rem;
 }
 
-.mega-menu-category-name {
+.mega-menu-catalog-name {
     flex: 1;
     font-weight: 500;
 }
 
-.mega-menu-category-count {
+.mega-menu-catalog-count {
     background: rgba(255, 255, 255, 0.2);
     padding: 0.2rem 0.5rem;
     border-radius: 12px;
@@ -152,104 +156,185 @@
     text-align: center;
 }
 
-.mega-menu-subcategories {
+.mega-menu-groups {
+    width: 280px;
+    background: rgba(255, 255, 255, 0.03);
+    overflow-y: auto;
+    padding: 1rem 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mega-menu-group {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.mega-menu-group:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-left-color: #fff;
+}
+
+.mega-menu-group.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-left-color: #fff;
+}
+
+.mega-menu-group-icon {
+    width: 24px;
+    text-align: center;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.mega-menu-group-name {
+    flex: 1;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.mega-menu-group-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    min-width: 25px;
+    text-align: center;
+}
+
+.mega-menu-categories {
     flex: 1;
     padding: 2rem;
     overflow-y: auto;
     background: rgba(255, 255, 255, 0.02);
 }
 
-.mega-menu-subcategory-section {
+.mega-menu-category-section {
     margin-bottom: 2rem;
 }
 
-.mega-menu-subcategory-title {
+.mega-menu-category-title {
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1rem;
     color: #fff;
     border-bottom: 2px solid rgba(255, 255, 255, 0.3);
     padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.mega-menu-subcategory-grid {
+.mega-menu-category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 1rem;
 }
 
-.mega-menu-subcategory-item {
+.mega-menu-category-item {
     background: rgba(255, 255, 255, 0.1);
     padding: 1rem;
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
 }
 
-.mega-menu-subcategory-item:hover {
+.mega-menu-category-item:hover {
     background: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.mega-menu-subcategory-name {
+.mega-menu-category-name {
     font-weight: 500;
     margin-bottom: 0.5rem;
     color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.mega-menu-subcategory-description {
+.mega-menu-category-description {
     font-size: 0.9rem;
     color: rgba(255, 255, 255, 0.8);
     line-height: 1.4;
 }
 
-.mega-menu-subcategory-count {
+.mega-menu-category-count {
     margin-top: 0.5rem;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.6);
 }
 
+.mega-menu-category-reference {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
     .mega-menu-content {
         flex-direction: column;
     }
     
-    .mega-menu-categories {
+    .mega-menu-catalogs,
+    .mega-menu-groups {
         width: 100%;
-        height: 200px;
+        height: 150px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    .mega-menu-subcategories {
-        height: calc(100% - 200px);
+    .mega-menu-categories {
+        height: calc(100% - 300px);
     }
     
-    .mega-menu-subcategory-grid {
+    .mega-menu-category-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .mega-menu-catalogs,
+    .mega-menu-groups {
+        height: 120px;
+    }
+    
+    .mega-menu-categories {
+        height: calc(100% - 240px);
+    }
+    
+    .mega-menu-category-grid {
         grid-template-columns: 1fr;
     }
 }
 
 /* Scrollbar Styling */
-.mega-menu-categories::-webkit-scrollbar,
-.mega-menu-subcategories::-webkit-scrollbar {
+.mega-menu-catalogs::-webkit-scrollbar,
+.mega-menu-groups::-webkit-scrollbar,
+.mega-menu-categories::-webkit-scrollbar {
     width: 6px;
 }
 
-.mega-menu-categories::-webkit-scrollbar-track,
-.mega-menu-subcategories::-webkit-scrollbar-track {
+.mega-menu-catalogs::-webkit-scrollbar-track,
+.mega-menu-groups::-webkit-scrollbar-track,
+.mega-menu-categories::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
 }
 
-.mega-menu-categories::-webkit-scrollbar-thumb,
-.mega-menu-subcategories::-webkit-scrollbar-thumb {
+.mega-menu-catalogs::-webkit-scrollbar-thumb,
+.mega-menu-groups::-webkit-scrollbar-thumb,
+.mega-menu-categories::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 3px;
-}
-
-.mega-menu-categories::-webkit-scrollbar-thumb:hover,
-.mega-menu-subcategories::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.5);
 }
 </style> 

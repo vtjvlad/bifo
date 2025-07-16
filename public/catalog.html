@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталоги - BIFO</title>
+    <meta name="description" content="Все каталоги товаров в интернет-магазине BIFO">
+    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <div data-component="header"></div>
+
+    <!-- Catalog Content -->
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="mb-4">Все каталоги товаров</h1>
+                <div class="row" id="allCategoriesGrid">
+                    <!-- All catalogs will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <div data-component="footer"></div>
+
+    <!-- Modals Component -->
+    <div data-component="modals"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Component Loader -->
+    <script src="js/components.js"></script>
+    <!-- Custom JS -->
+    <script src="js/app.js"></script>
+    <script>
+        // Дополнительная логика для страницы каталогов
+        document.addEventListener('DOMContentLoaded', async () => {
+            await window.app.init();
+            
+            // Загружаем все каталоги для этой страницы
+            const response = await window.app.apiRequest('/catalogs');
+            window.app.renderAllCatalogs(response.data);
+        });
+    </script>
+</body>
+</html> 

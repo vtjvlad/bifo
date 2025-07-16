@@ -1,0 +1,188 @@
+
+___________  sverlilnyj-elektroinstrument___________
+       shurupoverty                                                                       
+       perforatory                                                                        
+       mnogofunkcionalnyj-instrument                                                      
+       sverla-bury                                                                        
+       patronypoint-nasadki-dlya-sverlilnogo-instrumenta                                  
+       akkumulyatory-zaryadnye-ustrojstva-dlya-elektroinstrumentov                        
+    
+
+___________  svarochnoe-oborudovanie___________
+       svarochnye-invertory                                                               
+       sredstva-individualnoj-zaschity-dlya-svarochnyh-rabot                              
+       rashodnye-svarochnye-materialy                                                     
+       komplektuyuschie-dlya-svarochnogo-oborudovaniya                                    
+    
+
+___________  shlifovalnyjpoint-otreznoj-elektroinstrument___________
+       uglovye-shlifmashiny-bolgarki                                                      
+       elektrolobziki                                                                     
+       mnogofunkcionalnyj-instrument                                                      
+       elektronozhnicy                                                                    
+       diskovye-pily                                                                      
+       vibracionnye-shlifmashiny                                                          
+       lentochnye-shlifmashiny                                                            
+       sabelnye-pily                                                                      
+       polirovalnye-mashiny                                                               
+       otreznye-shlifovalnye-diski                                                        
+       pryamye-schetochnye-shlifmashiny                                                   
+      /dacha_sad/cepnye-pily                                                                
+       akkumulyatory-zaryadnye-ustrojstva-dlya-elektroinstrumentov                        
+    
+
+___________  malyarnyj-instrument___________
+       kompressory-i-prinadlezhnosti                                                      
+       kraskopulty                                                                        
+       prinadlezhnosti-dlya-kompressorov-i-pnevmoinstrumenta                              
+       valiki-malyarnye-kisti                                                             
+       emkosti-stroitelnye                                                                
+       nozhi-dlya-otdelochnyh-rabot                                                       
+       pistolety-dlya-germetikovpoint-pen                                                 
+       urovni-stroitelnye                                                            
+       shpateli                                                                           
+       yaschiki-dlya-instrumentov                                                         
+    
+
+___________  stroitelnoe-oborudovanie___________
+      /dacha_sad/generatory                                                                     
+       lestnicy-stremyanki                                                                
+       stroitelnye-pylesosypoint-podmetalnye-mashiny                                      
+       plitkorezy                                                                         
+       betonomeshalki                                                                     
+       shtroborezy                                                                        
+       kompressory-i-prinadlezhnosti                                                      
+       vibroplitypoint-glubinnye-vibratory                                                
+       shurupoverty                                                                  
+       zatirochnye-mashiny                                                                
+       lomypoint-gvozdodery                                                               
+       motobury                                                                           
+       steklorezy                                                                         
+       pogruzchikipoint-shtabelerypoint-gidravlicheskie-telezhki                          
+       stroitelnye-vyshki-pomosty-lesa                                                    
+       benzorezy                                                                          
+       tali                                                                               
+      /dacha_sad/tachki-sadovye-stroitelnye                                                     
+       prinadlezhnosti-dlya-vibroplitpoint-glubinnyh-vibratorov                           
+       prinadlezhnosti-dlya-kompressorov-i-pnevmoinstrumenta                              
+       prinadlezhnosti-dlya-motoburov                                                     
+    
+
+___________  izmeritelnyj-instrument___________
+       lazernyj-izmeritelnyj-instrument                                                   
+       multimetry                                                                         
+       izmeritelnye-ruletki                                                               
+       urovni-stroitelnye                                                                 
+       specializirovannyj-izmeritelnyj-instrument                                         
+       prinadlezhnosti-dlya-lazernogo-i-opticheskogo-izmeritelnogo-instrumenta            
+    
+
+___________  elektroinstrument___________
+       payalniki-i-payalnye-stancii                                                       
+       elektrorubanki                                                                     
+       tehnicheskie-feny                                                                  
+       metalloiskateli                                                                    
+       kleevye-pistolety                                                                  
+       elektrosteplery-gvozdezabivateli                                                   
+       sterzhni-dlya-kleevyh-pistoletov                                                   
+       kraskopulty                                                                        
+       prinadlezhnosti-dlya-metalloiskatelej                                              
+       mnogofunkcionalnyj-instrument                                                      
+       multimetry                                                                         
+       payalnye-prinadlezhnosti                                                           
+       lupy                                                                               
+       akkumulyatory-zaryadnye-ustrojstva-dlya-elektroinstrumentov                        
+    
+
+___________  ruchnoj-instrument___________
+       nabory-instrumentov                                                                
+       yaschiki-dlya-instrumentov                                                         
+       otvertki                                                                           
+       tiski-strubciny                                                                    
+       ploskogubcy-kruglogubcy-passatizhi                                                 
+       torcevye-golovki                                                                   
+       semniki-universalnye                                                               
+       treschetkipoint-dinamometricheskie-klyuchi                                         
+       klyuchi-trubnye                                                                    
+       skobozabivateli-skoby                                                              
+       shestigrannye-klyuchi                                                              
+       gaechnye-razvodnye-klyuchi                                                         
+       vorotkipoint-udlinitelipoint-perehodniki                                           
+       zaklepochniki                                                                      
+       zubila-stameski-doloto                                                             
+       molotki                                                                            
+       napilniki-rashpili                                                                 
+       nozhnicy-po-metallu                                                                
+       nozhovki                                                                           
+       rezbonareznoj-instrument                                                           
+       truborezy                                                                          
+    
+
+___________  stanki___________
+       frezery                                                                            
+       zatochnye-stanki                                                                   
+       rejsmusovye-stanki                                                                 
+       sverlilnye-stanki                                                                  
+       dopolnitelnoe-oborudovanie-dlya-stankov                                            
+       lentochnopilnye-stanki                                                             
+       tokarnye-stanki                                                                    
+       frezernye-stanki                                                                   
+       stanki-ostalnye                                                                    
+       frezy-dlya-stankov                                                                 
+    
+
+___________  stolyarnyj-instrument___________
+       topory                                                                             
+       lomypoint-gvozdodery                                                         
+       nozhovki                                                                      
+       napilniki-rashpili                                                            
+       rubanki                                                                            
+       zubila-stameski-doloto                                                        
+       tiski-strubciny                                                               
+       yaschiki-dlya-instrumentov                                                         
+    
+
+___________  populyarno-seychas-tools___________
+       stroitelnye-pylesosypoint-podmetalnye-mashiny                                 
+       sredstva-individualnoj-zaschity-dlya-svarochnyh-rabot                              
+       sverla-bury                                                                        
+       nabory-instrumentov                                                                
+       ploskogubcy-kruglogubcy-passatizhi                                                 
+       stroitelnye-pylesosypoint-podmetalnye-mashiny                                 
+      /remont/specodezhda-dlya-stroitelnyh-rabot                                                
+       rashodnye-svarochnye-materialy                                                     
+      /auto/domkraty                                                                            
+       shurupoverty                                                                   
+       stroitelnye-pylesosypoint-podmetalnye-mashiny                                 
+      /krasota/maski-i-respiratory                                                        
+       otreznye-shlifovalnye-diski                                                        
+       kompressory-i-prinadlezhnosti                                                      
+       izmeritelnye-ruletki                                                          
+       stroitelnye-pylesosypoint-podmetalnye-mashiny                                
+       specializirovannyj-izmeritelnyj-instrument                                   
+       izmeritelnye-ruletki                                                          
+       semniki-universalnye                                                               
+       izmeritelnye-ruletki                                                          
+      /bt/pylesosy                                                                         
+       polirovalnye-mashiny                                                          
+       shestigrannye-klyuchi                                                         
+      /dacha_sad/minimojki                                                                      
+       treschetkipoint-dinamometricheskie-klyuchi                                         
+       gaechnye-razvodnye-klyuchi                                                    
+       torcevye-golovki                                                                   
+       shurupoverty                                                                  
+      /dom/sredstva-po-uhodu-za-bytovoj-tehnikoj                                                
+      /auto/smazkipoint-konservanty                                                             
+       otvertki                                                                           
+      /dom/sredstva-dlya-mytya-posudy                                                           
+       lomypoint-gvozdodery                                                         
+       molotki                                                                            
+      /dom/hoztovary                                                                            
+       gaechnye-razvodnye-klyuchi                                                    
+      /dom/sredstva-dlya-uborki                                                                 
+       yaschiki-dlya-instrumentov                                                         
+      /deti/kancelyarskie-tovary                                                           
+      /auto/smazkipoint-konservanty                                                       
+       nozhovki                                                                           
+       nabory-instrumentov                                                           
+      /remont/klejpoint-zhidkie-gvozdi                                                          

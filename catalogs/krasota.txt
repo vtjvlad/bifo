@@ -1,0 +1,114 @@
+___________uhod-za-telom___________
+     /krasota/shampuni-kosmeticheskie-sredstva-dlya-volos                            
+     /krasota/kraska-dlya-volos                                                      
+     /krasota/rascheski-schetki-dlya-volos                                           
+     /krasota/sredstva-dlya-ukladki-i-modelirovaniya                                 
+     /krasota/specsredstva-po-uhodu-za-volosami                                      
+     /krasota/balzam-i-kondicioner-dlya-volos                                        
+     /krasota/krem-i-maska-dlya-volos                                                
+     /krasota/krem-dlya-lica                                                         
+     /krasota/maska-dlya-lica                                                        
+     /krasota/sredstva-dlya-umyvaniya                                                
+     /krasota/krem-dlya-lica                                                   
+     /krasota/loson-i-tonik-dlya-lica                                                
+     /krasota/syvorotka-dlya-lica                                                    
+     /krasota/sredstva-dlya-snyatiya-makiyazha                                       
+     /krasota/vatnye-palochki-i-diskipoint-salfetki                                  
+     /krasota/sredstva-dlya-britya                                                   
+     /krasota/uhod-za-licom-i-telom                                                  
+     /krasota/stanki-pomazki-dlya-britya                                             
+     /krasota/uhod-za-volosami                                                       
+     /krasota/bannaya-liniya                                                         
+     /krasota/antiperspiranty                                                  
+     /krasota/nabory-kosmetiki-po-uhodu                                        
+     /krasota/zubnaya-pastapoint-opolaskivatel                                       
+     /krasota/zubnye-schetkipoint-flosy                                              
+     /bt/zubnye-elektroschetki                                                       
+     /bt/nasadki-dlya-elektricheskih-zubnyh-schetok                                  
+     /krasota/krem-i-loson-dlya-ruk                                                  
+     /krasota/sredstva-dlya-nogtej                                                   
+     /krasota/krempoint-loson-i-skrab-dlya-nog                                       
+     /krasota/sredstva-dlya-nog                                                      
+     /krasota/krem-dlya-tela                                                         
+     /krasota/mylopoint-geli-dlya-tela                                               
+     /krasota/antiperspiranty                                                        
+     /krasota/prokladki-tampony                                                      
+     /krasota/vse-dlya-epilyacii                                                     
+     /krasota/sredstva-dlya-pohudeniya                                               
+     /krasota/soli-i-pena-dlya-vann                                                  
+     /krasota/nabory-kosmetiki-po-uhodu                                              
+     /krasota/sredstva-dlya-zagara                                                   
+     /krasota/kosmetichki                                                            
+     /krasota/manikyurnye-nabory-i-instrumenty                                       
+     /krasota/kosmeticheskie-zerkala                                                 
+     /krasota/nozhnicy-dlya-strizhki                                                 
+     /krasota/uf-lampy                                                               
+    
+___________tovary-medicinskogo-naznacheniya___________
+     /krasota/maski-i-respiratory                                                    
+     /krasota/antiseptiki-i-dezinficiruyuschie-sredstva                              
+     /krasota/izdeliya-iz-reziny-i-lateksa                                           
+     /krasota/odnorazovaya-medicinskaya-produkciya                                   
+     /krasota/medicinskaya-odezhda-i-obuv                                            
+    
+___________bytovye-medicinskie-pribory___________
+     /krasota/tonometry                                                              
+     /krasota/glyukometry                                                            
+     /krasota/test-poloski-i-aksessuary-k-glyukometram                               
+     /krasota/ingalyatory                                                            
+     /krasota/termometry-medicinskie                                                 
+     /krasota/dozimetry                                                              
+     /krasota/stetoskopypoint-fonendoskopy                                           
+     /krasota/medicinskie-lampy                                                      
+     /krasota/pulsoksimetry                                                          
+     /krasota/kislorodnye-koncentratory                                              
+     /krasota/pribory-dlya-domashnej-terapii                                         
+     /bt/uvlazhniteli-ochistiteli-vozduha                                      
+     /krasota/aksessuary-k-tonometram                                                
+     /krasota/aksessuary-dlya-ingalyatorov-nebulajzerov                              
+    
+______________tovary-dlya-krasoty-i-personalnogo-uhoda
+___________/krasota/tovary-dlya-krasoty-i-personalnogo-uhoda___________
+     /bt/mashinki-dlya-strizhki-trimmery                                             
+     /bt/elektrobritvy                                                               
+     /bt/feny-stajlery                                                               
+     /bt/vesy-napolnye                                                               
+     /bt/epilyatory                                                                  
+     /bt/elektromassazhery                                                           
+     /bt/zubnye-elektroschetki                                                       
+     /bt/nasadki-dlya-elektricheskih-zubnyh-schetok                                  
+     /bt/pribory-dlya-manikyura-i-pedikyura                                          
+     /bt/pribory-dlya-uhoda-za-kozhej                                                
+     /krasota/elektrogrelki                                                          
+    
+______________parfyumeriya
+___________/krasota/parfyumeriya___________
+     /krasota/duhi-tualetnaya-voda                                                   
+     /krasota/muzhskaya-parfyumeriya                                                 
+    
+______________uhod-i-reabilitaciya
+___________/krasota/uhod-i-reabilitaciya___________
+     /krasota/podguznikipoint-prostyni-i-pelenki-dlya-vzroslyh                       
+     /remont/biotualety                                                              
+     /krasota/prinadlezhnosti-dlya-vanny-i-tualeta                                   
+     /krasota/bandazhi                                                               
+     /krasota/ortopedicheskaya-obuv                                                  
+     /krasota/ortopedicheskie-stelki                                                 
+     /krasota/bandazhi                                                          
+     /dom/matrasy                                                               
+     /dom/podushki                                                              
+     /dom/ofisnye-kresla                                                       
+     /krasota/medicinskie-krovati                                                    
+     /krasota/protivoprolezhnevye-matrasy                                            
+     /krasota/kompressionnaya-odezhda                                                
+     /krasota/trosti-hodunki-kostyli                                                 
+     /krasota/invalidnye-kolyaski                                                    
+     /krasota/reabilitacionnye-trenazhery                                            
+    
+___________kontaktnye-linzypoint-ochki___________
+     /krasota/biologicheski-aktivnye-dobavki-bad                                     
+     /krasota/rastvorypoint-kaplipoint-aksessuary-dlya-linz                          
+     /krasota/ochki                                                                  
+     /sport/sportivnoe-pitanie                                                       
+     /krasota/berushi                                                                
+     /krasota/plastyripoint-perevyazochnye-i-fiksiruyuschie-materialy                

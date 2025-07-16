@@ -6,13 +6,13 @@ require('dotenv').config();
 
 // Import models
 const User = require('../models/User');
-const Category = require('../models/Category');
+const Catalog = require('../models/Catalog');
 const Product = require('../models/Product');
 
-// Load categories from files
-function loadCategoriesFromFiles() {
+// Load catalogs from files
+function loadCatalogsFromFiles() {
     const categoriesDir = path.join(__dirname, '../categories');
-    const categories = [];
+    const catalogs = [];
     
     try {
         const files = fs.readdirSync(categoriesDir);
@@ -26,30 +26,30 @@ function loadCategoriesFromFiles() {
                 // Parse group name for display
                 const groupDisplayName = getDisplayName(groupName);
                 
-                // Create main category group
-                const mainCategory = {
+                // Create main catalog group
+                const mainCatalog = {
                     name: groupDisplayName,
                     slug: groupName,
-                    description: `Категория товаров: ${groupDisplayName}`,
+                    description: `Каталог товаров: ${groupDisplayName}`,
                     sortOrder: groupIndex + 1,
                     level: 0,
                     parent: null
                 };
                 
-                categories.push(mainCategory);
+                catalogs.push(mainCatalog);
                 
-                // Parse subcategories
-                const subcategories = content.split('\n')
+                // Parse subcatalogs
+                const subcatalogs = content.split('\n')
                     .map(line => line.trim())
                     .filter(line => line.length > 0);
                 
-                subcategories.forEach((subcategory, subIndex) => {
-                    if (subcategory) {
-                        const subDisplayName = getDisplayName(subcategory);
-                        categories.push({
+                subcatalogs.forEach((subcatalog, subIndex) => {
+                    if (subcatalog) {
+                        const subDisplayName = getDisplayName(subcatalog);
+                        catalogs.push({
                             name: subDisplayName,
-                            slug: subcategory,
-                            description: `Подкатегория: ${subDisplayName}`,
+                            slug: subcatalog,
+                            description: `Подкаталог: ${subDisplayName}`,
                             sortOrder: subIndex + 1,
                             level: 1,
                             parent: groupName
@@ -59,9 +59,9 @@ function loadCategoriesFromFiles() {
             }
         });
         
-        return categories;
+        return catalogs;
     } catch (error) {
-        console.error('Error loading categories from files:', error);
+        console.error('Error loading catalogs from files:', error);
         return [];
     }
 }
@@ -284,12 +284,12 @@ async function initDatabase() {
 
         // Clear existing data
         await User.deleteMany({});
-        await Category.deleteMany({});
+        await Catalog.deleteMany({});
         await Product.deleteMany({});
         
         // Drop existing indexes to avoid conflicts
         try {
-            await Category.collection.dropIndexes();
+            await Catalog.collection.dropIndexes();
         } catch (error) {
             console.log('No indexes to drop');
         }
@@ -321,15 +321,15 @@ async function initDatabase() {
         await testUser.save();
         console.log('👤 Created test user: user@bifo.com / admin123');
 
-        // Load and create categories from files
-        const categoryData = loadCategoriesFromFiles();
-        const createdCategories = [];
+        // Load and create catalogs from files
+        const catalogData = loadCatalogsFromFiles();
+        const createdCatalogs = [];
         
-        for (const categoryDataItem of categoryData) {
-            const category = new Category(categoryDataItem);
-            await category.save();
-            createdCategories.push(category);
-            console.log(`📁 Created category: ${category.name} (${category.level === 0 ? 'Main' : 'Sub'})`);
+        for (const catalogDataItem of catalogData) {
+            const catalog = new Catalog(catalogDataItem);
+            await catalog.save();
+            createdCatalogs.push(catalog);
+            console.log(`📁 Created catalog: ${catalog.name} (${catalog.level === 0 ? 'Main' : 'Sub'})`);
         }
 
         // Create products
@@ -343,7 +343,7 @@ async function initDatabase() {
         console.log('\n📋 Login credentials:');
         console.log('Admin: admin@bifo.com / admin123');
         console.log('User: user@bifo.com / admin123');
-        console.log(`\n📁 Created ${createdCategories.length} categories from files`);
+        console.log(`\n📁 Created ${createdCatalogs.length} catalogs from files`);
         console.log(`📦 Created ${products.length} sample products`);
         console.log('\n🚀 You can now start the server with: npm start');
 

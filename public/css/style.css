@@ -111,6 +111,112 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Catalog Structure Styles */
+.catalog-structure-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    height: 100%;
+    border: 1px solid var(--border-color);
+}
+
+.catalog-structure-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.catalog-structure-card .card-header {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    border: none;
+}
+
+.catalog-structure-card .card-header h5 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.catalog-structure-card .card-body {
+    padding: 1.5rem;
+}
+
+/* Accordion Styles */
+.accordion-item {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+}
+
+.accordion-button {
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    border: none;
+    padding: 1rem 1.25rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+}
+
+.accordion-button:not(.collapsed) {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border: none;
+}
+
+.accordion-button:hover {
+    background: linear-gradient(45deg, #0056b3, #004085);
+    color: white;
+}
+
+.accordion-body {
+    padding: 1rem 1.25rem;
+    background: white;
+}
+
+/* Category Links */
+.show-category-link {
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    padding: 0.25rem 0;
+    display: block;
+    border-radius: 5px;
+}
+
+.show-category-link:hover {
+    color: var(--primary-color);
+    background: rgba(255, 193, 7, 0.1);
+    padding-left: 0.5rem;
+    text-decoration: none;
+}
+
+.show-category-link i.fa-chevron-right {
+    transition: transform 0.3s ease;
+}
+
+.show-category-link:hover i.fa-chevron-right {
+    transform: translateX(3px);
+}
+
+/* Reference Category Indicator */
+.show-category-link .fa-external-link-alt {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Group Badge */
+.accordion-button .badge {
+    background: rgba(255, 255, 255, 0.2);
+    color: inherit;
+    font-size: 0.75rem;
+}
+
 /* Product Cards */
 .product-card {
     background: white;
