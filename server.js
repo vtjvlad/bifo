@@ -7,6 +7,22 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// CSP Middleware для разрешения изображений
+app.use((req, res, next) => {
+    res.setHeader(
+        'Content-Security-Policy',
+        "default-src 'self'; " +
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+        "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+        "img-src 'self' data: https: http: blob:; " +
+        "font-src 'self' https://cdnjs.cloudflare.com; " +
+        "connect-src 'self'; " +
+        "frame-src 'none'; " +
+        "object-src 'none'"
+    );
+    next();
+});
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -24,6 +40,9 @@ app.use('/api/categories', require('./routes/categories'));
 app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/auth', require('./routes/auth'));
+
+// Serve catalog files
+app.use('/catalogs', express.static(path.join(__dirname, 'catalogs')));
 
 // Serve main page
 app.get('/', (req, res) => {

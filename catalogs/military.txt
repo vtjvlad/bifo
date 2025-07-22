@@ -1,0 +1,76 @@
+___________tekhnycheskoe-snariazhenye___________
+     /av/aksessuary-dlya-kvadrokopterov                           
+     /av/aksessuary-dlya-kvadrokopterov                           
+     /sport/opticheskie-i-kollimatornye-pritsely                   
+     /sport/opticheskie-i-kollimatornye-pritsely                   
+     /sport/radiostancii                                                
+     /sport/binokli-teleskopy-mikroskopy                            
+     /mobile/universalnye-batarei                                       
+     /auto/gps-navigatory                                           
+     /sport/takticheskoe-snaryazhenie-i-amuniciya                 
+     /sport/ryukzaki                                              
+     /sport/takticheskoe-snaryazhenie-i-amuniciya                       
+     /sport/fonariki                                              
+     /sport/fonariki                                              
+     /sport/aksessuary-dlya-strelkovogo-oruzhiya                  
+     /sport/aksessuary-dlya-strelkovogo-oruzhiya                        
+    
+___________taktichniy-odyag___________
+     /sport/bronezhilety-i-razgruzochnye-takticheskie-zhilety           
+     /sport/takticheskaya-odezhda                                       
+     /sport/takticheskoe-snaryazhenie-i-amuniciya                 
+     /sport/takticheskaya-odezhda                                 
+     /sport/sportivnye-ochki                                       
+     /sport/termobele                                                   
+     /sport/trekkingovaya-obuv                                          
+     /sport/odezhda-rybolova                                       
+     /sport/sportivnye-noski-golfy                                
+     /sport/turisticheskie-grelki                                 
+    
+___________amunytsyia___________
+     /mobile/zaryadnye-stancii                                          
+     /computer/modemy-3g-gsm-cdma                                
+     /dacha_sad/generatory                                              
+     /sport/turisticheskie-kovriki                                 
+     /sport/spalnye-meshki                                              
+     /dom/termosy                                                       
+     /sport/kempingovaya-mebel                                     
+     /sport/palatki                                                     
+     /sport/kompressionnye-i-germomeshki                                
+     /sport/sumki-pervoj-pomoschi-aptechki                         
+     /dacha_sad/grabli-lopaty-vily                                 
+     /dacha_sad/grabli-lopaty-vily                                 
+     /dacha_sad/cepnye-pily                                         
+     /tools/topory                                                      
+     /sport/nozhi-multituly                                       
+     /sport/gazovye-gorelki                                      
+     /remont/pechi-na-drovah                                    
+     /sport/gazovye-gorelki                                        
+     /sport/turisticheskie-grelki                                 
+     /sport/fonariki                                             
+     /sport/gazovye-gorelki                                             
+     /sport/sredstva-dlya-rozzhiga-ognya                                
+     /sport/turisticheskaya-posuda                                 
+     /sport/turisticheskaya-posuda                                      
+     /sport/turisticheskie-filtry-dlya-vody                             
+     /dom/kofe                                                     
+    
+___________pokhodnoe-snariazhenye___________
+     /krasota/vatnye-palochki-i-diskipoint-salfetki               
+     /sport/portativnyj-dush                                            
+     /krasota/bannaya-liniya                                     
+     /dom/polotenca                                                
+     /krasota/antiseptiki-i-dezinficiruyuschie-sredstva           
+     /bt/elektrobritvy                                              
+    
+___________zdorove-hyhyena___________
+     /auto/nasosy-i-kompressory                                         
+     /auto/domkraty                                                     
+     /auto/pusko-zaryadnye-ustrojstva                             
+     /auto/avtomobilnye-akkumulyatory                               
+     /auto/kanistry                                                
+     /auto/prisadki-k-toplivu                                      
+     /auto/avtomobilnye-masla                                           
+     /auto/antifrizy                                                    
+     /auto/lebedki-i-trosy                                              
+     /tools/nabory-instrumentov                                         

@@ -12,6 +12,7 @@ class BifoApp {
     init() {
         this.setupEventListeners();
         this.loadCategories();
+        this.loadMegaMenu();
         this.loadFeaturedProducts();
         this.loadSaleProducts();
         this.updateAuthUI();
@@ -184,6 +185,33 @@ class BifoApp {
         `).join('');
     }
 
+    // Mega Menu
+    async loadMegaMenu() {
+        try {
+            await megaMenuParser.loadAllCatalogs();
+            this.renderMegaMenu();
+        } catch (error) {
+            console.error('Error loading mega menu:', error);
+        }
+    }
+
+    renderMegaMenu() {
+        const container = document.getElementById('megaMenuContent');
+        if (!container) return;
+
+        container.innerHTML = megaMenuParser.generateMegaMenuHTML();
+    }
+
+    closeMegaMenu() {
+        const dropdown = document.querySelector('.catalogs-btn');
+        if (dropdown) {
+            const dropdownMenu = bootstrap.Dropdown.getInstance(dropdown);
+            if (dropdownMenu) {
+                dropdownMenu.hide();
+            }
+        }
+    }
+
     // Products
     async loadFeaturedProducts() {
         try {
@@ -234,9 +262,9 @@ class BifoApp {
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 ${product.isOnSale ? 
-                                    `<span class="product-original-price">${product.originalPrice} ₽</span><br>` : ''
+                                    `<span class="product-original-price">${product.originalPrice} грн.</span><br>` : ''
                                 }
-                                <span class="product-price">${product.price} ₽</span>
+                                <span class="product-price">${product.price} грн.</span>
                             </div>
                             <button class="btn btn-primary btn-sm" onclick="app.addToCart('${product._id}')">
                                 <i class="fas fa-cart-plus"></i>
@@ -399,7 +427,7 @@ class BifoApp {
             `).join('');
 
             const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('cartTotal').textContent = `${total} ₽`;
+            document.getElementById('cartTotal').textContent = `${total} грн.`;
         }
 
         const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));

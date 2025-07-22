@@ -1,0 +1,108 @@
+
+___________  zasoby-dlia-prannia/___________
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+      /bt/aksessuary-dlya-stiralnyh-mashin                                                                                                                    
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+       sredstva-dlya-stirki                                                                                                                                   
+    
+
+___________  zasoby-dlia-myttia-posudu/___________
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+       sredstva-dlya-mytya-posudy                                                                                                                             
+    
+
+___________  zasoby-dohliadu-za-pobutovoiu-tekhnikoiu/___________
+       sredstva-po-uhodu-za-bytovoj-tehnikoj                                                                                                                  
+       sredstva-po-uhodu-za-bytovoj-tehnikoj                                                                                                                  
+    
+
+___________  zasoby-dlia-prybyrannia/___________
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+      /bt/paroochistitelipoint-parovye-shvabry                                                                                                                
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+    
+
+___________  zasoby-dohliadu-za-santekhnikoiu/___________
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+       sredstva-dlya-uborki                                                                                                                                   
+      /remont/aksessuary-dlya-vannoj-komnaty                                                                                                                  
+       hoztovary                                                                                                                                              
+    
+
+___________  hospodarski-tovary/___________
+       tualetnaya-bumaga--salfetki--polotenca                                                                                                                 
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+      /sport/organajzery-dlya-odezhdy                                                                                                                         
+      /bt/gladilnye-doski                                                                                                                                     
+      /bt/aksessuary-dlya-utyugov                                                                                                                             
+       sushilki-dlya-belya                                                                                                                                    
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+    
+___________  vulychna-zona/___________
+       hoztovary                                                                                                                                              
+       sredstva-ot-nasekomyh                                                                                                                                  
+      /dacha_sad/lovushki-otpugivateli                                                                                                                        
+      /remont/zhidkost-dlya-biotualetov                                                                                                                       
+       dezinficiruyuschie-i-ochistnye-sredstva-dlya-bassejnov                                                                                                 
+    
+___________  zasoby-dohliadu-za-vzuttiam/___________
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+       hoztovary                                                                                                                                              
+      /bt/melkaya-tehnika-dlya-doma                                                                                                                           

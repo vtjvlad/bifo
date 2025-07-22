@@ -27,8 +27,24 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Catalogs Button -->
+                <div class="navbar-nav me-3">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle catalogs-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-large me-1"></i>Каталоги товаров
+                        </a>
+                        <div class="dropdown-menu mega-menu" id="megaMenu">
+                            <div class="container">
+                                <div class="row" id="megaMenuContent">
+                                    <!-- Mega menu content will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Search Bar -->
-                <form class="d-flex mx-auto" style="max-width: 500px;">
+                <form class="d-flex mx-auto search-bar" style="max-width: 500px;">
                     <div class="input-group">
                         <input class="form-control" type="search" id="searchInput" placeholder="Поиск товаров..." aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">
@@ -66,7 +82,7 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- Sidebar Filters -->
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-3 col-md-4 d-none d-md-block">
                     <div class="card sticky-top" style="top: 100px;">
                         <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Фильтры</h5>
@@ -144,7 +160,14 @@
                 </div>
 
                 <!-- Products Grid -->
-                <div class="col-lg-9 col-md-8">
+                <div class="col-lg-9 col-md-8 col-12">
+                    <!-- Mobile Filters Button -->
+                    <div class="d-md-none mb-3">
+                        <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#filtersModal">
+                            <i class="fas fa-filter me-2"></i>Фильтры и сортировка
+                        </button>
+                    </div>
+                    
                     <!-- Header with results count and view options -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
@@ -290,6 +313,85 @@
         </div>
     </div>
 
+    <!-- Filters Modal for Mobile -->
+    <div class="modal fade" id="filtersModal" tabindex="-1">
+        <div class="modal-dialog modal-fullscreen-sm-down">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-filter me-2"></i>Фильтры и сортировка</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Category Filter -->
+                    <div class="mb-4">
+                        <h6>Категория</h6>
+                        <select class="form-select" id="mobileCategoryFilter">
+                            <option value="">Все категории</option>
+                        </select>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="mb-4">
+                        <h6>Бренд</h6>
+                        <select class="form-select" id="mobileBrandFilter">
+                            <option value="">Все бренды</option>
+                        </select>
+                    </div>
+
+                    <!-- Price Range -->
+                    <div class="mb-4">
+                        <h6>Цена</h6>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="mobileMinPrice" placeholder="От">
+                            </div>
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="mobileMaxPrice" placeholder="До">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="mb-4">
+                        <h6>Сортировка</h6>
+                        <select class="form-select" id="mobileSortFilter">
+                            <option value="createdAt_desc">Новинки</option>
+                            <option value="price_asc">Цена: по возрастанию</option>
+                            <option value="price_desc">Цена: по убыванию</option>
+                            <option value="sales_desc">По популярности</option>
+                            <option value="title_asc">По названию А-Я</option>
+                        </select>
+                    </div>
+
+                    <!-- Additional Filters -->
+                    <div class="mb-4">
+                        <h6>Дополнительно</h6>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="mobileFeaturedFilter">
+                            <label class="form-check-label" for="mobileFeaturedFilter">
+                                Только акции
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="mobileSaleFilter">
+                            <label class="form-check-label" for="mobileSaleFilter">
+                                Только новинки
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="catalogApp.clearFilters()">
+                        <i class="fas fa-times me-2"></i>Очистить
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="catalogApp.applyMobileFilters()">
+                        <i class="fas fa-check me-2"></i>Применить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Cart Modal -->
     <div class="modal fade" id="cartModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -315,6 +417,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Mega Menu Parser -->
+    <script src="/js/mega-menu-parser.js"></script>
     <!-- Custom JS -->
     <script src="/js/catalog.js"></script>
 </body>

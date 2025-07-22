@@ -27,8 +27,24 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Catalogs Button -->
+                <div class="navbar-nav me-3">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle catalogs-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-large me-1"></i>Каталоги товаров
+                        </a>
+                        <div class="dropdown-menu mega-menu" id="megaMenu">
+                            <div class="container">
+                                <div class="row" id="megaMenuContent">
+                                    <!-- Mega menu content will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Search Bar -->
-                <form class="d-flex mx-auto" style="max-width: 500px;">
+                <form class="d-flex mx-auto search-bar" style="max-width: 500px;">
                     <div class="input-group">
                         <input class="form-control" type="search" id="searchInput" placeholder="Поиск товаров..." aria-label="Search">
                         <button class="btn btn-outline-light" type="submit">
@@ -221,7 +237,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="d-flex justify-content-between align-items-center w-100">
-                        <h5>Итого: <span id="cartTotal">0 ₽</span></h5>
+                        <h5>Итого: <span id="cartTotal">0 грн.</span></h5>
                         <button type="button" class="btn btn-primary" id="checkoutBtn">Оформить заказ</button>
                     </div>
                 </div>
@@ -231,6 +247,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Mega Menu Parser -->
+    <script src="/js/mega-menu-parser.js"></script>
     <!-- Custom JS -->
     <script src="/js/app.js"></script>
 </body>

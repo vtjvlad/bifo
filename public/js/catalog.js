@@ -29,6 +29,7 @@ class CatalogApp {
     init() {
         this.setupEventListeners();
         this.loadCategories();
+        this.loadMegaMenu();
         this.loadBrands();
         this.loadProducts();
         this.updateAuthUI();
@@ -247,12 +248,24 @@ class CatalogApp {
 
     populateCategoryFilter(categories) {
         const select = document.getElementById('categoryFilter');
-        categories.forEach(category => {
+        const mobileSelect = document.getElementById('mobileCategoryFilter');
+        
+        const options = categories.map(category => {
             const option = document.createElement('option');
             option.value = category.name;
             option.textContent = `${category.icon} ${category.label} (${category.count})`;
-            select.appendChild(option);
+            return option;
         });
+        
+        // Clear and populate desktop filter
+        select.innerHTML = '<option value="">Все категории</option>';
+        options.forEach(option => select.appendChild(option.cloneNode(true)));
+        
+        // Clear and populate mobile filter
+        if (mobileSelect) {
+            mobileSelect.innerHTML = '<option value="">Все категории</option>';
+            options.forEach(option => mobileSelect.appendChild(option.cloneNode(true)));
+        }
     }
 
     async loadBrands() {
@@ -267,12 +280,24 @@ class CatalogApp {
 
     populateBrandFilter(brands) {
         const select = document.getElementById('brandFilter');
-        brands.forEach(brand => {
+        const mobileSelect = document.getElementById('mobileBrandFilter');
+        
+        const options = brands.map(brand => {
             const option = document.createElement('option');
             option.value = brand;
             option.textContent = brand;
-            select.appendChild(option);
+            return option;
         });
+        
+        // Clear and populate desktop filter
+        select.innerHTML = '<option value="">Все бренды</option>';
+        options.forEach(option => select.appendChild(option.cloneNode(true)));
+        
+        // Clear and populate mobile filter
+        if (mobileSelect) {
+            mobileSelect.innerHTML = '<option value="">Все бренды</option>';
+            options.forEach(option => mobileSelect.appendChild(option.cloneNode(true)));
+        }
     }
 
     // Products
@@ -339,7 +364,8 @@ class CatalogApp {
     }
 
     renderProductCard(product) {
-        const imageUrl = product.imageLinks && product.imageLinks.length > 0 ? product.imageLinks[0] : '/images/placeholder.jpg';
+        const imageUrl = this.getProductImageUrl(product);
+        
         const isPromo = product.isPromo || false;
         const isNew = product.isNew === 1;
         
@@ -348,7 +374,10 @@ class CatalogApp {
                 <div class="card product-card h-100">
                     ${isPromo ? `<span class="sale-badge">Акция</span>` : ''}
                     ${isNew ? `<span class="featured-badge">Новинка</span>` : ''}
-                    <img src="${imageUrl}" class="card-img-top" alt="${product.title}" onerror="this.src='/images/placeholder.jpg'">
+                    <img src="${imageUrl}" class="card-img-top" alt="${product.title}" 
+                         onerror="this.src='/images/placeholder.jpg'; this.onerror=null;" 
+                         onload="this.style.opacity='1';" 
+                         style="opacity: 0; transition: opacity 0.3s;">
                     <div class="card-body d-flex flex-column">
                         <h6 class="card-title">${product.title}</h6>
                         <div class="rating mb-2">
@@ -358,8 +387,8 @@ class CatalogApp {
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <span class="product-price">${product.minPrice} ₽</span>
-                                    ${product.maxPrice !== product.minPrice ? `<br><small class="text-muted">до ${product.maxPrice} ₽</small>` : ''}
+                                    <span class="product-price">${product.minPrice} грн.</span>
+                                    ${product.maxPrice !== product.minPrice ? `<br><small class="text-muted">до ${product.maxPrice} грн.</small>` : ''}
                                 </div>
                                 <button class="btn btn-primary btn-sm" onclick="catalogApp.addToCart('${product._id}')">
                                     <i class="fas fa-cart-plus"></i>
@@ -373,7 +402,8 @@ class CatalogApp {
     }
 
     renderProductList(product) {
-        const imageUrl = product.imageLinks && product.imageLinks.length > 0 ? product.imageLinks[0] : '/images/placeholder.jpg';
+        const imageUrl = this.getProductImageUrl(product);
+        
         const isPromo = product.isPromo || false;
         const isNew = product.isNew === 1;
         
@@ -382,7 +412,10 @@ class CatalogApp {
                 <div class="card product-list-item">
                     <div class="row g-0">
                         <div class="col-md-3">
-                            <img src="${imageUrl}" class="img-fluid rounded-start" alt="${product.title}" style="height: 200px; object-fit: cover;" onerror="this.src='/images/placeholder.jpg'">
+                            <img src="${imageUrl}" class="img-fluid rounded-start" alt="${product.title}" 
+                                 style="height: 200px; object-fit: cover; opacity: 0; transition: opacity 0.3s;" 
+                                 onerror="this.src='/images/placeholder.jpg'; this.onerror=null;" 
+                                 onload="this.style.opacity='1';">
                         </div>
                         <div class="col-md-9">
                             <div class="card-body">
@@ -401,8 +434,8 @@ class CatalogApp {
                                     </div>
                                     <div class="col-md-4 text-end">
                                         <div class="mb-3">
-                                            <div class="product-price fs-4">${product.minPrice} ₽</div>
-                                            ${product.maxPrice !== product.minPrice ? `<small class="text-muted">до ${product.maxPrice} ₽</small>` : ''}
+                                            <div class="product-price fs-4">${product.minPrice} грн.</div>
+                                            ${product.maxPrice !== product.minPrice ? `<small class="text-muted">до ${product.maxPrice} грн.</small>` : ''}
                                         </div>
                                         <button class="btn btn-primary" onclick="catalogApp.addToCart('${product._id}')">
                                             <i class="fas fa-cart-plus me-2"></i>В корзину
@@ -425,6 +458,48 @@ class CatalogApp {
         return '★'.repeat(fullStars) + 
                (hasHalfStar ? '☆' : '') + 
                '☆'.repeat(emptyStars);
+    }
+
+    // Вспомогательная функция для получения URL изображения
+    getProductImageUrl(product) {
+        if (product.imageLinks && product.imageLinks.length > 0) {
+            const firstImage = product.imageLinks[0];
+            if (typeof firstImage === 'string') {
+                return firstImage;
+            } else if (firstImage && firstImage.big) {
+                return firstImage.big;
+            } else if (firstImage && firstImage.thumb) {
+                return firstImage.thumb;
+            }
+        } 
+        return '/images/placeholder.jpg';
+    }
+
+    // Mega Menu
+    async loadMegaMenu() {
+        try {
+            await megaMenuParser.loadAllCatalogs();
+            this.renderMegaMenu();
+        } catch (error) {
+            console.error('Error loading mega menu:', error);
+        }
+    }
+
+    renderMegaMenu() {
+        const container = document.getElementById('megaMenuContent');
+        if (!container) return;
+
+        container.innerHTML = megaMenuParser.generateMegaMenuHTML();
+    }
+
+    closeMegaMenu() {
+        const dropdown = document.querySelector('.catalogs-btn');
+        if (dropdown) {
+            const dropdownMenu = bootstrap.Dropdown.getInstance(dropdown);
+            if (dropdownMenu) {
+                dropdownMenu.hide();
+            }
+        }
     }
 
     // Search
@@ -465,8 +540,39 @@ class CatalogApp {
         document.getElementById('saleFilter').checked = false;
         document.getElementById('searchInput').value = '';
 
+        // Reset mobile form inputs
+        if (document.getElementById('mobileCategoryFilter')) {
+            document.getElementById('mobileCategoryFilter').value = '';
+            document.getElementById('mobileBrandFilter').value = '';
+            document.getElementById('mobileMinPrice').value = '';
+            document.getElementById('mobileMaxPrice').value = '';
+            document.getElementById('mobileSortFilter').value = 'createdAt_desc';
+            document.getElementById('mobileFeaturedFilter').checked = false;
+            document.getElementById('mobileSaleFilter').checked = false;
+        }
+
         this.currentPage = 1;
         this.loadProducts();
+    }
+
+    // Mobile filters support
+    applyMobileFilters() {
+        this.filters.section = document.getElementById('mobileCategoryFilter').value;
+        this.filters.vendor = document.getElementById('mobileBrandFilter').value;
+        this.filters.minPrice = document.getElementById('mobileMinPrice').value;
+        this.filters.maxPrice = document.getElementById('mobileMaxPrice').value;
+        this.filters.sort = document.getElementById('mobileSortFilter').value;
+        this.filters.isPromo = document.getElementById('mobileFeaturedFilter').checked;
+        this.filters.isNew = document.getElementById('mobileSaleFilter').checked;
+        
+        this.currentPage = 1;
+        this.loadProducts();
+        
+        // Close modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('filtersModal'));
+        if (modal) {
+            modal.hide();
+        }
     }
 
     // View Mode
@@ -642,7 +748,10 @@ class CatalogApp {
                 <div class="cart-item">
                     <div class="row align-items-center">
                         <div class="col-2">
-                            <img src="${item.product.imageLinks && item.product.imageLinks.length > 0 ? item.product.imageLinks[0] : '/images/placeholder.jpg'}" class="cart-item-img" alt="${item.product.title}" onerror="this.src='/images/placeholder.jpg'">
+                            <img src="${this.getProductImageUrl(item.product)}" class="cart-item-img" alt="${item.product.title}" 
+                                 onerror="this.src='/images/placeholder.jpg'; this.onerror=null;" 
+                                 onload="this.style.opacity='1';" 
+                                 style="opacity: 0; transition: opacity 0.3s;">
                         </div>
                         <div class="col-4">
                             <h6 class="mb-0">${item.product.title}</h6>
@@ -656,7 +765,7 @@ class CatalogApp {
                             </div>
                         </div>
                         <div class="col-2">
-                            <span class="fw-bold">${item.price * item.quantity} ₽</span>
+                            <span class="fw-bold">${item.price * item.quantity} грн.</span>
                         </div>
                         <div class="col-1">
                             <button class="btn btn-sm btn-outline-danger" onclick="catalogApp.removeFromCart('${item.product._id}')">
@@ -668,7 +777,7 @@ class CatalogApp {
             `).join('');
 
             const total = this.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('cartTotal').textContent = `${total} ₽`;
+            document.getElementById('cartTotal').textContent = `${total} грн.`;
         }
 
         const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));

@@ -1,0 +1,57 @@
+
+___________  dlya-koshek___________
+       korm-dlya-koshek                                        
+       korm-dlya-koshek                                   
+       korm-dlya-koshek                                   
+       korm-dlya-koshek                                  
+       napolniteli-tualetov-dlya-koshek                        
+       gruming-dlya-sobak-i-koshek                        
+       uhod-i-gigiena-dlya-zhivotnyh                           
+       vitaminy-dlya-zhivotnyh                                 
+       povodki-shlei                                     
+       kogtetochki                                             
+       posuda-dlya-zhivotnyh                                   
+       igrushki-dlya-zhivotnyh                                 
+    
+
+___________  sobakam___________
+       korm-dlya-sobak                                         
+       korm-dlya-sobak                                    
+       korm-dlya-sobak                                    
+       korm-dlya-sobak                                    
+       gruming-dlya-sobak-i-koshek                             
+       uhod-i-gigiena-dlya-zhivotnyh                      
+       vitaminy-dlya-zhivotnyh                            
+       povodki-shlei                                           
+       oshejniki                                               
+       odezhda-i-obuv-dlya-sobak                               
+       igrushki-dlya-zhivotnyh                            
+       posuda-dlya-zhivotnyh                              
+       gigiena-doma                                            
+    
+
+___________  dlya-ryb-i-reptilij___________
+       akvariumy                                               
+       korm-dlya-ryb-i-reptilij                                
+       filtry-dlya-akvariumov                                  
+       aksessuary-dlya-akvariumov                              
+       pompy-i-kompressory-dlya-akvariumov                     
+       termoregulyaciya-dlya-akvariumov                        
+       osveschenie-dlya-akvariumov                             
+       oborudovanie-dlya-akvariumov-raznoe                     
+    
+
+___________  vyrobnyky-zoo___________
+      /brands/royal-canin                                                
+      /brands/purina                                                     
+      /brands/brit                                                       
+      /brands/klub-4-lapy                                                
+      /brands/gourmet                                                    
+      /brands/acana                                                      
+      /brands/hills-pet-nutrition                                        
+      /brands/petkit                                                     
+      /brands/trixie                                                     
+      /brands/animall                                                    
+      /brands/waudog                                                     
+      /brands/provet                                                     
+      /brands/priroda                                                    
