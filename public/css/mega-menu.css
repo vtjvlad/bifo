@@ -1,0 +1,259 @@
+/* Mega Menu Enhanced Styles */
+
+/* Custom scrollbar for mega menu */
+.mega-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.mega-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.mega-menu::-webkit-scrollbar-thumb {
+    background: rgba(0, 123, 255, 0.3);
+    border-radius: 3px;
+}
+
+.mega-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 123, 255, 0.5);
+}
+
+/* Enhanced catalog section with glassmorphism */
+.catalog-section {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effects with 3D transform */
+.catalog-section:hover {
+    transform: translateY(-8px) rotateX(2deg);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient text for catalog titles */
+.catalog-title a {
+    background: linear-gradient(135deg, var(--dark-color) 0%, var(--primary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.catalog-title a:hover {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--info-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Enhanced group links with icons */
+.catalog-group > a {
+    position: relative;
+    overflow: hidden;
+}
+
+.catalog-group > a::after {
+    content: '→';
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    color: var(--primary-color);
+}
+
+.catalog-group > a:hover::after {
+    opacity: 1;
+    transform: translateY(-50%) translateX(3px);
+}
+
+/* Category items with subtle animations */
+.catalog-category a {
+    position: relative;
+    overflow: hidden;
+}
+
+.catalog-category a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--info-color));
+    transition: width 0.3s ease;
+}
+
+.catalog-category a:hover::after {
+    width: 100%;
+}
+
+/* Loading animation for mega menu */
+.mega-menu.loading {
+    position: relative;
+}
+
+.mega-menu.loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary-color), var(--info-color), var(--primary-color));
+    background-size: 200% 100%;
+    animation: loading 2s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Enhanced dropdown animation */
+.dropdown-menu.show {
+    animation: dropdownSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes dropdownSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Catalog section badges */
+.catalog-section .badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--info-color));
+    border: none;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+}
+
+.catalog-section:hover .badge {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Category count indicators */
+.catalog-category .category-count {
+    background: rgba(0, 123, 255, 0.1);
+    color: var(--primary-color);
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.catalog-category:hover .category-count {
+    opacity: 1;
+}
+
+/* Enhanced mobile styles */
+@media (max-width: 768px) {
+    .mega-menu {
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .catalog-section {
+        margin-bottom: 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .catalog-title a {
+        font-size: 1.1rem;
+        padding: 0.5rem 0;
+    }
+    
+    .catalog-group > a {
+        font-size: 1rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .catalog-category a {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.6rem;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .mega-menu {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #404040 100%);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .catalog-section {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .catalog-section:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(0, 123, 255, 0.3);
+    }
+    
+    .catalog-title a {
+        color: #ffffff;
+    }
+    
+    .catalog-group > a {
+        color: #e0e0e0;
+    }
+    
+    .catalog-category a {
+        color: #b0b0b0;
+    }
+}
+
+/* Accessibility improvements */
+.catalog-section:focus-within {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.catalog-group > a:focus,
+.catalog-category a:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .catalog-section {
+        border: 2px solid var(--dark-color);
+    }
+    
+    .catalog-title a {
+        color: var(--dark-color);
+        font-weight: bold;
+    }
+    
+    .catalog-group > a {
+        color: var(--dark-color);
+        font-weight: 600;
+    }
+    
+    .catalog-category a {
+        color: var(--dark-color);
+    }
+} 

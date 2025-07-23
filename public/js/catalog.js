@@ -239,33 +239,91 @@ class CatalogApp {
     // Categories and Brands
     async loadCategories() {
         try {
-            const categories = await this.apiRequest('/categories');
-            this.populateCategoryFilter(categories);
+            // Try to get from localStorage first
+            const cachedData = this.getCatalogsFromLocalStorage('main');
+            if (cachedData) {
+                this.populateCategoryFilter(cachedData);
+                return;
+            }
+
+            // If no cache, get from API
+            const catalogs = await this.apiRequest('/catalogs/main');
+            this.saveCatalogsToLocalStorage(catalogs, 'main');
+            this.populateCategoryFilter(catalogs);
         } catch (error) {
             console.error('Error loading categories:', error);
+            // Fallback to old categories API
+            try {
+                const categories = await this.apiRequest('/categories');
+                this.populateCategoryFilter(categories);
+            } catch (fallbackError) {
+                console.error('Fallback error:', fallbackError);
+            }
         }
     }
 
-    populateCategoryFilter(categories) {
+    populateCategoryFilter(catalogs) {
         const select = document.getElementById('categoryFilter');
         const mobileSelect = document.getElementById('mobileCategoryFilter');
         
-        const options = categories.map(category => {
+        const options = catalogs.map(catalog => {
             const option = document.createElement('option');
-            option.value = category.name;
-            option.textContent = `${category.icon} ${category.label} (${category.count})`;
+            option.value = catalog.slug;
+            option.textContent = `${this.getCatalogIcon(catalog.name)} ${catalog.name}`;
             return option;
         });
         
         // Clear and populate desktop filter
-        select.innerHTML = '<option value="">Все категории</option>';
+        select.innerHTML = '<option value="">Все каталоги</option>';
         options.forEach(option => select.appendChild(option.cloneNode(true)));
         
         // Clear and populate mobile filter
         if (mobileSelect) {
-            mobileSelect.innerHTML = '<option value="">Все категории</option>';
+            mobileSelect.innerHTML = '<option value="">Все каталоги</option>';
             options.forEach(option => mobileSelect.appendChild(option.cloneNode(true)));
         }
+    }
+
+    getCatalogIcon(catalogName) {
+        const iconMap = {
+            'Электроника': '📱',
+            'Одежда': '👕',
+            'Мебель': '🪑',
+            'Спорт': '⚽',
+            'Книги': '📚',
+            'Игрушки': '🧸',
+            'Автотовары': '🚗',
+            'Красота': '💄',
+            'Здоровье': '💊',
+            'Дом': '🏠',
+            'Сад': '🌱',
+            'Инструменты': '🔧',
+            'Украшения': '💍',
+            'Часы': '⌚',
+            'Сумки': '👜',
+            'Обувь': '👟',
+            'Аксессуары': '🕶️',
+            'Продукты': '🍎',
+            'Напитки': '🥤',
+            'Товары для животных': '🐕',
+            'Детские товары': '👶',
+            'Офис': '📁',
+            'Искусство': '🎨',
+            'Коллекционные': '🏆',
+            'Военное снаряжение': '🎖️',
+            'Интимные товары': '🔞',
+            'Музыка': '🎵',
+            'Фильмы': '🎬',
+            'Игры': '🎮',
+            'Активный отдых': '🏕️',
+            'Фитнес': '💪',
+            'Медицинские товары': '🏥',
+            'Промышленные товары': '🏭',
+            'Сельхозтовары': '🚜',
+            'Строительные материалы': '🏗️'
+        };
+        
+        return iconMap[catalogName] || '📦';
     }
 
     async loadBrands() {
@@ -478,18 +536,89 @@ class CatalogApp {
     // Mega Menu
     async loadMegaMenu() {
         try {
-            await megaMenuParser.loadAllCatalogs();
-            this.renderMegaMenu();
+            // Try to get from localStorage first
+            const cachedData = this.getCatalogsFromLocalStorage('mega');
+            if (cachedData) {
+                this.renderMegaMenu(cachedData);
+                return;
+            }
+
+            // If no cache, get from API
+            const megaStructure = await this.apiRequest('/catalogs/mega');
+            this.saveCatalogsToLocalStorage(megaStructure, 'mega');
+            this.renderMegaMenu(megaStructure);
         } catch (error) {
             console.error('Error loading mega menu:', error);
+            // Fallback to old mega menu parser
+            try {
+                await megaMenuParser.loadAllCatalogs();
+                this.renderMegaMenu();
+            } catch (fallbackError) {
+                console.error('Fallback error:', fallbackError);
+            }
         }
     }
 
-    renderMegaMenu() {
+    renderMegaMenu(megaStructure) {
         const container = document.getElementById('megaMenuContent');
         if (!container) return;
 
-        container.innerHTML = megaMenuParser.generateMegaMenuHTML();
+        if (megaStructure) {
+            container.innerHTML = this.generateMegaMenuHTML(megaStructure);
+        } else {
+            // Fallback to old mega menu parser
+            container.innerHTML = megaMenuParser.generateMegaMenuHTML();
+        }
+    }
+
+    generateMegaMenuHTML(catalogs) {
+        return catalogs.map(catalog => `
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="catalog-section">
+                    <h5 class="catalog-title">
+                        <a href="/catalog.html?catalog=${catalog.slug}" class="text-decoration-none">
+                            ${this.getCatalogIcon(catalog.name)} ${catalog.name}
+                        </a>
+                    </h5>
+                    ${catalog.groups && catalog.groups.length > 0 ? `
+                        <ul class="catalog-groups list-unstyled">
+                            ${catalog.groups.slice(0, 5).map(group => `
+                                <li class="catalog-group">
+                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}" class="text-decoration-none">
+                                        ${group.name}
+                                    </a>
+                                    ${group.categories && group.categories.length > 0 ? `
+                                        <ul class="catalog-categories list-unstyled ms-3">
+                                            ${group.categories.slice(0, 3).map(category => `
+                                                <li class="catalog-category">
+                                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}&category=${category.slug}" class="text-decoration-none small">
+                                                        ${category.name}
+                                                    </a>
+                                                </li>
+                                            `).join('')}
+                                            ${group.categories.length > 3 ? `
+                                                <li class="catalog-category">
+                                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}" class="text-decoration-none small text-muted">
+                                                        +${group.categories.length - 3} еще...
+                                                    </a>
+                                                </li>
+                                            ` : ''}
+                                        </ul>
+                                    ` : ''}
+                                </li>
+                            `).join('')}
+                            ${catalog.groups.length > 5 ? `
+                                <li class="catalog-group">
+                                    <a href="/catalog.html?catalog=${catalog.slug}" class="text-decoration-none text-muted">
+                                        +${catalog.groups.length - 5} групп еще...
+                                    </a>
+                                </li>
+                            ` : ''}
+                        </ul>
+                    ` : ''}
+                </div>
+            </div>
+        `).join('');
     }
 
     closeMegaMenu() {
@@ -835,6 +964,111 @@ class CatalogApp {
         } catch (error) {
             console.error('Error clearing cart:', error);
         }
+    }
+
+    // LocalStorage caching methods
+    saveCatalogsToLocalStorage(catalogs, type) {
+        try {
+            const data = {
+                catalogs: catalogs,
+                timestamp: Date.now(),
+                version: '1.0'
+            };
+            localStorage.setItem(`bifo_catalogs_${type}`, JSON.stringify(data));
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+    }
+
+    getCatalogsFromLocalStorage(type) {
+        try {
+            const data = localStorage.getItem(`bifo_catalogs_${type}`);
+            if (!data) return null;
+
+            const parsed = JSON.parse(data);
+            const ageHours = (Date.now() - parsed.timestamp) / (1000 * 60 * 60);
+            
+            // Cache expires after 7 days
+            if (ageHours > 168) {
+                localStorage.removeItem(`bifo_catalogs_${type}`);
+                return null;
+            }
+
+            return parsed.catalogs;
+        } catch (error) {
+            console.error('Error reading from localStorage:', error);
+            localStorage.removeItem(`bifo_catalogs_${type}`);
+            return null;
+        }
+    }
+
+    clearCatalogsFromLocalStorage(type) {
+        localStorage.removeItem(`bifo_catalogs_${type}`);
+    }
+
+    clearAllCatalogCache() {
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+            if (key.startsWith('bifo_catalogs_')) {
+                localStorage.removeItem(key);
+            }
+        });
+    }
+
+    refreshCatalogs(type) {
+        this.clearCatalogsFromLocalStorage(type);
+        if (type === 'main') {
+            this.loadCategories();
+        } else if (type === 'mega') {
+            this.loadMegaMenu();
+        } else if (type.startsWith('structure_')) {
+            const catalogSlug = type.replace('structure_', '');
+            this.loadCatalogStructure(catalogSlug);
+        }
+    }
+
+    async loadCatalogStructure(catalogSlug) {
+        try {
+            // Try to get from localStorage first
+            const cachedData = this.getCatalogsFromLocalStorage(`structure_${catalogSlug}`);
+            if (cachedData) {
+                return cachedData;
+            }
+
+            // If no cache, get from API
+            const structure = await this.apiRequest(`/catalogs/structure/${catalogSlug}`);
+            this.saveCatalogsToLocalStorage(structure, `structure_${catalogSlug}`);
+            return structure;
+        } catch (error) {
+            console.error('Error loading catalog structure:', error);
+            return null;
+        }
+    }
+
+    getCatalogCacheInfo() {
+        const info = {};
+        const keys = Object.keys(localStorage);
+        
+        keys.forEach(key => {
+            if (key.startsWith('bifo_catalogs_')) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    const ageHours = (Date.now() - data.timestamp) / (1000 * 60 * 60);
+                    const type = key.replace('bifo_catalogs_', '');
+                    
+                    info[type] = {
+                        ageHours: Math.round(ageHours),
+                        itemCount: Array.isArray(data.catalogs) ? data.catalogs.length : 0,
+                        version: data.version,
+                        timestamp: data.timestamp
+                    };
+                } catch (error) {
+                    info[key.replace('bifo_catalogs_', '')] = { error: 'Corrupted data' };
+                }
+            }
+        });
+        
+        return info;
     }
 
     // Utility methods
