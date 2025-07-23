@@ -34,32 +34,10 @@
 }
 
 /* Заголовок мега меню */
-.mega-menu-header {
-    background: rgba(52, 58, 64, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    z-index: 1051;
-}
-
-.mega-menu-title {
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
 .mega-menu-close {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 123, 255, 0.1);
     border: none;
-    color: white;
+    color: var(--primary-color);
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -72,14 +50,14 @@
 }
 
 .mega-menu-close:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 123, 255, 0.2);
     transform: scale(1.1);
 }
 
 /* Основной контейнер */
 .mega-menu-container {
     display: flex;
-    height: calc(100vh - 80px);
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -128,7 +106,7 @@
 .catalog-link {
     display: flex;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 0.75rem 1.5rem;
     color: var(--dark-color);
     text-decoration: none;
     transition: all 0.3s ease;
@@ -169,15 +147,15 @@
 }
 
 .catalog-icon {
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    margin-right: 1rem;
-    font-size: 1.2rem;
+    border-radius: 6px;
+    margin-right: 0.75rem;
+    font-size: 1rem;
     transition: all 0.3s ease;
 }
 
@@ -193,13 +171,7 @@
 
 .catalog-name {
     font-weight: 600;
-    font-size: 1.1rem;
-    margin: 0 0 0.25rem 0;
-}
-
-.catalog-description {
-    font-size: 0.9rem;
-    opacity: 0.7;
+    font-size: 1rem;
     margin: 0;
 }
 
@@ -207,6 +179,25 @@
 .mega-menu-content {
     flex: 1;
     background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Верхняя панель с поиском и кнопкой закрытия */
+.mega-menu-top-panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+/* Контейнер контента */
+#megaMenuContent {
+    flex: 1;
     overflow-y: auto;
     padding: 2rem;
     
@@ -215,20 +206,20 @@
     scrollbar-color: rgba(0, 123, 255, 0.3) transparent;
 }
 
-.mega-menu-content::-webkit-scrollbar {
+#megaMenuContent::-webkit-scrollbar {
     width: 8px;
 }
 
-.mega-menu-content::-webkit-scrollbar-track {
+#megaMenuContent::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.mega-menu-content::-webkit-scrollbar-thumb {
+#megaMenuContent::-webkit-scrollbar-thumb {
     background: rgba(0, 123, 255, 0.3);
     border-radius: 4px;
 }
 
-.mega-menu-content::-webkit-scrollbar-thumb:hover {
+#megaMenuContent::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 123, 255, 0.5);
 }
 
@@ -378,15 +369,11 @@
 }
 
 /* Поиск */
-.mega-menu-search {
-    padding: 1rem 2rem;
-    background: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
 .search-container {
     position: relative;
     max-width: 400px;
+    flex: 1;
+    margin-right: 1rem;
 }
 
 .search-input {
@@ -515,11 +502,7 @@
     }
     
     .catalog-name {
-        font-size: 1rem;
-    }
-    
-    .catalog-description {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
     
     .groups-container {
@@ -532,15 +515,22 @@
     }
     
     .mega-menu-content {
-        padding: 1rem;
+        padding: 0;
     }
     
-    .mega-menu-search {
-        padding: 1rem;
+    .mega-menu-top-panel {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 1rem;
     }
     
     .search-container {
         max-width: 100%;
+        margin-right: 0;
+    }
+    
+    #megaMenuContent {
+        padding: 1rem;
     }
 }
 
@@ -557,6 +547,11 @@
     
     .mega-menu-content {
         background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .mega-menu-top-panel {
+        background: rgba(255, 255, 255, 0.05);
+        border-bottom-color: rgba(255, 255, 255, 0.1);
     }
     
     .group-section {

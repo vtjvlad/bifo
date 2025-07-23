@@ -21,31 +21,6 @@ class FullscreenMegaMenu {
     createMenuStructure() {
         const menuHTML = `
             <div class="fullscreen-mega-menu" id="fullscreenMegaMenu" style="display: none;">
-                <!-- Заголовок -->
-                <div class="mega-menu-header">
-                    <h1 class="mega-menu-title">
-                        <i class="fas fa-th-large me-2"></i>
-                        Каталоги товаров
-                    </h1>
-                    <button class="mega-menu-close" id="megaMenuClose">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-
-                <!-- Поиск -->
-                <div class="mega-menu-search">
-                    <div class="search-container">
-                        <i class="fas fa-search search-icon"></i>
-                        <input 
-                            type="text" 
-                            class="search-input" 
-                            id="megaMenuSearch" 
-                            placeholder="Поиск по каталогам и категориям..."
-                            autocomplete="off"
-                        >
-                    </div>
-                </div>
-
                 <!-- Основной контейнер -->
                 <div class="mega-menu-container">
                     <!-- Левая колонка - каталоги -->
@@ -57,6 +32,23 @@ class FullscreenMegaMenu {
 
                     <!-- Правая колонка - контент -->
                     <div class="mega-menu-content">
+                        <!-- Верхняя панель с поиском и кнопкой закрытия -->
+                        <div class="mega-menu-top-panel">
+                            <div class="search-container">
+                                <i class="fas fa-search search-icon"></i>
+                                <input 
+                                    type="text" 
+                                    class="search-input" 
+                                    id="megaMenuSearch" 
+                                    placeholder="Поиск по каталогам и категориям..."
+                                    autocomplete="off"
+                                >
+                            </div>
+                            <button class="mega-menu-close" id="megaMenuClose">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        
                         <div id="megaMenuContent">
                             <!-- Контент будет загружен здесь -->
                         </div>
@@ -161,7 +153,6 @@ class FullscreenMegaMenu {
                     </div>
                     <div class="catalog-info">
                         <div class="catalog-name">${catalog.name}</div>
-                        <div class="catalog-description">${catalog.description || 'Описание отсутствует'}</div>
                     </div>
                 </a>
             </li>
@@ -306,8 +297,7 @@ class FullscreenMegaMenu {
 
         // Поиск по каталогам
         this.catalogs.forEach(catalog => {
-            if (catalog.name.toLowerCase().includes(query) || 
-                (catalog.description && catalog.description.toLowerCase().includes(query))) {
+            if (catalog.name.toLowerCase().includes(query)) {
                 this.searchResults.push({
                     type: 'catalog',
                     item: catalog,
@@ -385,7 +375,6 @@ class FullscreenMegaMenu {
                                 <i class="fas fa-th-large me-2"></i>
                                 Каталог: ${result.item.name}
                             </h3>
-                            <p class="mb-2">${result.item.description || 'Описание отсутствует'}</p>
                             <a href="#" class="category-link" data-action="select-catalog" data-slug="${result.item.slug}">
                                 Открыть каталог
                             </a>
