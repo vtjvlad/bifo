@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Product = require('./productSchema');
+const Product = require('./models/Product');
 
 // Пример подключения к MongoDB
 async function connectToDatabase() {
@@ -18,7 +18,7 @@ async function connectToDatabase() {
 async function createProduct() {
   try {
     const newProduct = new Product({
-      _id: 25775723,
+      id: 25775723,
       title: "MacBook Pro 14 M3 Pro",
       date: "2024-09-27",
       vendor: {
@@ -116,11 +116,13 @@ async function createProduct() {
       ],
       minPrice: 85000,
       maxPrice: 95000,
+      currentPrice: 85000,
+      initPrice: 95000,
       salesCount: 0,
       isNew: 1,
       colorsProduct: [],
       offerCount: 15,
-      singleOffer: null,
+      offers: [],
       madeInUkraine: false,
       userSubscribed: false,
       __typename: "Product"

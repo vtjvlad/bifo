@@ -363,38 +363,107 @@ class CatalogApp {
         this.showLoading(true);
         
         try {
-            // Prepare query parameters
-            const params = {
+            // Check if we have catalog parameters in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const catalogSlug = urlParams.get('catalog');
+            const groupSlug = urlParams.get('group');
+            const categorySlug = urlParams.get('category');
+
+            let endpoint = '/products';
+            let params = {
                 page: this.currentPage,
                 limit: this.itemsPerPage
             };
 
-            // Add filters
-            if (this.filters.section) params.section = this.filters.section;
-            if (this.filters.vendor) params.vendor = this.filters.vendor;
-            if (this.filters.minPrice) params.minPrice = this.filters.minPrice;
-            if (this.filters.maxPrice) params.maxPrice = this.filters.maxPrice;
-            if (this.filters.search) params.search = this.filters.search;
-            if (this.filters.isPromo) params.isPromo = 'true';
-            if (this.filters.isNew) params.isNew = 'true';
+            // If we have catalog parameters, use catalog-specific endpoints
+            if (catalogSlug) {
+                if (categorySlug) {
+                    // Load products by category
+                    endpoint = `/products/category/${categorySlug}`;
+                } else if (groupSlug) {
+                    // Load products by group
+                    endpoint = `/products/group/${groupSlug}`;
+                } else {
+                    // Load products by catalog
+                    endpoint = `/products/catalog/${catalogSlug}`;
+                    if (groupSlug) params.group = groupSlug;
+                    if (categorySlug) params.category = categorySlug;
+                }
+            } else {
+                // Use regular product filtering
+                if (this.filters.section) params.section = this.filters.section;
+                if (this.filters.vendor) params.vendor = this.filters.vendor;
+                if (this.filters.minPrice) params.minPrice = this.filters.minPrice;
+                if (this.filters.maxPrice) params.maxPrice = this.filters.maxPrice;
+                if (this.filters.search) params.search = this.filters.search;
+                if (this.filters.isPromo) params.isPromo = 'true';
+                if (this.filters.isNew) params.isNew = 'true';
 
-            // Handle sorting
-            if (this.filters.sort) {
-                const [field, order] = this.filters.sort.split('_');
-                params.sort = field;
-                params.order = order;
+                // Handle sorting
+                if (this.filters.sort) {
+                    const [field, order] = this.filters.sort.split('_');
+                    params.sort = field;
+                    params.order = order;
+                }
             }
 
-            const queryParams = new URLSearchParams(params);
-            const data = await this.apiRequest(`/products?${queryParams}`);
+            // Build query string
+            const queryString = new URLSearchParams(params).toString();
+            const data = await this.apiRequest(`${endpoint}?${queryString}`);
+            
             this.renderProducts(data.products);
             this.updatePagination(data.currentPage, data.totalPages, data.total);
             this.updateResultsCount(data.total);
+
+            // Update page title and breadcrumbs if we have catalog info
+            if (data.catalog || data.group || data.category) {
+                this.updateCatalogInfo(data);
+            }
         } catch (error) {
             console.error('Error loading products:', error);
+            this.showToast('Ошибка загрузки товаров', 'error');
             this.renderProducts([]);
         } finally {
             this.showLoading(false);
+        }
+    }
+
+    updateCatalogInfo(data) {
+        // Update page title
+        let title = 'Каталог товаров';
+        if (data.category) {
+            title = `${data.category.name} - ${title}`;
+        } else if (data.group) {
+            title = `${data.group.name} - ${title}`;
+        } else if (data.catalog) {
+            title = `${data.catalog.name} - ${title}`;
+        }
+        document.title = title;
+
+        // Update breadcrumbs if they exist
+        const breadcrumbContainer = document.getElementById('breadcrumbs');
+        if (breadcrumbContainer) {
+            let breadcrumbHtml = '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
+            breadcrumbHtml += '<li class="breadcrumb-item"><a href="/">Главная</a></li>';
+            
+            if (data.catalog) {
+                breadcrumbHtml += `<li class="breadcrumb-item"><a href="/catalog.html?catalog=${data.catalog.slug}">${data.catalog.name}</a></li>`;
+            }
+            
+            if (data.group) {
+                breadcrumbHtml += `<li class="breadcrumb-item"><a href="/catalog.html?catalog=${data.catalog?.slug}&group=${data.group.slug}">${data.group.name}</a></li>`;
+            }
+            
+            if (data.category) {
+                breadcrumbHtml += `<li class="breadcrumb-item active" aria-current="page">${data.category.name}</li>`;
+            } else if (data.group) {
+                breadcrumbHtml += `<li class="breadcrumb-item active" aria-current="page">${data.group.name}</li>`;
+            } else if (data.catalog) {
+                breadcrumbHtml += `<li class="breadcrumb-item active" aria-current="page">${data.catalog.name}</li>`;
+            }
+            
+            breadcrumbHtml += '</ol></nav>';
+            breadcrumbContainer.innerHTML = breadcrumbHtml;
         }
     }
 
@@ -441,7 +510,7 @@ class CatalogApp {
                         <div class="rating mb-2">
                             <small class="text-muted">Отзывов: ${product.reviewsCount || 0}</small>
                         </div>
-                        <p class="card-text text-muted small mb-3">${product.vendor?.name || 'Неизвестный производитель'}</p>
+                        <p class="card-text text-muted small mb-3">${product.vendor?.title || 'Неизвестный производитель'}</p>
                         <div class="mt-auto">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -483,11 +552,12 @@ class CatalogApp {
                                         <div class="rating mb-2">
                                             <small class="text-muted">Отзывов: ${product.reviewsCount || 0}</small>
                                         </div>
-                                        <p class="card-text">${product.vendor?.name || 'Неизвестный производитель'}</p>
+                                        <p class="card-text">${product.vendor?.title || 'Неизвестный производитель'}</p>
                                         <div class="d-flex gap-2 mb-2">
                                             ${isPromo ? `<span class="badge bg-danger">Акция</span>` : ''}
                                             ${isNew ? `<span class="badge bg-warning text-dark">Новинка</span>` : ''}
-                                            <span class="badge bg-secondary">${product.section?.name || 'Без категории'}</span>
+                                            <span class="badge bg-secondary">${product.section?.productCategoryName || 'Без категории'}</span>
+                                            ${product.section?.category ? `<span class="badge bg-info">${product.section.category}</span>` : ''}
                                         </div>
                                     </div>
                                     <div class="col-md-4 text-end">
@@ -883,8 +953,8 @@ class CatalogApp {
                                  style="opacity: 0; transition: opacity 0.3s;">
                         </div>
                         <div class="col-4">
-                            <h6 class="mb-0">${item.product.title}</h6>
-                            <small class="text-muted">${item.product.vendor?.name || 'Неизвестный производитель'}</small>
+                                                    <h6 class="mb-0">${item.product.title}</h6>
+                        <small class="text-muted">${item.product.vendor?.title || 'Неизвестный производитель'}</small>
                         </div>
                         <div class="col-3">
                             <div class="quantity-controls">

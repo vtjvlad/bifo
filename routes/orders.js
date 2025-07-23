@@ -48,7 +48,7 @@ router.post('/', getUserFromToken, async (req, res) => {
         let subtotal = 0;
 
         for (const item of items) {
-            const product = await Product.findOne({ _id: parseInt(item.product) });
+            const product = await Product.findOne({ id: parseInt(item.product) });
             if (!product) {
                 return res.status(404).json({ error: `Product ${item.product} not found` });
             }

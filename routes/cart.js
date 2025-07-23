@@ -48,7 +48,7 @@ router.post('/add', getUserFromToken, async (req, res) => {
         const { productId, quantity = 1 } = req.body;
 
         // Validate product
-        const product = await Product.findOne({ _id: parseInt(productId) });
+        const product = await Product.findOne({ id: parseInt(productId) });
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
@@ -101,7 +101,7 @@ router.put('/update/:productId', getUserFromToken, async (req, res) => {
         }
 
         // Validate product stock
-        const product = await Product.findOne({ _id: parseInt(productId) });
+        const product = await Product.findOne({ id: parseInt(productId) });
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }

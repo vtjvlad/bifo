@@ -6,385 +6,321 @@ require('dotenv').config();
 const sampleProducts = [
     // Electronics
     {
-        name: "iPhone 15 Pro",
-        description: "Новейший смартфон Apple с титановым корпусом и камерой 48 МП",
-        price: 89990,
-        originalPrice: 99990,
-        category: "electronics",
-        subcategory: "smartphones",
-        brand: "Apple",
-        images: ["https://via.placeholder.com/400x400/007AFF/FFFFFF?text=iPhone+15+Pro"],
-        mainImage: "https://via.placeholder.com/400x400/007AFF/FFFFFF?text=iPhone+15+Pro",
-        stock: 25,
-        sku: "IPH15PRO001",
-        weight: 0.187,
-        dimensions: { length: 15.9, width: 7.6, height: 0.8 },
-        tags: ["смартфон", "apple", "титан", "камера"],
-        specifications: {
-            "Экран": "6.1 дюйма",
-            "Процессор": "A17 Pro",
-            "Память": "128 ГБ",
-            "Камера": "48 МП"
+        id: 1001,
+        title: "iPhone 15 Pro",
+        date: "2024-01-15",
+        vendor: {
+            title: "Apple",
+            __typename: "Vendor"
         },
-        rating: { average: 4.8, count: 156 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: true,
-        salePercentage: 10,
-        warranty: "1 год"
+        section: {
+            _id: 1,
+            productCategoryName: "Смартфоны",
+            category: "bt-smartphones",
+            subCategory: "iphone",
+            __typename: "Section"
+        },
+        isPromo: true,
+        toOfficial: false,
+        promoBid: null,
+        lineName: "iPhone 15",
+        linePathNew: "/smartphones/iphone-15/",
+        imagesCount: 5,
+        videosCount: 2,
+        techShortSpecifications: [
+            "Смартфон",
+            "Экран: 6.1 дюйма",
+            "Процессор: A17 Pro",
+            "Память: 128 ГБ",
+            "Камера: 48 МП"
+        ],
+        techShortSpecificationsList: [
+            { key: "Тип", value: "Смартфон" },
+            { key: "Экран", value: "6.1 дюйма" },
+            { key: "Процессор", value: "A17 Pro" },
+            { key: "Память", value: "128 ГБ" },
+            { key: "Камера", value: "48 МП" }
+        ],
+        reviewsCount: 156,
+        questionsCount: 23,
+        url: "/smartphones/apple-iphone-15-pro/",
+        imageLinks: [
+            {
+                thumb: "https://via.placeholder.com/150x150/007AFF/FFFFFF?text=iPhone+15+Pro",
+                basic: "https://via.placeholder.com/300x300/007AFF/FFFFFF?text=iPhone+15+Pro",
+                small: "https://via.placeholder.com/200x200/007AFF/FFFFFF?text=iPhone+15+Pro",
+                big: "https://via.placeholder.com/600x600/007AFF/FFFFFF?text=iPhone+15+Pro"
+            }
+        ],
+        minPrice: 89990,
+        maxPrice: 99990,
+        currentPrice: 89990,
+        initPrice: 99990,
+        salesCount: 45,
+        isNew: 1,
+        colorsProduct: [
+            {
+                id: 1,
+                title: "Титановый",
+                colorName: "Титановый",
+                alias: "titanium",
+                pathImg: "https://via.placeholder.com/100x100/8A8A8A/FFFFFF?text=Titanium"
+            }
+        ],
+        offerCount: 12,
+        offers: [],
+        madeInUkraine: false,
+        userSubscribed: false,
+        __typename: "Product"
     },
     {
-        name: "MacBook Air M2",
-        description: "Ультратонкий ноутбук с чипом M2 и дисплеем Liquid Retina",
-        price: 129990,
-        category: "electronics",
-        subcategory: "laptops",
-        brand: "Apple",
-        images: ["https://via.placeholder.com/400x400/000000/FFFFFF?text=MacBook+Air+M2"],
-        mainImage: "https://via.placeholder.com/400x400/000000/FFFFFF?text=MacBook+Air+M2",
-        stock: 15,
-        sku: "MBAIRM2001",
-        weight: 1.24,
-        dimensions: { length: 30.4, width: 21.5, height: 1.1 },
-        tags: ["ноутбук", "apple", "m2", "ультратонкий"],
-        specifications: {
-            "Экран": "13.6 дюйма",
-            "Процессор": "M2",
-            "Память": "8 ГБ",
-            "SSD": "256 ГБ"
+        id: 1002,
+        title: "MacBook Air M2",
+        date: "2024-01-10",
+        vendor: {
+            title: "Apple",
+            __typename: "Vendor"
         },
-        rating: { average: 4.9, count: 89 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: false
+        section: {
+            _id: 2,
+            productCategoryName: "Ноутбуки",
+            category: "bt-laptops",
+            subCategory: "macbook",
+            __typename: "Section"
+        },
+        isPromo: false,
+        toOfficial: false,
+        promoBid: null,
+        lineName: "MacBook Air",
+        linePathNew: "/laptops/macbook-air/",
+        imagesCount: 4,
+        videosCount: 1,
+        techShortSpecifications: [
+            "Ноутбук",
+            "Экран: 13.6 дюйма",
+            "Процессор: M2",
+            "Память: 8 ГБ",
+            "SSD: 256 ГБ"
+        ],
+        techShortSpecificationsList: [
+            { key: "Тип", value: "Ноутбук" },
+            { key: "Экран", value: "13.6 дюйма" },
+            { key: "Процессор", value: "M2" },
+            { key: "Память", value: "8 ГБ" },
+            { key: "SSD", value: "256 ГБ" }
+        ],
+        reviewsCount: 89,
+        questionsCount: 15,
+        url: "/laptops/apple-macbook-air-m2/",
+        imageLinks: [
+            {
+                thumb: "https://via.placeholder.com/150x150/000000/FFFFFF?text=MacBook+Air+M2",
+                basic: "https://via.placeholder.com/300x300/000000/FFFFFF?text=MacBook+Air+M2",
+                small: "https://via.placeholder.com/200x200/000000/FFFFFF?text=MacBook+Air+M2",
+                big: "https://via.placeholder.com/600x600/000000/FFFFFF?text=MacBook+Air+M2"
+            }
+        ],
+        minPrice: 129990,
+        maxPrice: 129990,
+        currentPrice: 129990,
+        initPrice: 129990,
+        salesCount: 23,
+        isNew: 0,
+        colorsProduct: [],
+        offerCount: 8,
+        offers: [],
+        madeInUkraine: false,
+        userSubscribed: false,
+        __typename: "Product"
     },
     {
-        name: "Samsung Galaxy S24",
-        description: "Флагманский смартфон с ИИ-функциями и камерой 200 МП",
-        price: 79990,
-        originalPrice: 89990,
-        category: "electronics",
-        subcategory: "smartphones",
-        brand: "Samsung",
-        images: ["https://via.placeholder.com/400x400/1428A0/FFFFFF?text=Galaxy+S24"],
-        mainImage: "https://via.placeholder.com/400x400/1428A0/FFFFFF?text=Galaxy+S24",
-        stock: 30,
-        sku: "SAMS24ULT001",
-        weight: 0.232,
-        dimensions: { length: 16.3, width: 7.9, height: 0.9 },
-        tags: ["смартфон", "samsung", "искусственный интеллект", "камера"],
-        specifications: {
-            "Экран": "6.8 дюйма",
-            "Процессор": "Snapdragon 8 Gen 3",
-            "Память": "256 ГБ",
-            "Камера": "200 МП"
+        id: 1003,
+        title: "Samsung Galaxy S24",
+        date: "2024-01-20",
+        vendor: {
+            title: "Samsung",
+            __typename: "Vendor"
         },
-        rating: { average: 4.7, count: 203 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: true,
-        salePercentage: 11
+        section: {
+            _id: 1,
+            productCategoryName: "Смартфоны",
+            category: "bt-smartphones",
+            subCategory: "galaxy",
+            __typename: "Section"
+        },
+        isPromo: true,
+        toOfficial: false,
+        promoBid: null,
+        lineName: "Galaxy S",
+        linePathNew: "/smartphones/galaxy-s/",
+        imagesCount: 6,
+        videosCount: 3,
+        techShortSpecifications: [
+            "Смартфон",
+            "Экран: 6.8 дюйма",
+            "Процессор: Snapdragon 8 Gen 3",
+            "Память: 256 ГБ",
+            "Камера: 200 МП"
+        ],
+        techShortSpecificationsList: [
+            { key: "Тип", value: "Смартфон" },
+            { key: "Экран", value: "6.8 дюйма" },
+            { key: "Процессор", value: "Snapdragon 8 Gen 3" },
+            { key: "Память", value: "256 ГБ" },
+            { key: "Камера", value: "200 МП" }
+        ],
+        reviewsCount: 203,
+        questionsCount: 34,
+        url: "/smartphones/samsung-galaxy-s24/",
+        imageLinks: [
+            {
+                thumb: "https://via.placeholder.com/150x150/1428A0/FFFFFF?text=Galaxy+S24",
+                basic: "https://via.placeholder.com/300x300/1428A0/FFFFFF?text=Galaxy+S24",
+                small: "https://via.placeholder.com/200x200/1428A0/FFFFFF?text=Galaxy+S24",
+                big: "https://via.placeholder.com/600x600/1428A0/FFFFFF?text=Galaxy+S24"
+            }
+        ],
+        minPrice: 79990,
+        maxPrice: 89990,
+        currentPrice: 79990,
+        initPrice: 89990,
+        salesCount: 67,
+        isNew: 1,
+        colorsProduct: [
+            {
+                id: 1,
+                title: "Черный",
+                colorName: "Черный",
+                alias: "black",
+                pathImg: "https://via.placeholder.com/100x100/000000/FFFFFF?text=Black"
+            },
+            {
+                id: 2,
+                title: "Белый",
+                colorName: "Белый",
+                alias: "white",
+                pathImg: "https://via.placeholder.com/100x100/FFFFFF/000000?text=White"
+            }
+        ],
+        offerCount: 18,
+        offers: [],
+        madeInUkraine: false,
+        userSubscribed: false,
+        __typename: "Product"
     },
-
-    // Clothing
     {
-        name: "Джинсы Levi's 501",
-        description: "Классические джинсы прямого кроя из денима премиум качества",
-        price: 8990,
-        category: "clothing",
-        subcategory: "jeans",
-        brand: "Levi's",
-        images: ["https://via.placeholder.com/400x400/1E3A8A/FFFFFF?text=Levi's+501"],
-        mainImage: "https://via.placeholder.com/400x400/1E3A8A/FFFFFF?text=Levi's+501",
-        stock: 50,
-        sku: "LEVI501001",
-        weight: 0.4,
-        dimensions: { length: 30, width: 20, height: 2 },
-        tags: ["джинсы", "levi's", "классика", "деним"],
-        specifications: {
-            "Материал": "100% хлопок",
-            "Размеры": "28-36",
-            "Цвет": "Синий",
-            "Стиль": "Прямой крой"
+        id: 1004,
+        title: "Электрический чайник Bosch",
+        date: "2024-01-25",
+        vendor: {
+            title: "Bosch",
+            __typename: "Vendor"
         },
-        rating: { average: 4.6, count: 342 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: false
+        section: {
+            _id: 3,
+            productCategoryName: "Электрические чайники",
+            category: "bt-elektrochajniki",
+            subCategory: "electric-kettles",
+            __typename: "Section"
+        },
+        isPromo: false,
+        toOfficial: false,
+        promoBid: null,
+        lineName: "Bosch Kettle",
+        linePathNew: "/kitchen/kettles/",
+        imagesCount: 3,
+        videosCount: 1,
+        techShortSpecifications: [
+            "Электрический чайник",
+            "Объем: 1.7 л",
+            "Мощность: 2400 Вт",
+            "Материал: Нержавеющая сталь"
+        ],
+        techShortSpecificationsList: [
+            { key: "Тип", value: "Электрический чайник" },
+            { key: "Объем", value: "1.7 л" },
+            { key: "Мощность", value: "2400 Вт" },
+            { key: "Материал", value: "Нержавеющая сталь" }
+        ],
+        reviewsCount: 45,
+        questionsCount: 8,
+        url: "/kitchen/bosch-electric-kettle/",
+        imageLinks: [
+            {
+                thumb: "https://via.placeholder.com/150x150/FF6B6B/FFFFFF?text=Bosch+Kettle",
+                basic: "https://via.placeholder.com/300x300/FF6B6B/FFFFFF?text=Bosch+Kettle",
+                small: "https://via.placeholder.com/200x200/FF6B6B/FFFFFF?text=Bosch+Kettle",
+                big: "https://via.placeholder.com/600x600/FF6B6B/FFFFFF?text=Bosch+Kettle"
+            }
+        ],
+        minPrice: 1290,
+        maxPrice: 1590,
+        currentPrice: 1290,
+        initPrice: 1590,
+        salesCount: 12,
+        isNew: 0,
+        colorsProduct: [],
+        offerCount: 6,
+        offers: [],
+        madeInUkraine: false,
+        userSubscribed: false,
+        __typename: "Product"
     },
     {
-        name: "Футболка Nike Dri-FIT",
-        description: "Спортивная футболка с технологией отвода влаги",
-        price: 3990,
-        originalPrice: 4990,
-        category: "clothing",
-        subcategory: "t-shirts",
-        brand: "Nike",
-        images: ["https://via.placeholder.com/400x400/000000/FFFFFF?text=Nike+Dri-FIT"],
-        mainImage: "https://via.placeholder.com/400x400/000000/FFFFFF?text=Nike+Dri-FIT",
-        stock: 100,
-        sku: "NIKE001",
-        weight: 0.15,
-        dimensions: { length: 25, width: 20, height: 1 },
-        tags: ["футболка", "nike", "спорт", "дри-фит"],
-        specifications: {
-            "Материал": "Полиэстер",
-            "Размеры": "S-XXL",
-            "Цвет": "Черный",
-            "Технология": "Dri-FIT"
+        id: 1005,
+        title: "Аксессуар для вытяжки",
+        date: "2024-01-30",
+        vendor: {
+            title: "Electrolux",
+            __typename: "Vendor"
         },
-        rating: { average: 4.5, count: 178 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: true,
-        salePercentage: 20
-    },
-
-    // Furniture
-    {
-        name: "Диван IKEA KIVIK",
-        description: "Удобный трехместный диван с подлокотниками",
-        price: 45990,
-        category: "furniture",
-        subcategory: "sofas",
-        brand: "IKEA",
-        images: ["https://via.placeholder.com/400x400/8B4513/FFFFFF?text=IKEA+KIVIK"],
-        mainImage: "https://via.placeholder.com/400x400/8B4513/FFFFFF?text=IKEA+KIVIK",
-        stock: 8,
-        sku: "IKEAKIV001",
-        weight: 45,
-        dimensions: { length: 220, width: 88, height: 85 },
-        tags: ["диван", "ikea", "мягкая мебель", "гостиная"],
-        specifications: {
-            "Материал": "Ткань",
-            "Размер": "220x88x85 см",
-            "Цвет": "Серый",
-            "Место для сидения": "3 человека"
+        section: {
+            _id: 4,
+            productCategoryName: "Аксессуары для вытяжек",
+            category: "bt-aksessuary-dlya-vytyazhek",
+            subCategory: "hood-accessories",
+            __typename: "Section"
         },
-        rating: { average: 4.4, count: 67 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: false
-    },
-
-    // Sports
-    {
-        name: "Футбольный мяч Adidas Champions League",
-        description: "Официальный мяч Лиги Чемпионов UEFA",
-        price: 5990,
-        category: "sports",
-        subcategory: "football",
-        brand: "Adidas",
-        images: ["https://via.placeholder.com/400x400/FFFFFF/000000?text=Adidas+Champions+League"],
-        mainImage: "https://via.placeholder.com/400x400/FFFFFF/000000?text=Adidas+Champions+League",
-        stock: 25,
-        sku: "ADIDASCL001",
-        weight: 0.43,
-        dimensions: { length: 22, width: 22, height: 22 },
-        tags: ["футбол", "adidas", "лига чемпионов", "мяч"],
-        specifications: {
-            "Размер": "5",
-            "Материал": "Синтетическая кожа",
-            "Вес": "430 г",
-            "Окружность": "68-70 см"
-        },
-        rating: { average: 4.8, count: 234 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: false
-    },
-
-    // Books
-    {
-        name: "Война и мир",
-        description: "Роман-эпопея Льва Толстого в подарочном издании",
-        price: 2990,
-        category: "books",
-        subcategory: "classic",
-        brand: "АСТ",
-        images: ["https://via.placeholder.com/400x400/8B0000/FFFFFF?text=Война+и+Мир"],
-        mainImage: "https://via.placeholder.com/400x400/8B0000/FFFFFF?text=Война+и+Мир",
-        stock: 15,
-        sku: "BOOK001",
-        weight: 1.2,
-        dimensions: { length: 20, width: 15, height: 4 },
-        tags: ["книга", "классика", "толстой", "роман"],
-        specifications: {
-            "Автор": "Лев Толстой",
-            "Страниц": "1225",
-            "Переплет": "Твердый",
-            "Язык": "Русский"
-        },
-        rating: { average: 4.9, count: 456 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: false
-    },
-
-    // Toys
-    {
-        name: "LEGO Star Wars Millennium Falcon",
-        description: "Коллекционный набор из серии Star Wars",
-        price: 15990,
-        originalPrice: 19990,
-        category: "toys",
-        subcategory: "construction",
-        brand: "LEGO",
-        images: ["https://via.placeholder.com/400x400/FFD700/000000?text=LEGO+Millennium+Falcon"],
-        mainImage: "https://via.placeholder.com/400x400/FFD700/000000?text=LEGO+Millennium+Falcon",
-        stock: 5,
-        sku: "LEGO001",
-        weight: 2.5,
-        dimensions: { length: 50, width: 40, height: 15 },
-        tags: ["lego", "star wars", "конструктор", "коллекция"],
-        specifications: {
-            "Деталей": "754",
-            "Возраст": "9+",
-            "Размер модели": "50x40x15 см",
-            "Серия": "Star Wars"
-        },
-        rating: { average: 4.9, count: 89 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: true,
-        salePercentage: 20
-    },
-
-    // Automotive
-    {
-        name: "Автомобильное кресло Britax Romer",
-        description: "Детское автокресло группы 0+/1 с системой безопасности",
-        price: 25990,
-        category: "automotive",
-        subcategory: "child-seats",
-        brand: "Britax",
-        images: ["https://via.placeholder.com/400x400/4169E1/FFFFFF?text=Britax+Romer"],
-        mainImage: "https://via.placeholder.com/400x400/4169E1/FFFFFF?text=Britax+Romer",
-        stock: 12,
-        sku: "BRITAX001",
-        weight: 4.2,
-        dimensions: { length: 45, width: 44, height: 65 },
-        tags: ["автокресло", "детское", "безопасность", "britax"],
-        specifications: {
-            "Группа": "0+/1",
-            "Вес ребенка": "0-18 кг",
-            "Возраст": "0-4 года",
-            "Стандарт": "ECE R44/04"
-        },
-        rating: { average: 4.7, count: 156 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: false
-    },
-
-    // Beauty
-    {
-        name: "Помада MAC Ruby Woo",
-        description: "Культовая матовая помада красного цвета",
-        price: 2990,
-        category: "beauty",
-        subcategory: "lipstick",
-        brand: "MAC",
-        images: ["https://via.placeholder.com/400x400/DC143C/FFFFFF?text=MAC+Ruby+Woo"],
-        mainImage: "https://via.placeholder.com/400x400/DC143C/FFFFFF?text=MAC+Ruby+Woo",
-        stock: 45,
-        sku: "MAC001",
-        weight: 0.03,
-        dimensions: { length: 8, width: 1.5, height: 1.5 },
-        tags: ["помада", "mac", "красная", "матовая"],
-        specifications: {
-            "Цвет": "Ruby Woo",
-            "Текстура": "Матовая",
-            "Вес": "3 г",
-            "Стойкость": "До 8 часов"
-        },
-        rating: { average: 4.8, count: 567 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: false
-    },
-
-    // Health
-    {
-        name: "Витамины Centrum",
-        description: "Комплекс витаминов и минералов для взрослых",
-        price: 1990,
-        originalPrice: 2490,
-        category: "health",
-        subcategory: "vitamins",
-        brand: "Centrum",
-        images: ["https://via.placeholder.com/400x400/FF6B6B/FFFFFF?text=Centrum+Vitamins"],
-        mainImage: "https://via.placeholder.com/400x400/FF6B6B/FFFFFF?text=Centrum+Vitamins",
-        stock: 80,
-        sku: "CENTRUM001",
-        weight: 0.15,
-        dimensions: { length: 8, width: 4, height: 4 },
-        tags: ["витамины", "здоровье", "centrum", "комплекс"],
-        specifications: {
-            "Количество": "30 таблеток",
-            "Прием": "1 раз в день",
-            "Возраст": "18+",
-            "Состав": "13 витаминов + 11 минералов"
-        },
-        rating: { average: 4.6, count: 234 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: true,
-        salePercentage: 20
-    },
-
-    // Military
-    {
-        name: "Тактический рюкзак 5.11 Rush 24",
-        description: "Профессиональный тактический рюкзак для военных и туристов",
-        price: 15990,
-        category: "military",
-        subcategory: "backpacks",
-        brand: "5.11",
-        images: ["https://via.placeholder.com/400x400/2F4F4F/FFFFFF?text=5.11+Rush+24"],
-        mainImage: "https://via.placeholder.com/400x400/2F4F4F/FFFFFF?text=5.11+Rush+24",
-        stock: 8,
-        sku: "511001",
-        weight: 1.2,
-        dimensions: { length: 50, width: 30, height: 20 },
-        tags: ["рюкзак", "тактический", "5.11", "военный"],
-        specifications: {
-            "Объем": "37 л",
-            "Материал": "1050D Nylon",
-            "Цвет": "Черный",
-            "Вес": "1.2 кг"
-        },
-        rating: { average: 4.9, count: 78 },
-        isActive: true,
-        isFeatured: true,
-        isOnSale: false
-    },
-
-    // Adult (discrete category)
-    {
-        name: "Массажер для тела",
-        description: "Электрический массажер для расслабления мышц",
-        price: 3990,
-        category: "adult",
-        subcategory: "massagers",
-        brand: "Beurer",
-        images: ["https://via.placeholder.com/400x400/FF69B4/FFFFFF?text=Body+Massager"],
-        mainImage: "https://via.placeholder.com/400x400/FF69B4/FFFFFF?text=Body+Massager",
-        stock: 20,
-        sku: "BEURER001",
-        weight: 0.8,
-        dimensions: { length: 25, width: 8, height: 8 },
-        tags: ["массажер", "расслабление", "здоровье"],
-        specifications: {
-            "Мощность": "15 Вт",
-            "Режимы": "3 скорости",
-            "Время работы": "15 мин",
-            "Питание": "Аккумулятор"
-        },
-        rating: { average: 4.5, count: 45 },
-        isActive: true,
-        isFeatured: false,
-        isOnSale: false
+        isPromo: true,
+        toOfficial: false,
+        promoBid: null,
+        lineName: "Hood Accessories",
+        linePathNew: "/kitchen/hood-accessories/",
+        imagesCount: 2,
+        videosCount: 0,
+        techShortSpecifications: [
+            "Аксессуар для вытяжки",
+            "Совместимость: Electrolux",
+            "Материал: Пластик"
+        ],
+        techShortSpecificationsList: [
+            { key: "Тип", value: "Аксессуар для вытяжки" },
+            { key: "Совместимость", value: "Electrolux" },
+            { key: "Материал", value: "Пластик" }
+        ],
+        reviewsCount: 23,
+        questionsCount: 5,
+        url: "/kitchen/electrolux-hood-accessory/",
+        imageLinks: [
+            {
+                thumb: "https://via.placeholder.com/150x150/4ECDC4/FFFFFF?text=Hood+Accessory",
+                basic: "https://via.placeholder.com/300x300/4ECDC4/FFFFFF?text=Hood+Accessory",
+                small: "https://via.placeholder.com/200x200/4ECDC4/FFFFFF?text=Hood+Accessory",
+                big: "https://via.placeholder.com/600x600/4ECDC4/FFFFFF?text=Hood+Accessory"
+            }
+        ],
+        minPrice: 450,
+        maxPrice: 550,
+        currentPrice: 450,
+        initPrice: 550,
+        salesCount: 8,
+        isNew: 0,
+        colorsProduct: [],
+        offerCount: 4,
+        offers: [],
+        madeInUkraine: false,
+        userSubscribed: false,
+        __typename: "Product"
     }
 ];
 

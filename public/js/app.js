@@ -346,16 +346,33 @@ class BifoApp {
     // Products
     async loadFeaturedProducts() {
         try {
-            const products = await this.apiRequest('/products/featured/all');
-            this.renderProducts(products, 'featuredProducts');
+            // Try to get featured products from main catalogs
+            const catalogs = await this.apiRequest('/catalogs/main');
+            if (catalogs && catalogs.length > 0) {
+                // Get featured products from the first catalog
+                const firstCatalog = catalogs[0];
+                const products = await this.apiRequest(`/products/featured/catalog/${firstCatalog.slug}?limit=8`);
+                this.renderProducts(products, 'featuredProducts');
+            } else {
+                // Fallback to old API
+                const products = await this.apiRequest('/products/featured/all');
+                this.renderProducts(products, 'featuredProducts');
+            }
         } catch (error) {
             console.error('Error loading featured products:', error);
+            // Fallback to old API
+            try {
+                const products = await this.apiRequest('/products/featured/all');
+                this.renderProducts(products, 'featuredProducts');
+            } catch (fallbackError) {
+                console.error('Fallback error:', fallbackError);
+            }
         }
     }
 
     async loadSaleProducts() {
         try {
-            const products = await this.apiRequest('/products/sale/all');
+            const products = await this.apiRequest('/products/promo/all');
             this.renderProducts(products, 'saleProducts');
         } catch (error) {
             console.error('Error loading sale products:', error);
