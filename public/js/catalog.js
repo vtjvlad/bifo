@@ -29,7 +29,6 @@ class CatalogApp {
     init() {
         this.setupEventListeners();
         this.loadCategories();
-        this.loadMegaMenu();
         this.loadBrands();
         this.loadProducts();
         this.updateAuthUI();
@@ -37,6 +36,9 @@ class CatalogApp {
         
         // Инициализируем полноэкранное мега меню
         this.initFullscreenMegaMenu();
+        
+        // Отключаем любые dropdown экземпляры для кнопки каталогов
+        this.disableCatalogDropdown();
     }
 
     setupEventListeners() {
@@ -72,11 +74,41 @@ class CatalogApp {
         // Fullscreen mega menu button
         const catalogsBtn = document.querySelector('.catalogs-btn');
         if (catalogsBtn) {
+            // Отключаем любые существующие dropdown экземпляры
+            const existingDropdown = bootstrap.Dropdown.getInstance(catalogsBtn);
+            if (existingDropdown) {
+                existingDropdown.dispose();
+            }
+            
+            // Убираем атрибуты, которые могут активировать dropdown
+            catalogsBtn.removeAttribute('data-bs-toggle');
+            catalogsBtn.removeAttribute('role');
+            catalogsBtn.removeAttribute('aria-expanded');
+            
+            // Добавляем обработчик событий
             catalogsBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                e.stopPropagation();
+                e.stopImmediatePropagation();
+                
+                // Отключаем любые dropdown экземпляры перед открытием мега меню
+                const existingDropdown = bootstrap.Dropdown.getInstance(catalogsBtn);
+                if (existingDropdown) {
+                    existingDropdown.dispose();
+                }
+                
                 if (this.fullscreenMegaMenu) {
                     this.fullscreenMegaMenu.toggle();
                 }
+            });
+            
+            // Предотвращаем инициализацию Bootstrap dropdown
+            catalogsBtn.addEventListener('mouseenter', (e) => {
+                e.stopPropagation();
+            });
+            
+            catalogsBtn.addEventListener('mouseleave', (e) => {
+                e.stopPropagation();
             });
         }
 
@@ -619,101 +651,14 @@ class CatalogApp {
 
     // Mega Menu
     async loadMegaMenu() {
-        try {
-            // Try to get from localStorage first
-            const cachedData = this.getCatalogsFromLocalStorage('mega');
-            if (cachedData) {
-                this.renderMegaMenu(cachedData);
-                return;
-            }
-
-            // If no cache, get from API
-            const megaStructure = await this.apiRequest('/catalogs/mega');
-            this.saveCatalogsToLocalStorage(megaStructure, 'mega');
-            this.renderMegaMenu(megaStructure);
-        } catch (error) {
-            console.error('Error loading mega menu:', error);
-            // Fallback to old mega menu parser
-            try {
-                await megaMenuParser.loadAllCatalogs();
-                this.renderMegaMenu();
-            } catch (fallbackError) {
-                console.error('Fallback error:', fallbackError);
-            }
-        }
+        // Старое dropdown мега меню больше не используется
+        // Вместо него используется полноэкранное мега меню
+        console.log('Mega menu loading disabled - using fullscreen mega menu instead');
     }
 
-    renderMegaMenu(megaStructure) {
-        const container = document.getElementById('megaMenuContent');
-        if (!container) return;
 
-        if (megaStructure) {
-            container.innerHTML = this.generateMegaMenuHTML(megaStructure);
-        } else {
-            // Fallback to old mega menu parser
-            container.innerHTML = megaMenuParser.generateMegaMenuHTML();
-        }
-    }
 
-    generateMegaMenuHTML(catalogs) {
-        return catalogs.map(catalog => `
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-                <div class="catalog-section">
-                    <h5 class="catalog-title">
-                        <a href="/catalog.html?catalog=${catalog.slug}" class="text-decoration-none">
-                            ${this.getCatalogIcon(catalog.name)} ${catalog.name}
-                        </a>
-                    </h5>
-                    ${catalog.groups && catalog.groups.length > 0 ? `
-                        <ul class="catalog-groups list-unstyled">
-                            ${catalog.groups.slice(0, 5).map(group => `
-                                <li class="catalog-group">
-                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}" class="text-decoration-none">
-                                        ${group.name}
-                                    </a>
-                                    ${group.categories && group.categories.length > 0 ? `
-                                        <ul class="catalog-categories list-unstyled ms-3">
-                                            ${group.categories.slice(0, 3).map(category => `
-                                                <li class="catalog-category">
-                                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}&category=${category.slug}" class="text-decoration-none small">
-                                                        ${category.name}
-                                                    </a>
-                                                </li>
-                                            `).join('')}
-                                            ${group.categories.length > 3 ? `
-                                                <li class="catalog-category">
-                                                    <a href="/catalog.html?catalog=${catalog.slug}&group=${group.slug}" class="text-decoration-none small text-muted">
-                                                        +${group.categories.length - 3} еще...
-                                                    </a>
-                                                </li>
-                                            ` : ''}
-                                        </ul>
-                                    ` : ''}
-                                </li>
-                            `).join('')}
-                            ${catalog.groups.length > 5 ? `
-                                <li class="catalog-group">
-                                    <a href="/catalog.html?catalog=${catalog.slug}" class="text-decoration-none text-muted">
-                                        +${catalog.groups.length - 5} групп еще...
-                                    </a>
-                                </li>
-                            ` : ''}
-                        </ul>
-                    ` : ''}
-                </div>
-            </div>
-        `).join('');
-    }
 
-    closeMegaMenu() {
-        const dropdown = document.querySelector('.catalogs-btn');
-        if (dropdown) {
-            const dropdownMenu = bootstrap.Dropdown.getInstance(dropdown);
-            if (dropdownMenu) {
-                dropdownMenu.hide();
-            }
-        }
-    }
 
     // Search
     async handleSearch() {
@@ -1216,9 +1161,53 @@ class CatalogApp {
             console.warn('FullscreenMegaMenu class not loaded');
         }
     }
+    
+    // Отключение dropdown для кнопки каталогов
+    disableCatalogDropdown() {
+        const catalogsBtn = document.querySelector('.catalogs-btn');
+        if (catalogsBtn) {
+            // Отключаем существующие dropdown экземпляры
+            const existingDropdown = bootstrap.Dropdown.getInstance(catalogsBtn);
+            if (existingDropdown) {
+                existingDropdown.dispose();
+            }
+            
+            // Убираем атрибуты dropdown
+            catalogsBtn.removeAttribute('data-bs-toggle');
+            catalogsBtn.removeAttribute('role');
+            catalogsBtn.removeAttribute('aria-expanded');
+            catalogsBtn.classList.remove('dropdown-toggle');
+            
+            // Добавляем обработчик для предотвращения инициализации dropdown
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && 
+                        (mutation.attributeName === 'data-bs-toggle' || 
+                         mutation.attributeName === 'role' || 
+                         mutation.attributeName === 'aria-expanded')) {
+                        catalogsBtn.removeAttribute(mutation.attributeName);
+                    }
+                });
+            });
+            
+            observer.observe(catalogsBtn, {
+                attributes: true,
+                attributeFilter: ['data-bs-toggle', 'role', 'aria-expanded']
+            });
+        }
+    }
 }
 
 // Initialize catalog app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Отключаем все dropdown экземпляры для кнопки каталогов
+    const catalogsBtn = document.querySelector('.catalogs-btn');
+    if (catalogsBtn) {
+        const existingDropdown = bootstrap.Dropdown.getInstance(catalogsBtn);
+        if (existingDropdown) {
+            existingDropdown.dispose();
+        }
+    }
+    
     window.catalogApp = new CatalogApp();
 }); 

@@ -509,4 +509,18 @@
         right: 10px;
         left: 10px;
     }
-} 
+}
+
+/* Отключаем dropdown поведение для кнопки каталогов */
+.catalogs-btn {
+    pointer-events: auto !important;
+}
+
+.catalogs-btn[data-bs-toggle] {
+    pointer-events: auto !important;
+}
+
+/* Отключаем Bootstrap dropdown для кнопки каталогов */
+.catalogs-btn.dropdown-toggle::after {
+    display: none !important;
+}

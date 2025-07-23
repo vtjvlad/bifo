@@ -15,6 +15,9 @@ class FullscreenMegaMenu {
         this.createMenuStructure();
         this.setupEventListeners();
         this.loadCatalogs();
+        
+        // Отключаем любые dropdown экземпляры для кнопки каталогов
+        this.disableCatalogDropdown();
     }
 
     // Создание структуры меню
@@ -56,7 +59,7 @@ class FullscreenMegaMenu {
                             </button>
                         </div>
                         
-                        <div id="megaMenuContent">
+                        <div id="fullscreenMegaMenuContent">
                             <!-- Контент будет загружен здесь -->
                         </div>
                     </div>
@@ -71,7 +74,7 @@ class FullscreenMegaMenu {
         this.closeButton = document.getElementById('megaMenuClose');
         this.searchInput = document.getElementById('megaMenuSearch');
         this.catalogList = document.getElementById('catalogList');
-        this.contentArea = document.getElementById('megaMenuContent');
+        this.contentArea = document.getElementById('fullscreenMegaMenuContent');
         
         // Проверяем, что все элементы найдены
         if (!this.menuElement) console.error('Menu element not found');
@@ -550,6 +553,9 @@ class FullscreenMegaMenu {
     open() {
         if (this.isOpen) return;
         
+        // Отключаем любые dropdown экземпляры для кнопки каталогов
+        this.disableCatalogDropdown();
+        
         this.isOpen = true;
         this.menuElement.style.display = 'block';
         this.menuElement.classList.add('show');
@@ -580,6 +586,9 @@ class FullscreenMegaMenu {
         // Очищаем поиск
         this.clearSearch();
         
+        // Отключаем любые dropdown экземпляры для кнопки каталогов
+        this.disableCatalogDropdown();
+        
         // Событие закрытия
         this.menuElement.dispatchEvent(new CustomEvent('megaMenuClosed'));
         
@@ -603,6 +612,24 @@ class FullscreenMegaMenu {
             searchQuery: this.searchQuery,
             searchResultsCount: this.searchResults.length
         };
+    }
+    
+    // Отключение dropdown для кнопки каталогов
+    disableCatalogDropdown() {
+        const catalogsBtn = document.querySelector('.catalogs-btn');
+        if (catalogsBtn) {
+            // Отключаем существующие dropdown экземпляры
+            const existingDropdown = bootstrap.Dropdown.getInstance(catalogsBtn);
+            if (existingDropdown) {
+                existingDropdown.dispose();
+            }
+            
+            // Убираем атрибуты dropdown
+            catalogsBtn.removeAttribute('data-bs-toggle');
+            catalogsBtn.removeAttribute('role');
+            catalogsBtn.removeAttribute('aria-expanded');
+            catalogsBtn.classList.remove('dropdown-toggle');
+        }
     }
 }
 
