@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест полноэкранного мега-меню - BIFO</title>
+    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="css/common.css">
+    <!-- Mega Menu CSS -->
+    <link rel="stylesheet" href="css/mega-menu.css">
+    <!-- Mega Menu Positioning CSS -->
+    <link rel="stylesheet" href="css/mega-menu-positioning.css">
+    <!-- Fullscreen Mega Menu CSS -->
+    <link rel="stylesheet" href="css/fullscreen-mega-menu.css">
+    
+    <style>
+        .test-content {
+            min-height: 150vh;
+            padding: 2rem;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .status-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 1060;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/bifo-logo.png" alt="BIFO" height="40" class="me-2">
+                <span class="fw-bold">BIFO</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Catalogs Button -->
+                <div class="navbar-nav me-3">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle catalogs-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-large me-1"></i>Каталоги товаров
+                        </a>
+                        <div class="dropdown-menu mega-menu" id="megaMenu">
+                            <div class="container">
+                                <div class="row" id="megaMenuContent">
+                                    <!-- Старое мега меню (будет заменено) -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search Bar -->
+                <form class="d-flex mx-auto search-bar" style="max-width: 500px;">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="searchInput" placeholder="Поиск товаров..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Navigation -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/catalog.html">Каталог</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Status Indicator -->
+    <div class="status-indicator" id="statusIndicator">
+        Статус: <span id="statusText">Ожидание</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="mt-5 pt-4">
+        <div class="container">
+            <div class="test-content">
+                <h1 class="mb-4">
+                    <i class="fas fa-expand-arrows-alt me-2"></i>
+                    Тест полноэкранного мега-меню
+                </h1>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Новое полноэкранное мега-меню включает:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Полноэкранный режим (кроме шапки)</li>
+                        <li>Двухколоночная структура (каталоги + контент)</li>
+                        <li>Поиск по каталогам и категориям</li>
+                        <li>Хлебные крошки для навигации</li>
+                        <li>Клавиатурная навигация (Escape, Enter, стрелки)</li>
+                        <li>Адаптивность для мобильных устройств</li>
+                    </ul>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-mouse-pointer me-2"></i>Как использовать</h3>
+                            <ol class="mb-0">
+                                <li>Нажмите на кнопку "Каталоги товаров" в навигации</li>
+                                <li>Выберите каталог в левой колонке</li>
+                                <li>Просматривайте группы и категории в правой части</li>
+                                <li>Используйте поиск для быстрого поиска</li>
+                                <li>Нажмите Escape или кнопку закрытия для выхода</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <h3><i class="fas fa-keyboard me-2"></i>Горячие клавиши</h3>
+                            <ul class="mb-0">
+                                <li><strong>Escape</strong> - закрыть меню</li>
+                                <li><strong>Enter</strong> - выбрать каталог</li>
+                                <li><strong>↑↓</strong> - навигация по каталогам</li>
+                                <li><strong>Tab</strong> - навигация по элементам</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="fas fa-mobile-alt me-2"></i>
+                                    Мобильная версия
+                                </h5>
+                                <p class="card-text">
+                                    На мобильных устройствах мега-меню адаптируется:
+                                </p>
+                                <ul>
+                                    <li>Каталоги отображаются горизонтально в верхней части</li>
+                                    <li>Контент занимает всю оставшуюся высоту</li>
+                                    <li>Поиск остается доступным</li>
+                                    <li>Свайп-жесты для навигации</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                                <h5>Умный поиск</h5>
+                                <p>Поиск по каталогам, группам и категориям с релевантными результатами</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-sitemap fa-3x text-success mb-3"></i>
+                                <h5>Иерархическая структура</h5>
+                                <p>Четкая навигация по уровням: каталоги → группы → категории</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-palette fa-3x text-warning mb-3"></i>
+                                <h5>Современный дизайн</h5>
+                                <p>Красивые анимации, градиенты и адаптивный интерфейс</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-code me-2"></i>
+                                Технические детали
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Функции:</h6>
+                                    <ul>
+                                        <li>Полноэкранный режим с фиксированным позиционированием</li>
+                                        <li>Двухколоночная сетка с адаптивностью</li>
+                                        <li>Поиск в реальном времени</li>
+                                        <li>Клавиатурная навигация</li>
+                                        <li>Хлебные крошки</li>
+                                        <li>Состояния загрузки и ошибок</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>API интеграция:</h6>
+                                    <ul>
+                                        <li>Загрузка каталогов с сервера</li>
+                                        <li>Динамическая загрузка структуры</li>
+                                        <li>Кэширование данных</li>
+                                        <li>Обработка ошибок</li>
+                                        <li>События открытия/закрытия</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Fullscreen Mega Menu JS -->
+    <script src="/js/fullscreen-mega-menu.js"></script>
+    <!-- Mega Menu Parser -->
+    <script src="/js/mega-menu-parser.js"></script>
+    
+    <script>
+        // Инициализация полноэкранного мега меню
+        let fullscreenMegaMenu;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализируем мега меню
+            if (typeof FullscreenMegaMenu !== 'undefined') {
+                fullscreenMegaMenu = new FullscreenMegaMenu();
+                
+                // Обработчик для кнопки каталогов
+                const catalogsBtn = document.querySelector('.catalogs-btn');
+                if (catalogsBtn) {
+                    catalogsBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        fullscreenMegaMenu.toggle();
+                    });
+                }
+                
+                // Отслеживание событий
+                fullscreenMegaMenu.menuElement.addEventListener('megaMenuOpened', () => {
+                    updateStatus('Открыто', '#28a745');
+                });
+                
+                fullscreenMegaMenu.menuElement.addEventListener('megaMenuClosed', () => {
+                    updateStatus('Закрыто', '#dc3545');
+                });
+                
+                // Отображение состояния
+                function updateStatus(text, color) {
+                    const statusText = document.getElementById('statusText');
+                    statusText.textContent = text;
+                    statusText.style.color = color;
+                }
+                
+                // Показываем информацию о состоянии
+                setInterval(() => {
+                    const state = fullscreenMegaMenu.getState();
+                    if (state.isOpen) {
+                        const info = `Открыто | Каталог: ${state.currentCatalog?.name || 'Не выбран'} | Поиск: ${state.searchQuery || 'нет'}`;
+                        updateStatus(info, '#28a745');
+                    }
+                }, 1000);
+                
+            } else {
+                console.error('FullscreenMegaMenu class not loaded');
+                updateStatus('Ошибка загрузки', '#ffc107');
+            }
+        });
+        
+        function updateStatus(text, color) {
+            const statusText = document.getElementById('statusText');
+            statusText.textContent = text;
+            statusText.style.color = color;
+        }
+    </script>
+</body>
+</html> 

@@ -18,10 +18,8 @@ class BifoApp {
         this.updateAuthUI();
         this.loadCart();
         
-        // Добавляем настройку позиционирования мега меню
-        setTimeout(() => {
-            this.setupMegaMenuPositioning();
-        }, 100);
+        // Инициализируем полноэкранное мега меню
+        this.initFullscreenMegaMenu();
     }
 
     setupEventListeners() {
@@ -53,6 +51,17 @@ class BifoApp {
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             this.handleCheckout();
         });
+
+        // Fullscreen mega menu button
+        const catalogsBtn = document.querySelector('.catalogs-btn');
+        if (catalogsBtn) {
+            catalogsBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (this.fullscreenMegaMenu) {
+                    this.fullscreenMegaMenu.toggle();
+                }
+            });
+        }
     }
 
     // API Methods
@@ -742,50 +751,23 @@ class BifoApp {
         return icons[type] || 'info-circle';
     }
 
-    // Улучшенное позиционирование мега меню
-    setupMegaMenuPositioning() {
-        const megaMenu = document.querySelector('.mega-menu');
-        const catalogsBtn = document.querySelector('.catalogs-btn');
-        
-        if (!megaMenu || !catalogsBtn) return;
-
-        // Функция для проверки и корректировки позиции
-        const adjustMegaMenuPosition = () => {
-            const btnRect = catalogsBtn.getBoundingClientRect();
-            const menuRect = megaMenu.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            const viewportWidth = window.innerWidth;
+    // Инициализация полноэкранного мега меню
+    initFullscreenMegaMenu() {
+        // Проверяем, загружен ли класс FullscreenMegaMenu
+        if (typeof FullscreenMegaMenu !== 'undefined') {
+            this.fullscreenMegaMenu = new FullscreenMegaMenu();
             
-            // Удаляем все классы позиционирования
-            megaMenu.classList.remove('position-top', 'position-left', 'position-right');
+            // Добавляем обработчики событий
+            this.fullscreenMegaMenu.menuElement.addEventListener('megaMenuOpened', () => {
+                console.log('Fullscreen mega menu opened');
+            });
             
-            // Проверяем, не выходит ли меню за нижнюю границу экрана
-            if (btnRect.bottom + menuRect.height > viewportHeight) {
-                // Если выходит, позиционируем сверху от кнопки
-                megaMenu.classList.add('position-top');
-            }
-            
-            // Добавляем класс для анимации
-            megaMenu.classList.add('show');
-        };
-
-        // Добавляем обработчики событий
-        window.addEventListener('resize', adjustMegaMenuPosition);
-        window.addEventListener('scroll', adjustMegaMenuPosition);
-        
-        // Обработчик для Bootstrap dropdown
-        catalogsBtn.addEventListener('shown.bs.dropdown', () => {
-            // Небольшая задержка для корректного расчета размеров
-            setTimeout(adjustMegaMenuPosition, 10);
-        });
-        
-        // Обработчик для скрытия dropdown
-        catalogsBtn.addEventListener('hidden.bs.dropdown', () => {
-            megaMenu.classList.remove('show', 'position-top', 'position-left', 'position-right');
-        });
-        
-        // Начальная настройка
-        adjustMegaMenuPosition();
+            this.fullscreenMegaMenu.menuElement.addEventListener('megaMenuClosed', () => {
+                console.log('Fullscreen mega menu closed');
+            });
+        } else {
+            console.warn('FullscreenMegaMenu class not loaded');
+        }
     }
 }
 
