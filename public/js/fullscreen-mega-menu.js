@@ -19,6 +19,13 @@ class FullscreenMegaMenu {
 
     // Создание структуры меню
     createMenuStructure() {
+        // Проверяем, не существует ли уже элемент мега меню
+        const existingMenu = document.getElementById('fullscreenMegaMenu');
+        if (existingMenu) {
+            console.log('FullscreenMegaMenu element already exists, using existing one');
+            return;
+        }
+
         const menuHTML = `
             <div class="fullscreen-mega-menu" id="fullscreenMegaMenu" style="display: none;">
                 <!-- Основной контейнер -->
@@ -65,12 +72,28 @@ class FullscreenMegaMenu {
         this.searchInput = document.getElementById('megaMenuSearch');
         this.catalogList = document.getElementById('catalogList');
         this.contentArea = document.getElementById('megaMenuContent');
+        
+        // Проверяем, что все элементы найдены
+        if (!this.menuElement) console.error('Menu element not found');
+        if (!this.closeButton) console.error('Close button not found');
+        if (!this.searchInput) console.error('Search input not found');
+        if (!this.catalogList) console.error('Catalog list not found');
+        if (!this.contentArea) console.error('Content area not found');
     }
 
     // Настройка обработчиков событий
     setupEventListeners() {
         // Закрытие меню
-        this.closeButton.addEventListener('click', () => this.close());
+        if (this.closeButton) {
+            this.closeButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Close button clicked');
+                this.close();
+            });
+        } else {
+            console.error('Close button not found');
+        }
         
         // Клик вне меню
         this.menuElement.addEventListener('click', (e) => {
@@ -106,15 +129,27 @@ class FullscreenMegaMenu {
         });
 
         // Поиск
-        this.searchInput.addEventListener('input', (e) => {
-            this.searchQuery = e.target.value.trim();
-            this.performSearch();
-        });
+        if (this.searchInput) {
+            this.searchInput.addEventListener('input', (e) => {
+                this.searchQuery = e.target.value.trim();
+                this.performSearch();
+            });
+        }
 
         // Обработка показа/скрытия
         this.menuElement.addEventListener('animationend', () => {
             if (!this.isOpen) {
                 this.menuElement.style.display = 'none';
+            }
+        });
+        
+        // Альтернативный обработчик закрытия через делегирование
+        document.addEventListener('click', (e) => {
+            if (e.target && e.target.closest('.mega-menu-close')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Close button clicked via delegation');
+                this.close();
             }
         });
     }
@@ -533,6 +568,7 @@ class FullscreenMegaMenu {
 
     // Закрыть меню
     close() {
+        console.log('Close function called, isOpen:', this.isOpen);
         if (!this.isOpen) return;
         
         this.isOpen = false;
@@ -546,6 +582,8 @@ class FullscreenMegaMenu {
         
         // Событие закрытия
         this.menuElement.dispatchEvent(new CustomEvent('megaMenuClosed'));
+        
+        console.log('Menu closed successfully');
     }
 
     // Переключить состояние меню

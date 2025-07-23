@@ -3,20 +3,21 @@
 /* Основные стили полноэкранного мега меню */
 .fullscreen-mega-menu {
     position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+    top: 100px !important;
+    left: 20px !important;
+    right: 20px !important;
+    bottom: 20px !important;
+    width: calc(100vw - 40px) !important;
+    height: calc(100vh - 120px) !important;
     z-index: 1050 !important;
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #e9ecef 100%);
     backdrop-filter: blur(10px);
-    border: none;
-    border-radius: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
     padding: 0;
     margin: 0;
     overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
     
     /* Анимация появления */
     animation: fullscreenMenuSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -47,6 +48,12 @@
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 1.2rem;
+    position: relative;
+    z-index: 10;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
 
 .mega-menu-close:hover {
@@ -57,7 +64,7 @@
 /* Основной контейнер */
 .mega-menu-container {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 120px);
     overflow: hidden;
 }
 
@@ -193,6 +200,8 @@
     background: rgba(255, 255, 255, 0.95);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 5;
 }
 
 /* Контейнер контента */
@@ -427,6 +436,20 @@
 
 /* Адаптивность для планшетов */
 @media (max-width: 1024px) {
+    .fullscreen-mega-menu {
+        top: 90px !important;
+        left: 15px !important;
+        right: 15px !important;
+        bottom: 15px !important;
+        width: calc(100vw - 30px) !important;
+        height: calc(100vh - 105px) !important;
+        border-radius: 12px;
+    }
+    
+    .mega-menu-container {
+        height: calc(100vh - 105px);
+    }
+    
     .mega-menu-sidebar {
         width: 250px;
     }
@@ -444,6 +467,13 @@
 /* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
     .fullscreen-mega-menu {
+        top: 80px !important;
+        left: 10px !important;
+        right: 10px !important;
+        bottom: 10px !important;
+        width: calc(100vw - 20px) !important;
+        height: calc(100vh - 90px) !important;
+        border-radius: 8px;
         animation: fullscreenMenuSlideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     
@@ -460,7 +490,7 @@
     
     .mega-menu-container {
         flex-direction: column;
-        height: calc(100vh - 140px);
+        height: calc(100vh - 90px);
     }
     
     .mega-menu-sidebar {
@@ -531,6 +561,31 @@
     
     #megaMenuContent {
         padding: 1rem;
+    }
+}
+
+/* Стили для очень маленьких экранов */
+@media (max-width: 480px) {
+    .fullscreen-mega-menu {
+        top: 70px !important;
+        left: 5px !important;
+        right: 5px !important;
+        bottom: 5px !important;
+        width: calc(100vw - 10px) !important;
+        height: calc(100vh - 75px) !important;
+        border-radius: 6px;
+    }
+    
+    .mega-menu-container {
+        height: calc(100vh - 75px);
+    }
+    
+    .mega-menu-top-panel {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    #megaMenuContent {
+        padding: 0.75rem;
     }
 }
 

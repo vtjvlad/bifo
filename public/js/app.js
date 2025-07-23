@@ -755,7 +755,15 @@ class BifoApp {
     initFullscreenMegaMenu() {
         // Проверяем, загружен ли класс FullscreenMegaMenu
         if (typeof FullscreenMegaMenu !== 'undefined') {
-            this.fullscreenMegaMenu = new FullscreenMegaMenu();
+            // Проверяем, не создан ли уже экземпляр
+            if (window.globalFullscreenMegaMenu) {
+                this.fullscreenMegaMenu = window.globalFullscreenMegaMenu;
+                console.log('Using existing FullscreenMegaMenu instance');
+            } else {
+                this.fullscreenMegaMenu = new FullscreenMegaMenu();
+                window.globalFullscreenMegaMenu = this.fullscreenMegaMenu;
+                console.log('Created new FullscreenMegaMenu instance');
+            }
             
             // Добавляем обработчики событий
             this.fullscreenMegaMenu.menuElement.addEventListener('megaMenuOpened', () => {
