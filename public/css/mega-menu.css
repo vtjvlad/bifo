@@ -170,6 +170,14 @@
     .mega-menu {
         max-height: 70vh;
         overflow-y: auto;
+        /* Улучшенное позиционирование для планшетов */
+        width: 100%;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        position: fixed;
+        top: 100%;
+        z-index: 1050;
     }
     
     .catalog-section {

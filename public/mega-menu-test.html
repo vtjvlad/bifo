@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест мега-меню - BIFO</title>
+    <meta name="description" content="Тестирование улучшенного мега-меню с правильным позиционированием и прокруткой">
+    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="css/common.css">
+    <!-- Mega Menu CSS -->
+    <link rel="stylesheet" href="css/mega-menu.css">
+    <!-- Mega Menu Positioning CSS -->
+    <link rel="stylesheet" href="css/mega-menu-positioning.css">
+    
+    <style>
+        /* Дополнительные стили для тестирования */
+        .test-content {
+            min-height: 200vh;
+            padding: 2rem;
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .position-indicator {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            z-index: 1060;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Component -->
+    <header class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/images/bifo-logo.png" alt="BIFO" height="40" class="me-2">
+                <span class="fw-bold">BIFO</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Catalogs Button -->
+                <div class="navbar-nav me-3">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle catalogs-btn" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-th-large me-1"></i>Каталоги товаров
+                        </a>
+                        <div class="dropdown-menu mega-menu" id="megaMenu">
+                            <div class="container">
+                                <div class="row" id="megaMenuContent">
+                                    <!-- Mega menu content will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Search Bar -->
+                <form class="d-flex mx-auto search-bar" style="max-width: 500px;">
+                    <div class="input-group">
+                        <input class="form-control" type="search" id="searchInput" placeholder="Поиск товаров..." aria-label="Search">
+                        <button class="btn btn-outline-light" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Navigation -->
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <i class="fas fa-user me-1"></i>Войти
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="cartBtn">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Корзина <span class="badge bg-danger" id="cartCount">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Position Indicator -->
+    <div class="position-indicator" id="positionIndicator">
+        Позиция: <span id="positionText">По умолчанию</span>
+    </div>
+
+    <!-- Main Content -->
+    <main class="mt-5 pt-4">
+        <div class="container">
+            <div class="test-content">
+                <h1 class="mb-4">
+                    <i class="fas fa-test-tube me-2"></i>
+                    Тестирование улучшенного мега-меню
+                </h1>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Тестируемые функции:</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>Правильное позиционирование окна мега-меню</li>
+                        <li>Предотвращение выхода за границы экрана</li>
+                        <li>Возможность прокрутки контента внутри меню</li>
+                        <li>Адаптивность для мобильных устройств</li>
+                    </ul>
+                </div>
+
+                <div class="test-section">
+                    <h3>Инструкции по тестированию:</h3>
+                    <ol>
+                        <li>Нажмите на кнопку "Каталоги товаров" в навигации</li>
+                        <li>Прокрутите страницу вниз и снова откройте меню - оно должно позиционироваться сверху</li>
+                        <li>Измените размер окна браузера - меню должно адаптироваться</li>
+                        <li>На мобильных устройствах проверьте горизонтальную прокрутку</li>
+                    </ol>
+                </div>
+
+                <div class="test-section">
+                    <h3>Тестовый контент для прокрутки</h3>
+                    <p>Этот контент нужен для тестирования позиционирования мега-меню при прокрутке страницы.</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Тестовая секция 1</h5>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Тестовая секция 2</h5>
+                                    <p class="card-text">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Дополнительный контент</h3>
+                    <p>Этот раздел добавляет высоту странице для тестирования позиционирования мега-меню при прокрутке.</p>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Длинный контент</h5>
+                                    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                    <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-section">
+                    <h3>Статус тестирования</h3>
+                    <div id="testStatus">
+                        <div class="alert alert-warning">
+                            <i class="fas fa-clock me-2"></i>
+                            Ожидание тестирования мега-меню...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- App JS -->
+    <script src="js/app.js"></script>
+    
+    <script>
+        // Дополнительный JavaScript для тестирования
+        document.addEventListener('DOMContentLoaded', function() {
+            const megaMenu = document.querySelector('.mega-menu');
+            const catalogsBtn = document.querySelector('.catalogs-btn');
+            const positionIndicator = document.getElementById('positionIndicator');
+            const positionText = document.getElementById('positionText');
+            const testStatus = document.getElementById('testStatus');
+            
+            // Функция для обновления индикатора позиции
+            function updatePositionIndicator() {
+                const classes = megaMenu.classList;
+                let position = 'По умолчанию';
+                
+                if (classes.contains('position-top')) {
+                    position = 'Сверху';
+                } else if (classes.contains('position-left')) {
+                    position = 'Слева';
+                } else if (classes.contains('position-right')) {
+                    position = 'Справа';
+                }
+                
+                positionText.textContent = position;
+            }
+            
+            // Обработчик для показа dropdown
+            catalogsBtn.addEventListener('shown.bs.dropdown', function() {
+                setTimeout(updatePositionIndicator, 50);
+                
+                // Обновляем статус тестирования
+                testStatus.innerHTML = `
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Мега-меню открыто!</strong><br>
+                        Позиция: ${positionText.textContent}<br>
+                        Высота: ${megaMenu.offsetHeight}px<br>
+                        Ширина: ${megaMenu.offsetWidth}px
+                    </div>
+                `;
+            });
+            
+            // Обработчик для скрытия dropdown
+            catalogsBtn.addEventListener('hidden.bs.dropdown', function() {
+                positionText.textContent = 'Закрыто';
+                testStatus.innerHTML = `
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Мега-меню закрыто. Откройте его снова для тестирования.
+                    </div>
+                `;
+            });
+            
+            // Обработчик изменения размера окна
+            window.addEventListener('resize', function() {
+                if (megaMenu.classList.contains('show')) {
+                    setTimeout(updatePositionIndicator, 100);
+                }
+            });
+            
+            // Обработчик прокрутки
+            window.addEventListener('scroll', function() {
+                if (megaMenu.classList.contains('show')) {
+                    setTimeout(updatePositionIndicator, 100);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

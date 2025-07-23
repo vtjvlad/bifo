@@ -52,10 +52,9 @@ body {
 /* Enhanced Mega Menu Styles */
 .mega-menu {
     width: 100vw;
-    left: 50% !important;
-    right: 50% !important;
-    margin-left: -50vw !important;
-    margin-right: -50vw !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: 0 !important;
     border: none;
     border-radius: 0;
     box-shadow: 0 15px 35px rgba(0,0,0,0.1);
@@ -64,14 +63,49 @@ body {
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(0,0,0,0.05);
     border-bottom: 1px solid rgba(0,0,0,0.05);
+    /* Добавляем максимальную высоту и прокрутку */
+    max-height: 80vh;
+    overflow-y: auto;
+    /* Улучшенное позиционирование */
+    position: absolute;
+    top: 100%;
+    z-index: 1050;
+    /* Плавная анимация */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Стили для скроллбара мега меню */
+.mega-menu::-webkit-scrollbar {
+    width: 8px;
+}
+
+.mega-menu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+}
+
+.mega-menu::-webkit-scrollbar-thumb {
+    background: rgba(0, 123, 255, 0.3);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.mega-menu::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 123, 255, 0.5);
 }
 
 .mega-menu .container {
     max-width: 1400px;
+    /* Добавляем отступы для предотвращения выхода за границы */
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .mega-menu .row {
     margin: 0;
+    /* Ограничиваем высоту контента */
+    max-height: calc(80vh - 5rem);
+    overflow-y: auto;
 }
 
 /* Catalog Section Styles */
@@ -630,6 +664,15 @@ footer a:hover {
         padding: 1.5rem 0;
         background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
         box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        /* Улучшенное позиционирование для мобильных */
+        max-height: 70vh;
+        width: 100%;
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        position: absolute;
+        top: 100%;
+        z-index: 1050;
     }
 
     .catalog-section {
