@@ -1,0 +1,48 @@
+
+___________energy___________
+      /mobile/zaryadnye-stancii                                          
+      /dacha_sad/generatory                                              
+      /mobile/universalnye-batarei                                       
+      /computer/istochniki-besperebojnogo-pitaniya                       
+      /computer/akkumulyatory-dlya-ibp                                   
+      /dacha_sad/zaryadnye-ustrojstva-na-solnechnyh-batareyah            
+      /dacha_sad/solnechnye-paneli-batareipoint-elektrostancii           
+      /dacha_sad/invertory-dlya-solnechnyh-batarej                 
+      /dacha_sad/invertory-dlya-solnechnyh-batarej               
+      /dacha_sad/invertory-dlya-solnechnyh-batarej                 
+      /dacha_sad/invertory-dlya-solnechnyh-batarej                 
+      /auto/preobrazovateli-napryazheniya                                
+      /auto/avtomobilnye-akkumulyatory                                   
+      /computer/stabilizatory-napryazheniya                              
+      /computer/setevye-filtry                                           
+      /computer/akkumulyatory-batarejki                                  
+      /computer/zaryadnye-ustrojstva-dlya-akkumulyatorov-aa-aaa          
+      /dom/avtomaticheskie-vyklyuchateli                         
+      /dacha_sad/vetro-solnechnye-kontrollery                            
+    
+
+___________ /power/internet-bez-svitla___________
+      /computer/besprovodnoe-oborudovanie                                
+      /computer/istochniki-besperebojnogo-pitaniya                
+      /mobile/universalnye-batarei                                
+      /computer/antenny-dlya-besprovodnyh-setej                     
+      /computer/modemy-3g-gsm-cdma                                
+      /computer/besprovodnoe-oborudovanie                         
+      /computer/kabeli-usb                                        
+      /computer/konvertory                                        
+    
+
+___________ /power/energosberezhennya___________
+      /bt/holodilniki                                              
+      /bt/posudomoechnye-mashiny                                   
+      /bt/stiralnye-i-sushilnye-mashiny                            
+      /bt/kondicionery                                             
+      /bt/obogrevateli                                               
+      /bt/mikrovolnovye-pechi                                         
+      /bt/elektrochajniki                                            
+      /bt/utyugi                                                     
+      /bt/pylesosy                                                 
+      /dom/elektrolampy                                             
+      /dom/umnye-rozetki                                           
+      /office/datchikipoint-izveschateli                           
+      /dom/schetchiki-elektroenergii                                

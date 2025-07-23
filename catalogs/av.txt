@@ -1,0 +1,100 @@
+
+___________ televisions/___________
+televizory                  
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+televizory                   
+
+___________ televizory-proektory/___________
+mediacentry                  
+av-resivery                  
+resivery-sputnikovogo-tv                  
+domashnie-kinoteatry                  
+akusticheskie-kolonki                   
+     /computer/igrovye-pristavki                  
+      akusticheskie-kolonki                   
+      universalnye-pulty-du                  
+      stojki-dlya-audio--videoapparatury                  
+     /dom/komody-tumby-stoliki                   
+      televizionnye-antenny                  
+     /computer/akkumulyatory-batarejki                  
+    
+___________ projectors/___________
+      proektory                  
+      proekcionnye-ekrany                  
+      stojki-dlya-audio--videoapparatury                   
+    
+___________ headphones/___________
+      naushniki-garnitury                  
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+      naushniki-garnitury                   
+    
+___________ audio/___________
+      akusticheskie-kolonki                  
+     /musical_instruments/mikrofony                  
+     /musical_instruments/mikrofony                   
+      av-resivery                  
+      usiliteli                  
+      muzykalnye-centry                  
+      proigryvateli                  
+      mp3--i-mediapleery                  
+      aksessuary-dlya-proigryvatelej-vinilovyh-diskov                  
+      vinilovye-plastinki                  
+      diktofony                  
+     /computer/zvukovye-karty                  
+      setevye-audioproigryvateli                  
+      cifro-analogovye-preobrazovateli-cap                  
+      cd-proigryvateli                  
+      tyunery                  
+      audio--i-videokabeli                  
+      aksessuary-dlya-naushnikov-i-garnitur                  
+    
+___________ videokamery-i-videooborudovanie/___________
+kvadrokoptery-dlya-videosemki                  
+ekshn-kamery                  
+/auto/videoregistratory                  
+aksessuary-dlya-ekshn-kamer                  
+aksessuary-dlya-kvadrokopterov                  
+/auto/aksessuary-dlya-videoregistratorov
+/mobile/monopody-dlya-selfi-selfie-stick                   
+
+___________ fotoapparaty-obektivy/___________
+fotoapparaty                  
+obektivy                  
+videokamery                  
+sumki-dlya-foto-i-video                  
+plenochnye-fotokamery                  
+fotovspyshki                  
+shtativy                  
+sistemy-stabilizacii-dlya-foto-i-videokamer                  
+/computer/flash-karty                  
+telekonvertery                  
+fotobumaga                  
+studijnyj-svet                  
+akkumulyatory-dlya-foto-i-video                  
+/computer/zaryadnye-ustrojstva-dlya-akkumulyatorov-aa-aaa                  
+/computer/akkumulyatory-batarejki                  

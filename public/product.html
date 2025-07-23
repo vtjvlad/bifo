@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товар - BIFO</title>
+    <meta name="description" content="Детальная информация о товаре - интернет-магазин BIFO">
+    <link rel="icon" href="/images/bifo-logo.png" type="image/png">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="product-page">
+    <!-- Header Component -->
+    <div data-component="header"></div>
+    
+    <!-- Mega Menu Component -->
+    <div data-component="mega-menu"></div>
+
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="product-container">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="container-fluid px-4 pt-4">
+                <ol class="breadcrumb" id="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Главная</a></li>
+                    <li class="breadcrumb-item"><a href="/catalog.html">Каталоги</a></li>
+                    <li class="breadcrumb-item"><a href="#" id="categoryLink">Категория</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Товар</li>
+                </ol>
+            </nav>
+
+            <!-- Product Content -->
+            <div class="container-fluid px-4 py-4">
+                <div class="row">
+                    <!-- Product Images -->
+                    <div class="col-lg-6 col-md-6 mb-4">
+                        <div class="product-images-section">
+                            <!-- Main Image -->
+                            <div class="main-image-container">
+                                <img id="mainImage" src="" alt="Товар" class="main-product-image">
+                                <div class="image-overlay">
+                                    <button class="btn btn-light btn-sm zoom-btn" id="zoomBtn">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Thumbnail Images -->
+                            <div class="thumbnail-images" id="thumbnailImages">
+                                <!-- Thumbnails will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="col-lg-6 col-md-6">
+                        <div class="product-info-section">
+                            <!-- Product Title -->
+                            <h1 id="productTitle" class="product-title">Название товара</h1>
+                            
+                            <!-- Product Vendor -->
+                            <div class="product-vendor-info">
+                                <i class="fas fa-industry me-2"></i>
+                                <span id="productVendor">Производитель</span>
+                            </div>
+
+                            <!-- Product Rating -->
+                            <div class="product-rating-section">
+                                <div class="rating-stars">
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="fas fa-star text-warning"></i>
+                                    <i class="far fa-star text-warning"></i>
+                                </div>
+                                <span class="rating-text">
+                                    <span id="ratingValue">4.2</span> 
+                                    (<span id="reviewsCount">0</span> отзывов)
+                                </span>
+                            </div>
+
+                            <!-- Product Price -->
+                            <div class="product-price-section">
+                                <div class="current-price">
+                                    <span id="currentPrice" class="price-amount">0</span>
+                                    <span class="price-currency">грн.</span>
+                                </div>
+                                <div id="originalPriceContainer" class="original-price" style="display: none;">
+                                    <span id="originalPrice" class="price-amount">0</span>
+                                    <span class="price-currency">грн.</span>
+                                </div>
+                                <div id="discountBadge" class="discount-badge" style="display: none;">
+                                    -<span id="discountPercent">0</span>%
+                                </div>
+                            </div>
+
+                            <!-- Product Actions -->
+                            <div class="product-actions-section">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <button class="btn btn-primary btn-lg w-100 add-to-cart-btn" id="addToCartBtn">
+                                            <i class="fas fa-cart-plus me-2"></i>
+                                            Добавить в корзину
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-outline-secondary w-100 favorite-btn" id="favoriteBtn">
+                                            <i class="far fa-heart me-2"></i>
+                                            В избранное
+                                        </button>
+                                    </div>
+                                    <div class="col-6">
+                                        <a href="#" target="_blank" class="btn btn-outline-secondary w-100" id="externalLink">
+                                            <i class="fas fa-external-link-alt me-2"></i>
+                                            На сайте
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Product Stats -->
+                            <div class="product-stats-section">
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <div class="stat-item">
+                                            <i class="fas fa-shopping-cart text-primary"></i>
+                                            <div class="stat-value" id="offersCount">0</div>
+                                            <div class="stat-label">предложений</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat-item">
+                                            <i class="fas fa-image text-info"></i>
+                                            <div class="stat-value" id="imagesCount">0</div>
+                                            <div class="stat-label">фото</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="stat-item">
+                                            <i class="fas fa-eye text-success"></i>
+                                            <div class="stat-value" id="viewsCount">0</div>
+                                            <div class="stat-label">просмотров</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Details Tabs -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="product-details-section">
+                            <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Характеристики
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
+                                        <i class="fas fa-align-left me-2"></i>
+                                        Описание
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                                        <i class="fas fa-star me-2"></i>
+                                        Отзывы
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="productTabsContent">
+                                <!-- Specifications Tab -->
+                                <div class="tab-pane fade show active" id="specs" role="tabpanel">
+                                    <div class="specifications-content" id="specificationsContent">
+                                        <!-- Specifications will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Description Tab -->
+                                <div class="tab-pane fade" id="description" role="tabpanel">
+                                    <div class="description-content" id="descriptionContent">
+                                        <!-- Description will be loaded here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- Reviews Tab -->
+                                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                                    <div class="reviews-content" id="reviewsContent">
+                                        <!-- Reviews will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Similar Products -->
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="similar-products-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-th-large me-2"></i>
+                                Похожие товары
+                            </h3>
+                            <div class="row" id="similarProducts">
+                                <!-- Similar products will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <div data-component="footer"></div>
+
+    <!-- Modals Component -->
+    <div data-component="modals"></div>
+
+    <!-- Image Zoom Modal -->
+    <div class="modal fade" id="imageZoomModal" tabindex="-1">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Просмотр изображения</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="zoomedImage" src="" alt="Увеличенное изображение" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Component Loader -->
+    <script src="/js/components.js"></script>
+    <!-- Custom JS -->
+    <script src="/js/app.js"></script>
+    <!-- Product Page JS -->
+    <script src="/js/product.js"></script>
+    <script>
+        // Инициализация основного приложения для работы шапки
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Инициализируем основное приложение
+            if (!window.app) {
+                window.app = new BifoApp();
+                await window.app.init();
+            }
+            
+            // Инициализируем страницу товара
+            window.productPage = new ProductPage();
+            await window.productPage.init();
+        });
+    </script>
+</body>
+</html> 
