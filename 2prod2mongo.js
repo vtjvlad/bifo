@@ -11,6 +11,8 @@ mongoose.connect(MONGO_URI);
 // Определение схемы для товара
 const productSchema = new mongoose.Schema({
   id: { type: Number, required: true, unique: true },
+  hlSectionId: { type: Number, required: true },
+  guide: { type: Object, required: true },
   title: { type: String, required: true },
   date: { type: String, required: true },
   vendor: { type: Object, required: true },
@@ -24,23 +26,34 @@ const productSchema = new mongoose.Schema({
   videosCount: { type: Number, default: 0 },
   techShortSpecifications: [{ type: String }],
   techShortSpecificationsList: [Object],
+  sizesProduct: [Object],
+  productValues: [Object],
+  fullDescription: { type: String, required: false },
   reviewsCount: { type: Number, default: 0 },
   questionsCount: { type: Number, default: 0 },
   url: { type: String, required: true },
   imageLinks: [Object],
-  minPrice: { type: Number, required: true },
-  maxPrice: { type: Number, required: true },
+  videos: [Object],
+  videoInstagramHash: { type: String, required: false },
+  minPrice: { type: Number, required: false },
+  maxPrice: { type: Number, required: false },
   currentPrice: { type: Number, required: true },
   initPrice: { type: Number, required: true },
+  lastHistoryCurrency: { type: String, default: 'UAH' },
+  lastHistoryPrice: { type: Number, default: 0 },
   salesCount: { type: Number, default: 0 },
   isNew: { type: Number, default: 0 },
   colorsProduct: [Object],
+  crossSelling: [Object],
+  similarProducts: [Object],
+  newProducts: [Object],
   offerCount: { type: Number, default: 0 },
-  offers: { type: Object, required: true },
+  offers: { type: Object, required: false },
   // singleOffer: { type: mongoose.Schema.Types.Mixed, default: null },
   madeInUkraine: { type: Boolean, default: false },
   userSubscribed: { type: Boolean, default: false },
   __typename: { type: String, default: 'Product' },
+  promoRelinkList: [Object],
 }, {
   timestamps: true, // Добавляет поля createdAt и updatedAt
   collection: 'products' // Указывает имя коллекции в MongoDB
@@ -50,7 +63,7 @@ const productSchema = new mongoose.Schema({
 const Products = mongoose.model('Products', productSchema);
 
 // Чтение JSON-файла
-const jsonFilePath = './test_struct_15_random.json'; 
+const jsonFilePath = './test_struct.json'; 
 const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
 
 // Функция для сохранения данных в MongoDB
@@ -70,6 +83,3 @@ async function saveToMongo() {
 
 // Запуск функции сохранения
 saveToMongo();
-
-
-
