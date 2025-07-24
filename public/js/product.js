@@ -149,7 +149,7 @@ class ProductPage {
             
             if (response.success && response.data) {
                 this.currentProduct = response.data;
-                this.renderProduct();
+                await this.renderProduct();
                 this.loadSimilarProducts();
             } else {
                 console.log('❌ API returned no data or error');
@@ -161,7 +161,7 @@ class ProductPage {
         }
     }
 
-    renderProduct() {
+    async renderProduct() {
         if (!this.currentProduct) return;
 
         const product = this.currentProduct;
@@ -228,7 +228,7 @@ class ProductPage {
         this.loadImages(product);
 
         // Load specifications
-        this.loadSpecifications(product);
+        await this.loadSpecifications(product);
 
         // Load description
         this.loadDescription(product);
@@ -375,17 +375,129 @@ class ProductPage {
         }
     }
 
-    loadSpecifications(product) {
+    async loadSpecifications(product) {
+        const container = document.getElementById('specificationsContent');
+        if (!container) return;
+        
+        // Показываем загрузку
+        container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Загрузка характеристик...</div>';
+        
+        try {
+            // Загружаем подробные характеристики с сервера
+            const response = await this.apiRequest(`/products/${product._id}/specifications`);
+            
+            if (response.success && response.data) {
+                this.renderSpecifications(response.data);
+            } else {
+                // Fallback к старым данным
+                this.renderLegacySpecifications(product);
+            }
+        } catch (error) {
+            console.error('Error loading specifications:', error);
+            // Fallback к старым данным
+            this.renderLegacySpecifications(product);
+        }
+    }
+
+    renderSpecifications(data) {
         const container = document.getElementById('specificationsContent');
         if (!container) return;
         
         let html = '';
         
+        // Основные характеристики
+        if (data.specifications.basic && data.specifications.basic.length > 0) {
+            html += '<div class="specifications-section mb-4">';
+            html += '<h5 class="spec-section-title"><i class="fas fa-info-circle me-2"></i>Основные характеристики</h5>';
+            html += '<div class="row">';
+            
+            data.specifications.basic.forEach(spec => {
+                if (spec.title && spec.value) {
+                    html += `
+                        <div class="col-md-6 mb-3">
+                            <div class="spec-item">
+                                <strong>${spec.title}:</strong> ${spec.value}
+                                ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div></div>';
+        }
+        
+        // Технические характеристики
+        if (data.specifications.technical && data.specifications.technical.length > 0) {
+            html += '<div class="specifications-section mb-4">';
+            html += '<h5 class="spec-section-title"><i class="fas fa-cogs me-2"></i>Технические характеристики</h5>';
+            html += '<div class="row">';
+            
+            data.specifications.technical.forEach(spec => {
+                if (spec.title && spec.value) {
+                    html += `
+                        <div class="col-md-6 mb-3">
+                            <div class="spec-item">
+                                <strong>${spec.title}:</strong> ${spec.value}
+                                ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div></div>';
+        }
+        
+        // Подробные характеристики
+        if (data.specifications.detailed && data.specifications.detailed.length > 0) {
+            html += '<div class="specifications-section mb-4">';
+            html += '<h5 class="spec-section-title"><i class="fas fa-list-alt me-2"></i>Подробные характеристики</h5>';
+            
+            data.specifications.detailed.forEach(spec => {
+                if (spec.h1Text) {
+                    html += `<h6 class="spec-header mt-3 mb-2">${spec.h1Text}</h6>`;
+                }
+                if (spec.title && spec.value) {
+                    html += `
+                        <div class="spec-item mb-2">
+                            <strong>${spec.title}:</strong> ${spec.value}
+                            ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+        }
+        
+        // Fallback к старым данным если новых нет
+        if (!html && (data.techShortSpecifications || data.techShortSpecificationsList)) {
+            html = this.renderLegacySpecificationsHTML(data);
+        }
+        
+        if (!html) {
+            html = '<p class="text-muted">Характеристики не указаны</p>';
+        }
+        
+        container.innerHTML = html;
+    }
+
+    renderLegacySpecifications(product) {
+        const container = document.getElementById('specificationsContent');
+        if (!container) return;
+        
+        container.innerHTML = this.renderLegacySpecificationsHTML(product);
+    }
+
+    renderLegacySpecificationsHTML(data) {
+        let html = '';
+        
         // Проверяем techShortSpecificationsList (новый формат)
-        if (product.techShortSpecificationsList && Array.isArray(product.techShortSpecificationsList) && product.techShortSpecificationsList.length > 0) {
+        if (data.techShortSpecificationsList && Array.isArray(data.techShortSpecificationsList) && data.techShortSpecificationsList.length > 0) {
             html = '<div class="row">';
             
-            product.techShortSpecificationsList.forEach(spec => {
+            data.techShortSpecificationsList.forEach(spec => {
                 if (spec.key && spec.value) {
                     html += `
                         <div class="col-md-6 mb-3">
@@ -408,10 +520,10 @@ class ProductPage {
             html += '</div>';
         }
         // Проверяем techShortSpecifications (старый формат)
-        else if (product.techShortSpecifications && Array.isArray(product.techShortSpecifications) && product.techShortSpecifications.length > 0) {
+        else if (data.techShortSpecifications && Array.isArray(data.techShortSpecifications) && data.techShortSpecifications.length > 0) {
             html = '<div class="row">';
             
-            product.techShortSpecifications.forEach(spec => {
+            data.techShortSpecifications.forEach(spec => {
                 html += `
                     <div class="col-md-6 mb-3">
                         <div class="spec-item">
@@ -424,26 +536,23 @@ class ProductPage {
             html += '</div>';
         }
         // Проверяем specifications (еще один формат)
-        else if (product.specifications && Object.keys(product.specifications).length > 0) {
+        else if (data.specifications && Object.keys(data.specifications).length > 0) {
             html = '<div class="row">';
             
-            Object.entries(product.specifications).forEach(([key, value]) => {
+            Object.entries(data.specifications).forEach(([key, value]) => {
                 html += `
                     <div class="col-md-6 mb-3">
-                        <div class="col-md-6 mb-3">
-                            <div class="spec-item">
-                                <strong>${key}:</strong> ${value}
-                            </div>
+                        <div class="spec-item">
+                            <strong>${key}:</strong> ${value}
                         </div>
-                    `;
+                    </div>
+                `;
             });
             
             html += '</div>';
-        } else {
-            html = '<p class="text-muted">Характеристики не указаны</p>';
         }
         
-        container.innerHTML = html;
+        return html || '<p class="text-muted">Характеристики не указаны</p>';
     }
 
     loadDescription(product) {

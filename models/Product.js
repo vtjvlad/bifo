@@ -15,6 +15,26 @@ const productSchema = new mongoose.Schema({
     videosCount: { type: Number, default: 0 },
     techShortSpecifications: [{ type: String }],
     techShortSpecificationsList: [Object],
+    /////////////////////////
+    /////////////////////////
+    productValues: [{
+        __typename: { type: String, required: true },
+        edges: [{
+            __typename: { type: String, required: true },
+            node: {
+                __typename: { type: String, required: true },
+                h1Text: { type: String },
+                help: { type: String },
+                isHeader: { type: Boolean, required: true },
+                title: { type: String, required: true },
+                type: { type: String },
+                url: { type: String },
+                value: { type: String }
+            }
+        }]
+    }],
+    /////////////////////////
+    /////////////////////////
     reviewsCount: { type: Number, default: 0 },
     questionsCount: { type: Number, default: 0 },
     url: { type: String, required: true },

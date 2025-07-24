@@ -2685,4 +2685,92 @@ body {
 
 .similar-products-section {
     animation: slideInUp 0.6s ease 0.4s both;
+}
+
+/* Specifications Styles */
+.specifications-section {
+    margin-bottom: 2rem;
+}
+
+.spec-section-title {
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.spec-section-title i {
+    color: var(--primary-color);
+    margin-right: 0.5rem;
+}
+
+.spec-item {
+    background: var(--bg-light);
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.spec-item:hover {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateX(5px);
+}
+
+.spec-item strong {
+    color: var(--secondary-color);
+    font-weight: 600;
+}
+
+.spec-item small {
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.spec-header {
+    color: var(--secondary-color);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-color), #ffdb4d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* Responsive specifications */
+@media (max-width: 768px) {
+    .specifications-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .spec-section-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .spec-item {
+        padding: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .spec-section-title {
+        font-size: 1rem;
+    }
+    
+    .spec-item {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .spec-item small {
+        font-size: 0.8rem;
+    }
 } 

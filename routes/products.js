@@ -115,6 +115,65 @@ router.get('/url/:productUrl(*)', async (req, res) => {
     }
 });
 
+// Get product detailed specifications
+router.get('/:id/specifications', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        // Extract and format productValues for better structure
+        const specifications = {
+            basic: [],
+            detailed: [],
+            technical: []
+        };
+
+        if (product.productValues && Array.isArray(product.productValues)) {
+            product.productValues.forEach(group => {
+                if (group.edges && Array.isArray(group.edges)) {
+                    group.edges.forEach(edge => {
+                        if (edge.node) {
+                            const spec = {
+                                title: edge.node.title || '',
+                                value: edge.node.value || '',
+                                type: edge.node.type || '',
+                                h1Text: edge.node.h1Text || '',
+                                help: edge.node.help || '',
+                                isHeader: edge.node.isHeader || false,
+                                url: edge.node.url || ''
+                            };
+
+                            // Categorize specifications
+                            if (spec.isHeader) {
+                                specifications.detailed.push(spec);
+                            } else if (spec.type && spec.type.toLowerCase().includes('технич')) {
+                                specifications.technical.push(spec);
+                            } else {
+                                specifications.basic.push(spec);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        res.json({ 
+            success: true, 
+            data: {
+                productId: product._id,
+                specifications,
+                techShortSpecifications: product.techShortSpecifications || [],
+                techShortSpecificationsList: product.techShortSpecificationsList || []
+            }
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Get products by section
 router.get('/section/:sectionId', async (req, res) => {
     try {
