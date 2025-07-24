@@ -230,6 +230,12 @@ class BifoApp {
                 this.hideMegaMenu();
             }
         });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'megaMenuIconX') {
+                this.hideMegaMenu();
+            }
+        });
         
         // Keyboard events for mega menu
         document.addEventListener('keydown', (e) => {
