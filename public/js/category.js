@@ -353,7 +353,7 @@ class CategoryPage {
                     </div>
                     <div class="product-info">
                         <h6 class="product-title">
-                            <a href="/product/${product.url}" class="text-decoration-none text-dark">
+                            <a href="/product/${product._id}" class="text-decoration-none text-dark">
                                 ${product.title}
                             </a>
                         </h6>
@@ -443,7 +443,7 @@ class CategoryPage {
                     </div>
                     <div class="product-info">
                         <h6 class="product-title">
-                            <a href="/product/${product.url}" class="text-decoration-none text-dark">
+                            <a href="/product/${product._id}" class="text-decoration-none text-dark">
                                 ${product.title}
                             </a>
                         </h6>

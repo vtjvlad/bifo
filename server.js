@@ -55,8 +55,8 @@ app.get('/category.html', (req, res) => {
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve product page - handle dynamic product URLs (after static files)
-app.get('/product/:productUrl(*)', (req, res) => {
+// Serve product page - handle dynamic product IDs (after static files)
+app.get('/product/:productId', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'product.html'));
 });
 

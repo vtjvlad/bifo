@@ -87,33 +87,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Get single product by URL
-router.get('/url/:productUrl(*)', async (req, res) => {
-    try {
-        const productUrl = req.params.productUrl;
-        
-        console.log('🔍 API Debug - Product URL Request:');
-        console.log('   Raw URL param:', productUrl);
-        
-        // Decode URL if it was encoded
-        const decodedUrl = decodeURIComponent(productUrl);
-        console.log('   Decoded URL:', decodedUrl);
-        
-        const product = await Product.findOne({ url: decodedUrl });
-        console.log('   Found product:', product ? 'Yes' : 'No');
 
-        if (!product) {
-            console.log('   ❌ Product not found in database');
-            return res.status(404).json({ success: false, error: 'Product not found' });
-        }
-
-        console.log('   ✅ Product found, returning data');
-        res.json({ success: true, data: product });
-    } catch (error) {
-        console.error('   ❌ Error in URL product lookup:', error);
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
 
 // Get product detailed specifications
 router.get('/:id/specifications', async (req, res) => {

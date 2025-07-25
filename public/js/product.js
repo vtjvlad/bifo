@@ -47,14 +47,14 @@ class ProductPage {
     }
 
     getProductIdFromURL() {
-        // Get product URL from the current page URL path
+        // Get product ID from the current page URL path
         const pathSegments = window.location.pathname.split('/');
-        const productUrl = pathSegments.slice(2).join('/'); // Remove '/product/' prefix
+        const productId = pathSegments[2]; // Get the ID after '/product/'
         
         console.log('🔍 Debug - Path segments:', pathSegments);
-        console.log('🔍 Debug - Product URL from path:', productUrl);
+        console.log('🔍 Debug - Product ID from path:', productId);
         
-        if (!productUrl) {
+        if (!productId) {
             // Fallback to query parameter for backward compatibility
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
@@ -62,7 +62,7 @@ class ProductPage {
             return id;
         }
         
-        return productUrl;
+        return productId;
     }
 
     setupEventListeners() {
@@ -118,46 +118,94 @@ class ProductPage {
         // This will be called after product data is loaded
     }
 
+    validateProductData(product) {
+        console.log('🔍 Debug - Validating product data:', product);
+        
+        // Проверяем обязательные поля
+        const requiredFields = ['_id', 'title'];
+        for (const field of requiredFields) {
+            if (!product[field]) {
+                console.error(`❌ Missing required field: ${field}`);
+                return null;
+            }
+        }
+        
+        // Добавляем значения по умолчанию для отсутствующих полей
+        const validatedProduct = {
+            ...product,
+            currentPrice: product.currentPrice || 0,
+            initPrice: product.initPrice || product.currentPrice || 0,
+            title: product.title || 'Без названия',
+            vendor: product.vendor || { name: 'Не указан', title: 'Не указан' },
+            section: product.section || { productCategoryName: 'Не указана' },
+            url: product.url || '#',
+            imageLinks: product.imageLinks || [],
+            images: product.images || [],
+            offerCount: product.offerCount || 0,
+            imagesCount: product.imagesCount || 0,
+            viewsCount: product.viewsCount || 0,
+            reviewsCount: product.reviewsCount || 0,
+            rating: product.rating || 0,
+            isPromo: product.isPromo || false,
+            isNew: product.isNew || false,
+            madeInUkraine: product.madeInUkraine || false,
+            techShortSpecifications: product.techShortSpecifications || [],
+            techShortSpecificationsList: product.techShortSpecificationsList || [],
+            productValues: product.productValues || [],
+            fullDescription: product.fullDescription || '',
+            description: product.description || ''
+        };
+        
+        console.log('✅ Product data validated successfully');
+        return validatedProduct;
+    }
+
     async loadProduct() {
         if (!this.productId) {
             console.log('❌ No product ID found');
-            this.showEmptyState();
+            this.showEmptyState('ID товара не найден');
             return;
         }
 
-        console.log('🔍 Debug - Loading product with ID/URL:', this.productId);
+        console.log('🔍 Debug - Loading product with ID:', this.productId);
         this.showLoading();
 
         try {
-            let response;
-            let apiEndpoint;
+            const apiEndpoint = `/products/${this.productId}`;
+            console.log('🔍 Debug - Using ID endpoint:', apiEndpoint);
             
-            // Check if productId looks like a URL (contains slashes or is not a MongoDB ObjectId)
-            if (this.productId.includes('/') || this.productId.length > 24) {
-                // It's a URL, use the URL endpoint
-                const decodedUrl = decodeURIComponent(this.productId);
-                apiEndpoint = `/products/url/${encodeURIComponent(decodedUrl)}`;
-                console.log('🔍 Debug - Using URL endpoint:', apiEndpoint);
-            } else {
-                // It's an ID, use the ID endpoint
-                apiEndpoint = `/products/${this.productId}`;
-                console.log('🔍 Debug - Using ID endpoint:', apiEndpoint);
-            }
-            
-            response = await this.apiRequest(apiEndpoint);
+            const response = await this.apiRequest(apiEndpoint);
             console.log('🔍 Debug - API response:', response);
             
             if (response.success && response.data) {
-                this.currentProduct = response.data;
-                await this.renderProduct();
-                this.loadSimilarProducts();
+                // Валидируем данные товара
+                const validatedProduct = this.validateProductData(response.data);
+                if (validatedProduct) {
+                    this.currentProduct = validatedProduct;
+                    await this.renderProduct();
+                    this.loadSimilarProducts();
+                } else {
+                    console.log('❌ Product data validation failed');
+                    this.showEmptyState('Данные товара некорректны');
+                }
             } else {
-                console.log('❌ API returned no data or error');
-                this.showEmptyState();
+                console.log('❌ API returned no data or error:', response);
+                const errorMessage = response.error || 'Товар не найден';
+                this.showEmptyState(errorMessage);
             }
         } catch (error) {
             console.error('❌ Error loading product:', error);
-            this.showEmptyState();
+            let errorMessage = 'Ошибка загрузки товара';
+            
+            if (error.message.includes('404')) {
+                errorMessage = 'Товар не найден';
+            } else if (error.message.includes('500')) {
+                errorMessage = 'Ошибка сервера';
+            } else if (error.message.includes('network')) {
+                errorMessage = 'Ошибка сети';
+            }
+            
+            this.showEmptyState(errorMessage);
         }
     }
 
@@ -268,7 +316,10 @@ class ProductPage {
     }
 
     loadImages(product) {
+        console.log('🔍 Debug - Loading images for product:', product.title);
+        
         this.images = this.getProductImages(product);
+        console.log('🔍 Debug - Found images:', this.images.length);
         
         if (this.images.length > 0) {
             // Set main image
@@ -276,11 +327,21 @@ class ProductPage {
             
             // Create thumbnails
             this.createThumbnails();
+            
+            console.log('✅ Images loaded successfully');
         } else {
+            console.log('⚠️ No images found, using placeholder');
             // Set placeholder image
             const mainImage = document.getElementById('mainImage');
             if (mainImage) {
                 mainImage.src = 'https://via.placeholder.com/400x400?text=Нет+изображения';
+                mainImage.alt = 'Изображение недоступно';
+            }
+            
+            // Clear thumbnails
+            const thumbnailContainer = document.getElementById('thumbnailImages');
+            if (thumbnailContainer) {
+                thumbnailContainer.innerHTML = '';
             }
         }
     }
@@ -288,35 +349,62 @@ class ProductPage {
     getProductImages(product) {
         const images = [];
         
+        console.log('🔍 Debug - Getting images from product data');
+        
         // Проверяем imageLinks (новый формат)
         if (product.imageLinks && Array.isArray(product.imageLinks)) {
-            product.imageLinks.forEach(imageLink => {
+            console.log('🔍 Debug - Processing imageLinks:', product.imageLinks.length);
+            product.imageLinks.forEach((imageLink, index) => {
                 if (typeof imageLink === 'object' && imageLink !== null) {
                     // Priority: big > basic > thumb > small
-                    if (imageLink.big) images.push(imageLink.big);
-                    else if (imageLink.basic) images.push(imageLink.basic);
-                    else if (imageLink.thumb) images.push(imageLink.thumb);
-                    else if (imageLink.small) images.push(imageLink.small);
+                    if (imageLink.big && imageLink.big.trim()) {
+                        images.push(imageLink.big);
+                        console.log(`✅ Added image ${index + 1}: big`);
+                    } else if (imageLink.basic && imageLink.basic.trim()) {
+                        images.push(imageLink.basic);
+                        console.log(`✅ Added image ${index + 1}: basic`);
+                    } else if (imageLink.thumb && imageLink.thumb.trim()) {
+                        images.push(imageLink.thumb);
+                        console.log(`✅ Added image ${index + 1}: thumb`);
+                    } else if (imageLink.small && imageLink.small.trim()) {
+                        images.push(imageLink.small);
+                        console.log(`✅ Added image ${index + 1}: small`);
+                    }
                 }
             });
         }
         
         // Проверяем images (старый формат)
         if (product.images && Array.isArray(product.images)) {
-            product.images.forEach(image => {
-                if (typeof image === 'string') {
+            console.log('🔍 Debug - Processing images:', product.images.length);
+            product.images.forEach((image, index) => {
+                if (typeof image === 'string' && image.trim()) {
                     images.push(image);
+                    console.log(`✅ Added image ${index + 1}: string`);
                 } else if (typeof image === 'object' && image !== null) {
                     // Priority: big > basic > thumb > small
-                    if (image.big) images.push(image.big);
-                    else if (image.basic) images.push(image.basic);
-                    else if (image.thumb) images.push(image.thumb);
-                    else if (image.small) images.push(image.small);
+                    if (image.big && image.big.trim()) {
+                        images.push(image.big);
+                        console.log(`✅ Added image ${index + 1}: big`);
+                    } else if (image.basic && image.basic.trim()) {
+                        images.push(image.basic);
+                        console.log(`✅ Added image ${index + 1}: basic`);
+                    } else if (image.thumb && image.thumb.trim()) {
+                        images.push(image.thumb);
+                        console.log(`✅ Added image ${index + 1}: thumb`);
+                    } else if (image.small && image.small.trim()) {
+                        images.push(image.small);
+                        console.log(`✅ Added image ${index + 1}: small`);
+                    }
                 }
             });
         }
         
-        return images;
+        // Удаляем дубликаты
+        const uniqueImages = [...new Set(images)];
+        console.log(`🔍 Debug - Total unique images found: ${uniqueImages.length}`);
+        
+        return uniqueImages;
     }
 
     changeMainImage(index) {
@@ -325,18 +413,31 @@ class ProductPage {
             const mainImage = document.getElementById('mainImage');
             if (mainImage) {
                 mainImage.src = this.images[index];
+                mainImage.alt = `Изображение ${index + 1}`;
+                
+                // Добавляем обработчик ошибок загрузки изображения
+                mainImage.onerror = () => {
+                    console.log(`⚠️ Failed to load main image ${index + 1}:`, this.images[index]);
+                    mainImage.src = 'https://via.placeholder.com/400x400?text=Ошибка+загрузки';
+                    mainImage.alt = 'Ошибка загрузки изображения';
+                };
             }
             
             // Update thumbnails
             document.querySelectorAll('.thumbnail-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
+            
+            console.log(`✅ Changed main image to index ${index}`);
         }
     }
 
     createThumbnails() {
         const container = document.getElementById('thumbnailImages');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ thumbnailImages container not found');
+            return;
+        }
         
         container.innerHTML = '';
         
@@ -345,9 +446,22 @@ class ProductPage {
             thumbnail.className = `thumbnail-item ${index === 0 ? 'active' : ''}`;
             thumbnail.dataset.index = index;
             
-            thumbnail.innerHTML = `<img src="${image}" alt="Изображение ${index + 1}">`;
+            const img = document.createElement('img');
+            img.src = image;
+            img.alt = `Изображение ${index + 1}`;
+            
+            // Добавляем обработчик ошибок загрузки изображения
+            img.onerror = () => {
+                console.log(`⚠️ Failed to load thumbnail image ${index + 1}:`, image);
+                img.src = 'https://via.placeholder.com/100x100?text=Ошибка';
+                img.alt = 'Ошибка загрузки';
+            };
+            
+            thumbnail.appendChild(img);
             container.appendChild(thumbnail);
         });
+        
+        console.log(`✅ Created ${this.images.length} thumbnails`);
     }
 
     previousImage() {
@@ -377,7 +491,12 @@ class ProductPage {
 
     async loadSpecifications(product) {
         const container = document.getElementById('specificationsContent');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ specificationsContent container not found');
+            return;
+        }
+        
+        console.log('🔍 Debug - Loading specifications for product:', product._id);
         
         // Показываем загрузку
         container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Загрузка характеристик...</div>';
@@ -385,15 +504,18 @@ class ProductPage {
         try {
             // Загружаем подробные характеристики с сервера
             const response = await this.apiRequest(`/products/${product._id}/specifications`);
+            console.log('🔍 Debug - Specifications API response:', response);
             
             if (response.success && response.data) {
                 this.renderSpecifications(response.data);
+                console.log('✅ Specifications loaded successfully');
             } else {
+                console.log('⚠️ Specifications API failed, using fallback');
                 // Fallback к старым данным
                 this.renderLegacySpecifications(product);
             }
         } catch (error) {
-            console.error('Error loading specifications:', error);
+            console.error('❌ Error loading specifications:', error);
             // Fallback к старым данным
             this.renderLegacySpecifications(product);
         }
@@ -571,21 +693,50 @@ class ProductPage {
     }
 
     async loadSimilarProducts() {
-        if (!this.currentProduct) return;
+        if (!this.currentProduct) {
+            console.log('❌ No current product for similar products');
+            return;
+        }
+
+        console.log('🔍 Debug - Loading similar products for:', this.currentProduct._id);
 
         try {
-            const response = await this.apiRequest(`/products/${this.productId}/similar`);
+            const response = await this.apiRequest(`/products/${this.currentProduct._id}/similar`);
+            console.log('🔍 Debug - Similar products response:', response);
             
-            if (response.success && response.data.length > 0) {
+            if (response.success && response.data && response.data.length > 0) {
                 this.renderSimilarProducts(response.data);
+                console.log(`✅ Loaded ${response.data.length} similar products`);
             } else {
-                document.getElementById('similarProducts').innerHTML = 
-                    '<div class="col-12"><p class="text-muted text-center">Похожие товары не найдены</p></div>';
+                console.log('⚠️ No similar products found');
+                const container = document.getElementById('similarProducts');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="text-center py-4">
+                                <i class="fas fa-info-circle text-muted mb-2"></i>
+                                <p class="text-muted">Похожие товары не найдены</p>
+                            </div>
+                        </div>
+                    `;
+                }
             }
         } catch (error) {
-            console.error('Error loading similar products:', error);
-            document.getElementById('similarProducts').innerHTML = 
-                '<div class="col-12"><p class="text-muted text-center">Ошибка загрузки похожих товаров</p></div>';
+            console.error('❌ Error loading similar products:', error);
+            const container = document.getElementById('similarProducts');
+            if (container) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="text-center py-4">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2"></i>
+                            <p class="text-muted">Ошибка загрузки похожих товаров</p>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="window.productPage.loadSimilarProducts()">
+                                <i class="fas fa-redo me-1"></i>Повторить
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
         }
     }
 
@@ -758,18 +909,29 @@ class ProductPage {
         }
     }
 
-    showEmptyState() {
+    showEmptyState(message = 'Товар не найден') {
         const container = document.querySelector('.product-container');
         if (container) {
             container.innerHTML = `
                 <div class="product-empty text-center py-5">
                     <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                    <h3>Товар не найден</h3>
-                    <p class="text-muted">Запрашиваемый товар не существует или был удален</p>
-                    <a href="/catalog.html" class="btn btn-primary">
-                        <i class="fas fa-arrow-left me-2"></i>
-                        Вернуться к каталогу
-                    </a>
+                    <h3>${message}</h3>
+                    <p class="text-muted">
+                        ${message === 'Товар не найден' ? 'Запрашиваемый товар не существует или был удален' : 
+                          message === 'ID товара не найден' ? 'Не удалось определить ID товара из URL' :
+                          message === 'Данные товара некорректны' ? 'Полученные данные товара содержат ошибки' :
+                          'Произошла ошибка при загрузке товара'}
+                    </p>
+                    <div class="mt-4">
+                        <a href="/catalog.html" class="btn btn-primary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Вернуться к каталогу
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+                            <i class="fas fa-redo me-2"></i>
+                            Обновить страницу
+                        </button>
+                    </div>
                 </div>
             `;
         }
@@ -797,6 +959,8 @@ class ProductPage {
     async apiRequest(endpoint, options = {}) {
         const url = `${this.apiBase}${endpoint}`;
         
+        console.log('🔍 Debug - API Request:', url);
+        
         const defaultOptions = {
             method: 'GET',
             headers: {
@@ -804,13 +968,23 @@ class ProductPage {
             },
         };
 
-        const response = await fetch(url, { ...defaultOptions, ...options });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        try {
+            const response = await fetch(url, { ...defaultOptions, ...options });
+            console.log('🔍 Debug - API Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ API Error:', response.status, errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText || 'Unknown error'}`);
+            }
+            
+            const data = await response.json();
+            console.log('🔍 Debug - API Response data:', data);
+            return data;
+        } catch (error) {
+            console.error('❌ API Request failed:', error);
+            throw error;
         }
-        
-        return await response.json();
     }
 }
 
