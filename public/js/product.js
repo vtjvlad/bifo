@@ -204,11 +204,25 @@ class ProductPage {
             if (discountBadge) discountBadge.style.display = 'block';
         }
 
+        // Update stats
+        const offersCount = document.getElementById('offersCount');
+        if (offersCount) offersCount.textContent = product.offerCount || 0;
+        
+        const imagesCount = document.getElementById('imagesCount');
+        if (imagesCount) imagesCount.textContent = product.imagesCount || 0;
+        
+        const viewsCount = document.getElementById('viewsCount');
+        if (viewsCount) viewsCount.textContent = product.viewsCount || 0;
+        
+        const reviewsCount = document.getElementById('reviewsCount');
+        if (reviewsCount) reviewsCount.textContent = product.reviewsCount || 0;
+
         // Update rating
         this.updateRating(product.rating || 0);
 
-        // Load color variants
-        this.loadColorVariants(product);
+        // Update external link
+        const externalLink = document.getElementById('externalLink');
+        if (externalLink) externalLink.href = product.url;
 
         // Load images
         this.loadImages(product);
@@ -251,139 +265,6 @@ class ProductPage {
                 star.className = 'far fa-star text-warning';
             }
         });
-    }
-
-    loadColorVariants(product) {
-        const colorSwitcher = document.getElementById('colorSwitcher');
-        if (!colorSwitcher) return;
-
-        // Check if product has color variants
-        if (!product.colorsProduct || !Array.isArray(product.colorsProduct) || product.colorsProduct.length === 0) {
-            colorSwitcher.style.display = 'none';
-            return;
-        }
-
-        // Show color switcher
-        colorSwitcher.style.display = 'block';
-
-        // Create color variants HTML
-        const colorVariantsHTML = product.colorsProduct.map((colorVariant, index) => {
-            const isActive = index === 0; // First color is active by default
-            const imageUrl = this.getColorVariantImage(colorVariant);
-            const colorName = colorVariant.colorName || colorVariant.title || 'Цвет';
-            
-            return `
-                <div class="color-variant" data-color-index="${index}">
-                    <div class="color-variant-btn ${isActive ? 'active' : ''}" 
-                         style="background-image: url('${imageUrl}')"
-                         title="${colorName}">
-                    </div>
-                    <div class="color-variant-name">${colorName}</div>
-                </div>
-            `;
-        }).join('');
-
-        // Update color switcher content
-        colorSwitcher.innerHTML = `
-            <div class="color-variants">
-                ${colorVariantsHTML}
-            </div>
-        `;
-
-        // Add event listeners for color variants
-        this.setupColorVariantListeners(product);
-    }
-
-    getColorVariantImage(colorVariant) {
-        // Priority: pathImgBig > pathImg > pathImgSmall
-        if (colorVariant.pathImgBig) {
-            return colorVariant.pathImgBig.startsWith('http') 
-                ? colorVariant.pathImgBig 
-                : `https://hotline.ua${colorVariant.pathImgBig}`;
-        }
-        if (colorVariant.pathImg) {
-            return colorVariant.pathImg.startsWith('http') 
-                ? colorVariant.pathImg 
-                : `https://hotline.ua${colorVariant.pathImg}`;
-        }
-        if (colorVariant.pathImgSmall) {
-            return colorVariant.pathImgSmall.startsWith('http') 
-                ? colorVariant.pathImgSmall 
-                : `https://hotline.ua${colorVariant.pathImgSmall}`;
-        }
-        
-        // Fallback to placeholder
-        return 'https://via.placeholder.com/40x40?text=Цвет';
-    }
-
-    setupColorVariantListeners(product) {
-        const colorVariants = document.querySelectorAll('.color-variant');
-        
-        colorVariants.forEach((variant, index) => {
-            variant.addEventListener('click', () => {
-                this.selectColorVariant(index, product);
-            });
-        });
-    }
-
-    selectColorVariant(colorIndex, product) {
-        const colorVariants = document.querySelectorAll('.color-variant');
-        const colorVariantBtns = document.querySelectorAll('.color-variant-btn');
-        
-        // Remove active class from all variants
-        colorVariantBtns.forEach(btn => btn.classList.remove('active'));
-        
-        // Add active class to selected variant
-        if (colorVariantBtns[colorIndex]) {
-            colorVariantBtns[colorIndex].classList.add('active');
-        }
-
-        // Get selected color variant
-        const selectedColorVariant = product.colorsProduct[colorIndex];
-        if (!selectedColorVariant) return;
-
-        // Update product images if the color variant has different images
-        if (selectedColorVariant.pathImgBig || selectedColorVariant.pathImg) {
-            this.updateProductImagesForColor(selectedColorVariant);
-        }
-
-        // Update product title if it's different
-        if (selectedColorVariant.title && selectedColorVariant.title !== product.title) {
-            const productTitle = document.getElementById('productTitle');
-            if (productTitle) {
-                productTitle.textContent = selectedColorVariant.title;
-            }
-        }
-
-        // Update URL if the color variant has a different path
-        if (selectedColorVariant.productPath) {
-            this.updateURLForColorVariant(selectedColorVariant.productPath);
-        }
-
-        console.log('Selected color variant:', selectedColorVariant);
-    }
-
-    updateProductImagesForColor(colorVariant) {
-        // Create new images array for this color variant
-        const newImages = [];
-        
-        if (colorVariant.pathImgBig) {
-            newImages.push(this.getColorVariantImage(colorVariant));
-        }
-        
-        // If we have new images, update the main image and thumbnails
-        if (newImages.length > 0) {
-            this.images = newImages;
-            this.currentImageIndex = 0;
-            this.changeMainImage(0);
-            this.createThumbnails();
-        }
-    }
-
-    updateURLForColorVariant(productPath) {
-        // Update URL without reloading the page
-        const newUrl = `/product/${productPath}`;
-        window.history.pushState({}, '', newUrl);
     }
 
     loadImages(product) {
