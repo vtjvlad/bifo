@@ -78,12 +78,12 @@ const productSchema = new mongoose.Schema({
       }]
     }],
     videoInstagramHash: { type: String },
-    minPrice: { type: Number, required: true },
-    maxPrice: { type: Number, required: true },
+    minPrice: { type: Number, required: false },
+    maxPrice: { type: Number, required: false },
     lastHistoryCurrency: { type: String },
     lastHistoryPrice: { type: Number },
-    currentPrice: { type: Number, required: true },
-    initPrice: { type: Number, required: true },
+    currentPrice: { type: Number, required: false },
+    initPrice: { type: Number, default: 1137, required: false },
     salesCount: { type: Number, default: 0 },
     isNew: { type: Number, default: 0 },
     colorsProduct: [{

@@ -54,23 +54,9 @@
                             <div class="thumbnail-images" id="thumbnailImages">
                                 <!-- Thumbnails will be loaded here -->
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Product Info -->
-                    <div class="col-lg-6 col-md-6">
-                        <div class="product-info-section">
-                            <!-- Product Title -->
-                            <h1 id="productTitle" class="product-title">Название товара</h1>
-                            
-                            <!-- Product Vendor -->
-                            <div class="product-vendor-info">
-                                <i class="fas fa-industry me-2"></i>
-                                <span id="productVendor">Производитель</span>
-                            </div>
-
-                            <!-- Product Rating -->
-                            <div class="product-rating-section">
+                            <!-- Product Rating (moved here) -->
+                            <div class="product-rating-section mt-3">
                                 <div class="rating-stars">
                                     <i class="fas fa-star text-warning"></i>
                                     <i class="fas fa-star text-warning"></i>
@@ -83,69 +69,55 @@
                                     (<span id="reviewsCount">0</span> отзывов)
                                 </span>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Product Price -->
-                            <div class="product-price-section">
-                                <div class="current-price">
-                                    <span id="currentPrice" class="price-amount">0</span>
-                                    <span class="price-currency">грн.</span>
+                    <!-- Product Info -->
+                    <div class="col-lg-6 col-md-6">
+                        <div class="product-info-section">
+                            <!-- Product Title (smaller) -->
+                            <h2 id="productTitle" class="product-title">Название товара</h2>
+                            
+                            <!-- Product Vendor (smaller) -->
+                            <div class="product-vendor-info">
+                                <i class="fas fa-industry me-2"></i>
+                                <span id="productVendor">Производитель</span>
+                            </div>
+
+                            <!-- Color Variants Switcher -->
+                            <div class="product-color-switcher mt-3" id="colorSwitcher">
+                                <!-- Color variants will be loaded here -->
+                            </div>
+
+                            <!-- Product Price and Cart Button (combined) -->
+                            <div class="product-price-cart-section d-flex align-items-center gap-3 mt-3">
+                                <div class="product-price-section">
+                                    <div class="current-price">
+                                        <span id="currentPrice" class="price-amount">0</span>
+                                        <span class="price-currency">грн.</span>
+                                    </div>
+                                    <div id="originalPriceContainer" class="original-price" style="display: none;">
+                                        <span id="originalPrice" class="price-amount">0</span>
+                                        <span class="price-currency">грн.</span>
+                                    </div>
+                                    <div id="discountBadge" class="discount-badge" style="display: none;">
+                                        -<span id="discountPercent">0</span>%
+                                    </div>
                                 </div>
-                                <div id="originalPriceContainer" class="original-price" style="display: none;">
-                                    <span id="originalPrice" class="price-amount">0</span>
-                                    <span class="price-currency">грн.</span>
-                                </div>
-                                <div id="discountBadge" class="discount-badge" style="display: none;">
-                                    -<span id="discountPercent">0</span>%
-                                </div>
+                                <button class="btn btn-primary btn-lg add-to-cart-btn" id="addToCartBtn">
+                                    <i class="fas fa-cart-plus me-2"></i>
+                                    Добавить в корзину
+                                </button>
                             </div>
 
                             <!-- Product Actions -->
-                            <div class="product-actions-section">
+                            <div class="product-actions-section mt-3">
                                 <div class="row g-3">
                                     <div class="col-12">
-                                        <button class="btn btn-primary btn-lg w-100 add-to-cart-btn" id="addToCartBtn">
-                                            <i class="fas fa-cart-plus me-2"></i>
-                                            Добавить в корзину
-                                        </button>
-                                    </div>
-                                    <div class="col-6">
                                         <button class="btn btn-outline-secondary w-100 favorite-btn" id="favoriteBtn">
                                             <i class="far fa-heart me-2"></i>
                                             В избранное
                                         </button>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="#" target="_blank" class="btn btn-outline-secondary w-100" id="externalLink">
-                                            <i class="fas fa-external-link-alt me-2"></i>
-                                            На сайте
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product Stats -->
-                            <div class="product-stats-section">
-                                <div class="row text-center">
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-shopping-cart text-primary"></i>
-                                            <div class="stat-value" id="offersCount">0</div>
-                                            <div class="stat-label">предложений</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-image text-info"></i>
-                                            <div class="stat-value" id="imagesCount">0</div>
-                                            <div class="stat-label">фото</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-eye text-success"></i>
-                                            <div class="stat-value" id="viewsCount">0</div>
-                                            <div class="stat-label">просмотров</div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>

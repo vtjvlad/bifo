@@ -124,11 +124,13 @@ router.get('/:id/specifications', async (req, res) => {
             return res.status(404).json({ success: false, error: 'Product not found' });
         }
 
-        // Extract and format productValues for better structure
+        // Extract and format productValues preserving original order
         const specifications = {
             basic: [],
             detailed: [],
-            technical: []
+            technical: [],
+            // Новое поле для сохранения исходного порядка
+            ordered: []
         };
 
         if (product.productValues && Array.isArray(product.productValues)) {
@@ -146,7 +148,10 @@ router.get('/:id/specifications', async (req, res) => {
                                 url: edge.node.url || ''
                             };
 
-                            // Categorize specifications
+                            // Сохраняем исходный порядок
+                            specifications.ordered.push(spec);
+
+                            // Также сохраняем категоризацию для обратной совместимости
                             if (spec.isHeader) {
                                 specifications.detailed.push(spec);
                             } else if (spec.type && spec.type.toLowerCase().includes('технич')) {
@@ -341,8 +346,11 @@ router.get('/catalog/:catalogSlug/group/:groupSlug/category/:categorySlug', asyn
 
 // Create new product (Admin only)
 router.post('/', [
+    body('id').isInt().withMessage('ID is required and must be an integer'),
+    body('hlSectionId').isInt().withMessage('hlSectionId is required and must be an integer'),
+    body('date').notEmpty().withMessage('Date is required'),
     body('title').notEmpty().withMessage('Title is required'),
-    body('currentPrice').isFloat({ min: 0 }).withMessage('Valid price is required'),
+    body('currentPrice').optional().isFloat({ min: 0 }).withMessage('Valid price is required'),
     body('vendor').isObject().withMessage('Vendor information is required'),
     body('section').isObject().withMessage('Section information is required'),
     body('url').isURL().withMessage('Valid URL is required')

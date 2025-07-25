@@ -204,25 +204,11 @@ class ProductPage {
             if (discountBadge) discountBadge.style.display = 'block';
         }
 
-        // Update stats
-        const offersCount = document.getElementById('offersCount');
-        if (offersCount) offersCount.textContent = product.offerCount || 0;
-        
-        const imagesCount = document.getElementById('imagesCount');
-        if (imagesCount) imagesCount.textContent = product.imagesCount || 0;
-        
-        const viewsCount = document.getElementById('viewsCount');
-        if (viewsCount) viewsCount.textContent = product.viewsCount || 0;
-        
-        const reviewsCount = document.getElementById('reviewsCount');
-        if (reviewsCount) reviewsCount.textContent = product.reviewsCount || 0;
-
         // Update rating
         this.updateRating(product.rating || 0);
 
-        // Update external link
-        const externalLink = document.getElementById('externalLink');
-        if (externalLink) externalLink.href = product.url;
+        // Load color variants
+        this.loadColorVariants(product);
 
         // Load images
         this.loadImages(product);
@@ -265,6 +251,139 @@ class ProductPage {
                 star.className = 'far fa-star text-warning';
             }
         });
+    }
+
+    loadColorVariants(product) {
+        const colorSwitcher = document.getElementById('colorSwitcher');
+        if (!colorSwitcher) return;
+
+        // Check if product has color variants
+        if (!product.colorsProduct || !Array.isArray(product.colorsProduct) || product.colorsProduct.length === 0) {
+            colorSwitcher.style.display = 'none';
+            return;
+        }
+
+        // Show color switcher
+        colorSwitcher.style.display = 'block';
+
+        // Create color variants HTML
+        const colorVariantsHTML = product.colorsProduct.map((colorVariant, index) => {
+            const isActive = index === 0; // First color is active by default
+            const imageUrl = this.getColorVariantImage(colorVariant);
+            const colorName = colorVariant.colorName || colorVariant.title || 'Цвет';
+            
+            return `
+                <div class="color-variant" data-color-index="${index}">
+                    <div class="color-variant-btn ${isActive ? 'active' : ''}" 
+                         style="background-image: url('${imageUrl}')"
+                         title="${colorName}">
+                    </div>
+                    <div class="color-variant-name">${colorName}</div>
+                </div>
+            `;
+        }).join('');
+
+        // Update color switcher content
+        colorSwitcher.innerHTML = `
+            <div class="color-variants">
+                ${colorVariantsHTML}
+            </div>
+        `;
+
+        // Add event listeners for color variants
+        this.setupColorVariantListeners(product);
+    }
+
+    getColorVariantImage(colorVariant) {
+        // Priority: pathImgBig > pathImg > pathImgSmall
+        if (colorVariant.pathImgBig) {
+            return colorVariant.pathImgBig.startsWith('http') 
+                ? colorVariant.pathImgBig 
+                : `https://hotline.ua${colorVariant.pathImgBig}`;
+        }
+        if (colorVariant.pathImg) {
+            return colorVariant.pathImg.startsWith('http') 
+                ? colorVariant.pathImg 
+                : `https://hotline.ua${colorVariant.pathImg}`;
+        }
+        if (colorVariant.pathImgSmall) {
+            return colorVariant.pathImgSmall.startsWith('http') 
+                ? colorVariant.pathImgSmall 
+                : `https://hotline.ua${colorVariant.pathImgSmall}`;
+        }
+        
+        // Fallback to placeholder
+        return 'https://via.placeholder.com/40x40?text=Цвет';
+    }
+
+    setupColorVariantListeners(product) {
+        const colorVariants = document.querySelectorAll('.color-variant');
+        
+        colorVariants.forEach((variant, index) => {
+            variant.addEventListener('click', () => {
+                this.selectColorVariant(index, product);
+            });
+        });
+    }
+
+    selectColorVariant(colorIndex, product) {
+        const colorVariants = document.querySelectorAll('.color-variant');
+        const colorVariantBtns = document.querySelectorAll('.color-variant-btn');
+        
+        // Remove active class from all variants
+        colorVariantBtns.forEach(btn => btn.classList.remove('active'));
+        
+        // Add active class to selected variant
+        if (colorVariantBtns[colorIndex]) {
+            colorVariantBtns[colorIndex].classList.add('active');
+        }
+
+        // Get selected color variant
+        const selectedColorVariant = product.colorsProduct[colorIndex];
+        if (!selectedColorVariant) return;
+
+        // Update product images if the color variant has different images
+        if (selectedColorVariant.pathImgBig || selectedColorVariant.pathImg) {
+            this.updateProductImagesForColor(selectedColorVariant);
+        }
+
+        // Update product title if it's different
+        if (selectedColorVariant.title && selectedColorVariant.title !== product.title) {
+            const productTitle = document.getElementById('productTitle');
+            if (productTitle) {
+                productTitle.textContent = selectedColorVariant.title;
+            }
+        }
+
+        // Update URL if the color variant has a different path
+        if (selectedColorVariant.productPath) {
+            this.updateURLForColorVariant(selectedColorVariant.productPath);
+        }
+
+        console.log('Selected color variant:', selectedColorVariant);
+    }
+
+    updateProductImagesForColor(colorVariant) {
+        // Create new images array for this color variant
+        const newImages = [];
+        
+        if (colorVariant.pathImgBig) {
+            newImages.push(this.getColorVariantImage(colorVariant));
+        }
+        
+        // If we have new images, update the main image and thumbnails
+        if (newImages.length > 0) {
+            this.images = newImages;
+            this.currentImageIndex = 0;
+            this.changeMainImage(0);
+            this.createThumbnails();
+        }
+    }
+
+    updateURLForColorVariant(productPath) {
+        // Update URL without reloading the page
+        const newUrl = `/product/${productPath}`;
+        window.history.pushState({}, '', newUrl);
     }
 
     loadImages(product) {
@@ -404,73 +523,59 @@ class ProductPage {
         if (!container) return;
         
         let html = '';
-        
-        // Основные характеристики
-        if (data.specifications.basic && data.specifications.basic.length > 0) {
-            html += '<div class="specifications-section mb-4">';
-            html += '<h5 class="spec-section-title"><i class="fas fa-info-circle me-2"></i>Основные характеристики</h5>';
-            html += '<div class="row">';
-            
-            data.specifications.basic.forEach(spec => {
-                if (spec.title && spec.value) {
-                    html += `
-                        <div class="col-md-6 mb-3">
-                            <div class="spec-item">
-                                <strong>${spec.title}:</strong> ${spec.value}
-                                ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }
-            });
-            
-            html += '</div></div>';
+        // Используем новый массив ordered, который сохраняет исходный порядок
+        let allSpecs = [];
+        if (data.specifications.ordered && Array.isArray(data.specifications.ordered)) {
+            allSpecs = data.specifications.ordered;
+        } else {
+            // Fallback к старой логике для обратной совместимости
+            if (data.specifications.basic && Array.isArray(data.specifications.basic)) {
+                allSpecs = allSpecs.concat(data.specifications.basic);
+            }
+            if (data.specifications.technical && Array.isArray(data.specifications.technical)) {
+                allSpecs = allSpecs.concat(data.specifications.technical);
+            }
+            if (data.specifications.detailed && Array.isArray(data.specifications.detailed)) {
+                allSpecs = allSpecs.concat(data.specifications.detailed);
+            }
         }
         
-        // Технические характеристики
-        if (data.specifications.technical && data.specifications.technical.length > 0) {
+        // ВРЕМЕННО: выводим массив для отладки
+        console.log('allSpecs for debug:', allSpecs);
+
+        if (allSpecs.length > 0) {
             html += '<div class="specifications-section mb-4">';
-            html += '<h5 class="spec-section-title"><i class="fas fa-cogs me-2"></i>Технические характеристики</h5>';
-            html += '<div class="row">';
-            
-            data.specifications.technical.forEach(spec => {
-                if (spec.title && spec.value) {
+            let sectionOpen = false;
+            allSpecs.forEach((spec, idx) => {
+                if (spec.isHeader) {
+                    // Закрываем предыдущую секцию, если была
+                    if (sectionOpen) {
+                        html += '</div>';
+                    }
+                    // Открываем новую секцию
+                    html += `<div class=\"spec-section\">`;
+                    html += `<div class=\"spec-section-title fw-bold border-bottom pb-2 mb-3 mt-4\"><i class=\"fas fa-list-alt me-2\"></i>${spec.title}</div>`;
+                    sectionOpen = true;
+                } else if (spec.title && spec.value) {
+                    if (!sectionOpen) {
+                        html += '<div class=\"spec-section\">';
+                        sectionOpen = true;
+                    }
                     html += `
-                        <div class="col-md-6 mb-3">
-                            <div class="spec-item">
-                                <strong>${spec.title}:</strong> ${spec.value}
-                                ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
-                            </div>
+                        <div class=\"spec-item d-flex align-items-center mb-2\">
+                            <strong class=\"me-2\">${spec.title}
+                                ${spec.help ? `<span class=\"ms-1\"><i class=\"fas fa-question-circle text-primary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"${spec.help.replace(/\"/g, '&quot;')}\"></i></span>` : ''}
+                            :</strong> <span>${spec.value}</span>
                         </div>
                     `;
                 }
             });
-            
-            html += '</div></div>';
-        }
-        
-        // Подробные характеристики
-        if (data.specifications.detailed && data.specifications.detailed.length > 0) {
-            html += '<div class="specifications-section mb-4">';
-            html += '<h5 class="spec-section-title"><i class="fas fa-list-alt me-2"></i>Подробные характеристики</h5>';
-            
-            data.specifications.detailed.forEach(spec => {
-                if (spec.h1Text) {
-                    html += `<h6 class="spec-header mt-3 mb-2">${spec.h1Text}</h6>`;
-                }
-                if (spec.title && spec.value) {
-                    html += `
-                        <div class="spec-item mb-2">
-                            <strong>${spec.title}:</strong> ${spec.value}
-                            ${spec.help ? `<small class="text-muted d-block">${spec.help}</small>` : ''}
-                        </div>
-                    `;
-                }
-            });
-            
+            if (sectionOpen) {
+                html += '</div>';
+            }
             html += '</div>';
         }
-        
+
         // Fallback к старым данным если новых нет
         if (!html && (data.techShortSpecifications || data.techShortSpecificationsList)) {
             html = this.renderLegacySpecificationsHTML(data);
@@ -481,6 +586,11 @@ class ProductPage {
         }
         
         container.innerHTML = html;
+        // Инициализация Bootstrap Tooltip для всех иконок вопроса
+        const tooltipTriggerList = [].slice.call(container.querySelectorAll('[data-bs-toggle=\'tooltip\']'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
     }
 
     renderLegacySpecifications(product) {
