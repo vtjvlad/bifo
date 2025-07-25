@@ -392,6 +392,177 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// Get similar products
+router.get('/:id/similar', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        
+        // If it's a URL instead of ObjectId
+        let product;
+        if (productId.includes('/') || productId.length > 24) {
+            const decodedUrl = decodeURIComponent(productId);
+            product = await Product.findOne({ url: decodedUrl });
+        } else {
+            product = await Product.findById(productId);
+        }
+
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        let similarProducts = [];
+
+        // First try to get similar products from the product's similarProducts field
+        if (product.similarProducts && product.similarProducts.products && product.similarProducts.products.length > 0) {
+            // Convert similar products from the stored format
+            similarProducts = product.similarProducts.products.map(p => ({
+                _id: p.id,
+                title: p.title,
+                url: p.path,
+                currentPrice: p.minPrice,
+                vendor: { name: p.vendor },
+                images: p.image ? [p.image] : [],
+                isNew: p.isNew
+            }));
+        } else {
+            // Fallback: find similar products by category or vendor
+            const query = {
+                _id: { $ne: product._id },
+                $or: [
+                    { 'section.category': product.section?.category },
+                    { 'vendor.name': product.vendor?.name },
+                    { 'section.productCategoryName': product.section?.productCategoryName }
+                ]
+            };
+
+            const relatedProducts = await Product.find(query)
+                .limit(8)
+                .sort({ createdAt: -1 });
+
+            similarProducts = relatedProducts;
+        }
+
+        res.json({ success: true, data: similarProducts.slice(0, 8) });
+    } catch (error) {
+        console.error('Error loading similar products:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get cross-selling products
+router.get('/:id/cross-selling', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        
+        // If it's a URL instead of ObjectId
+        let product;
+        if (productId.includes('/') || productId.length > 24) {
+            const decodedUrl = decodeURIComponent(productId);
+            product = await Product.findOne({ url: decodedUrl });
+        } else {
+            product = await Product.findById(productId);
+        }
+
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        let crossSellingProducts = [];
+
+        // Get cross-selling products from the product's crossSelling field
+        if (product.crossSelling && Array.isArray(product.crossSelling) && product.crossSelling.length > 0) {
+            // Convert cross-selling products from the stored format
+            crossSellingProducts = product.crossSelling.map(p => ({
+                _id: p.id || Math.random().toString(),
+                title: p.title,
+                url: p.path,
+                images: p.image ? [p.image] : [],
+                currentPrice: Math.floor(Math.random() * 10000) + 1000, // Placeholder price
+                vendor: { name: 'Не указан' }
+            }));
+        } else {
+            // Fallback: find related products by higher price range (upselling)
+            const query = {
+                _id: { $ne: product._id },
+                currentPrice: { $gte: product.currentPrice * 1.2 },
+                $or: [
+                    { 'section.category': product.section?.category },
+                    { 'vendor.name': product.vendor?.name }
+                ]
+            };
+
+            const relatedProducts = await Product.find(query)
+                .limit(6)
+                .sort({ currentPrice: 1 });
+
+            crossSellingProducts = relatedProducts;
+        }
+
+        res.json({ success: true, data: crossSellingProducts.slice(0, 6) });
+    } catch (error) {
+        console.error('Error loading cross-selling products:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get product videos
+router.get('/:id/videos', async (req, res) => {
+    try {
+        const productId = req.params.id;
+        
+        // If it's a URL instead of ObjectId
+        let product;
+        if (productId.includes('/') || productId.length > 24) {
+            const decodedUrl = decodeURIComponent(productId);
+            product = await Product.findOne({ url: decodedUrl });
+        } else {
+            product = await Product.findById(productId);
+        }
+
+        if (!product) {
+            return res.status(404).json({ success: false, error: 'Product not found' });
+        }
+
+        const videos = [];
+
+        // Extract videos from product.videos field
+        if (product.videos && Array.isArray(product.videos)) {
+            product.videos.forEach(videoGroup => {
+                if (videoGroup.edges && Array.isArray(videoGroup.edges)) {
+                    videoGroup.edges.forEach(edge => {
+                        if (edge.node) {
+                            videos.push({
+                                hash: edge.node.hash,
+                                description: edge.node.description,
+                                createdAt: edge.node.createdAt,
+                                isConfirmed: edge.node.isConfirmed,
+                                thumbnailUrl: `https://img.youtube.com/vi/${edge.node.hash}/maxresdefault.jpg`,
+                                videoUrl: `https://www.youtube.com/watch?v=${edge.node.hash}`
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        // Add Instagram video if exists
+        if (product.videoInstagramHash) {
+            videos.push({
+                hash: product.videoInstagramHash,
+                description: 'Instagram видео',
+                platform: 'instagram',
+                thumbnailUrl: `https://instagram.com/p/${product.videoInstagramHash}`,
+                videoUrl: `https://instagram.com/p/${product.videoInstagramHash}`
+            });
+        }
+
+        res.json({ success: true, data: videos });
+    } catch (error) {
+        console.error('Error loading product videos:', error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 // Delete product (Admin only)
 router.delete('/:id', async (req, res) => {
     try {

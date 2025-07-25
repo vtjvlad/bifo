@@ -36,9 +36,9 @@
 
             <!-- Product Content -->
             <div class="container-fluid px-4 py-4">
-                <div class="row">
+                <div class="row g-4">
                     <!-- Product Images -->
-                    <div class="col-lg-6 col-md-6 mb-4">
+                    <div class="col-xl-5 col-lg-6 col-md-6 mb-4">
                         <div class="product-images-section">
                             <!-- Main Image -->
                             <div class="main-image-container">
@@ -58,7 +58,7 @@
                     </div>
 
                     <!-- Product Info -->
-                    <div class="col-lg-6 col-md-6">
+                    <div class="col-xl-7 col-lg-6 col-md-6">
                         <div class="product-info-section">
                             <!-- Product Title -->
                             <h1 id="productTitle" class="product-title">Название товара</h1>
@@ -69,19 +69,46 @@
                                 <span id="productVendor">Производитель</span>
                             </div>
 
-                            <!-- Product Rating -->
-                            <div class="product-rating-section">
-                                <div class="rating-stars">
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="far fa-star text-warning"></i>
+                            <!-- Product Rating and Stats Row -->
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <!-- Product Rating -->
+                                    <div class="product-rating-section">
+                                        <div class="rating-stars">
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="fas fa-star text-warning"></i>
+                                            <i class="far fa-star text-warning"></i>
+                                        </div>
+                                        <span class="rating-text">
+                                            <span id="ratingValue">4.2</span> 
+                                            (<span id="reviewsCount">0</span> отзывов)
+                                        </span>
+                                    </div>
                                 </div>
-                                <span class="rating-text">
-                                    <span id="ratingValue">4.2</span> 
-                                    (<span id="reviewsCount">0</span> отзывов)
-                                </span>
+                                <div class="col-md-6">
+                                    <!-- Quick Product Stats -->
+                                    <div class="quick-stats-section">
+                                        <div class="d-flex justify-content-around text-center">
+                                            <div class="quick-stat-item">
+                                                <i class="fas fa-shopping-cart text-primary"></i>
+                                                <div class="quick-stat-value" id="offersCount">0</div>
+                                                <div class="quick-stat-label">предложений</div>
+                                            </div>
+                                            <div class="quick-stat-item">
+                                                <i class="fas fa-image text-info"></i>
+                                                <div class="quick-stat-value" id="imagesCount">0</div>
+                                                <div class="quick-stat-label">фото</div>
+                                            </div>
+                                            <div class="quick-stat-item">
+                                                <i class="fas fa-eye text-success"></i>
+                                                <div class="quick-stat-value" id="viewsCount">0</div>
+                                                <div class="quick-stat-label">просмотров</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Product Price -->
@@ -108,13 +135,13 @@
                                             Добавить в корзину
                                         </button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <button class="btn btn-outline-secondary w-100 favorite-btn" id="favoriteBtn">
                                             <i class="far fa-heart me-2"></i>
                                             В избранное
                                         </button>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-sm-6">
                                         <a href="#" target="_blank" class="btn btn-outline-secondary w-100" id="externalLink">
                                             <i class="fas fa-external-link-alt me-2"></i>
                                             На сайте
@@ -123,28 +150,31 @@
                                 </div>
                             </div>
 
-                            <!-- Product Stats -->
-                            <div class="product-stats-section">
-                                <div class="row text-center">
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-shopping-cart text-primary"></i>
-                                            <div class="stat-value" id="offersCount">0</div>
-                                            <div class="stat-label">предложений</div>
+                            <!-- Product Features/Benefits -->
+                            <div class="product-features-section">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <div class="feature-item">
+                                            <i class="fas fa-shield-alt text-success me-2"></i>
+                                            <span>Гарантия качества</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-image text-info"></i>
-                                            <div class="stat-value" id="imagesCount">0</div>
-                                            <div class="stat-label">фото</div>
+                                    <div class="col-6">
+                                        <div class="feature-item">
+                                            <i class="fas fa-truck text-primary me-2"></i>
+                                            <span>Быстрая доставка</span>
                                         </div>
                                     </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-eye text-success"></i>
-                                            <div class="stat-value" id="viewsCount">0</div>
-                                            <div class="stat-label">просмотров</div>
+                                    <div class="col-6">
+                                        <div class="feature-item">
+                                            <i class="fas fa-undo text-warning me-2"></i>
+                                            <span>Возврат 14 дней</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="feature-item">
+                                            <i class="fas fa-headset text-info me-2"></i>
+                                            <span>Поддержка 24/7</span>
                                         </div>
                                     </div>
                                 </div>
@@ -170,6 +200,12 @@
                                         Описание
                                     </button>
                                 </li>
+                                <li class="nav-item" role="presentation" id="videos-tab-item" style="display: none;">
+                                    <button class="nav-link" id="videos-tab" data-bs-toggle="tab" data-bs-target="#videos" type="button" role="tab">
+                                        <i class="fas fa-play-circle me-2"></i>
+                                        Видео
+                                    </button>
+                                </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
                                         <i class="fas fa-star me-2"></i>
@@ -193,12 +229,49 @@
                                     </div>
                                 </div>
                                 
+                                <!-- Videos Tab -->
+                                <div class="tab-pane fade" id="videos" role="tabpanel">
+                                    <div class="videos-content" id="videosTabContent">
+                                        <!-- Videos will be loaded here -->
+                                    </div>
+                                </div>
+                                
                                 <!-- Reviews Tab -->
                                 <div class="tab-pane fade" id="reviews" role="tabpanel">
                                     <div class="reviews-content" id="reviewsContent">
                                         <!-- Reviews will be loaded here -->
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Videos -->
+                <div class="row mt-5" id="productVideosSection" style="display: none;">
+                    <div class="col-12">
+                        <div class="product-videos-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-play-circle me-2"></i>
+                                Видео о товаре
+                            </h3>
+                            <div class="row" id="productVideos">
+                                <!-- Product videos will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cross-selling Products -->
+                <div class="row mt-5" id="crossSellingSection" style="display: none;">
+                    <div class="col-12">
+                        <div class="cross-selling-section">
+                            <h3 class="section-title">
+                                <i class="fas fa-arrow-up me-2"></i>
+                                Рекомендуем также
+                            </h3>
+                            <div class="row" id="crossSellingProducts">
+                                <!-- Cross-selling products will be loaded here -->
                             </div>
                         </div>
                     </div>

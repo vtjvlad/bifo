@@ -233,6 +233,12 @@ class ProductPage {
         // Load description
         this.loadDescription(product);
 
+        // Load videos
+        this.loadProductVideos();
+
+        // Load cross-selling products
+        this.loadCrossSellingProducts();
+
         // Update favorite button state
         this.updateFavoriteButton();
 
@@ -570,6 +576,213 @@ class ProductPage {
         container.innerHTML = html;
     }
 
+    async loadProductVideos() {
+        if (!this.currentProduct) return;
+
+        try {
+            const response = await this.apiRequest(`/products/${this.productId}/videos`);
+            
+            if (response.success && response.data.length > 0) {
+                this.renderProductVideos(response.data);
+                document.getElementById('productVideosSection').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error loading product videos:', error);
+        }
+    }
+
+    renderProductVideos(videos) {
+        const container = document.getElementById('productVideos');
+        const tabContainer = document.getElementById('videosTabContent');
+        
+        const html = videos.map(video => `
+            <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                <div class="video-card h-100">
+                    <div class="video-thumbnail-container">
+                        <img src="${video.thumbnailUrl}" 
+                             alt="${video.description || 'Видео товара'}" 
+                             class="video-thumbnail"
+                             onerror="this.src='https://via.placeholder.com/480x360?text=Видео'">
+                        <div class="video-overlay">
+                            <button class="btn btn-primary video-play-btn" data-video-url="${video.videoUrl}">
+                                <i class="fas fa-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="video-info">
+                        <h6 class="video-title">${video.description || 'Видео товара'}</h6>
+                        ${video.createdAt ? `<small class="text-muted">${new Date(video.createdAt).toLocaleDateString()}</small>` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        // Add to main videos section
+        if (container) {
+            container.innerHTML = html;
+            
+            // Add event listeners for video play buttons
+            container.addEventListener('click', (e) => {
+                if (e.target.closest('.video-play-btn')) {
+                    const videoUrl = e.target.closest('.video-play-btn').dataset.videoUrl;
+                    this.playVideo(videoUrl);
+                }
+            });
+        }
+        
+        // Add to videos tab
+        if (tabContainer) {
+            tabContainer.innerHTML = `<div class="row">${html}</div>`;
+            
+            // Show videos tab
+            const videosTabItem = document.getElementById('videos-tab-item');
+            if (videosTabItem) {
+                videosTabItem.style.display = 'block';
+            }
+            
+            // Add event listeners for video play buttons in tab
+            tabContainer.addEventListener('click', (e) => {
+                if (e.target.closest('.video-play-btn')) {
+                    const videoUrl = e.target.closest('.video-play-btn').dataset.videoUrl;
+                    this.playVideo(videoUrl);
+                }
+            });
+        }
+    }
+
+    playVideo(videoUrl) {
+        // Open video in a modal or new tab
+        if (videoUrl.includes('youtube.com')) {
+            // Open YouTube video in modal
+            this.showVideoModal(videoUrl);
+        } else {
+            // Open in new tab for other platforms
+            window.open(videoUrl, '_blank');
+        }
+    }
+
+    showVideoModal(videoUrl) {
+        // Convert YouTube URL to embed format
+        const videoId = this.extractYouTubeId(videoUrl);
+        if (!videoId) {
+            window.open(videoUrl, '_blank');
+            return;
+        }
+
+        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+        
+        // Create or update video modal
+        let modal = document.getElementById('videoModal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'videoModal';
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-xl modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Видео товара</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-0">
+                            <div class="ratio ratio-16x9">
+                                <iframe id="videoPlayer" src="" frameborder="0" allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        document.getElementById('videoPlayer').src = embedUrl;
+        const bsModal = new bootstrap.Modal(modal);
+        bsModal.show();
+
+        // Clear video when modal is hidden
+        modal.addEventListener('hidden.bs.modal', () => {
+            document.getElementById('videoPlayer').src = '';
+        });
+    }
+
+    extractYouTubeId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    async loadCrossSellingProducts() {
+        if (!this.currentProduct) return;
+
+        try {
+            const response = await this.apiRequest(`/products/${this.productId}/cross-selling`);
+            
+            if (response.success && response.data.length > 0) {
+                this.renderCrossSellingProducts(response.data);
+                document.getElementById('crossSellingSection').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error loading cross-selling products:', error);
+        }
+    }
+
+    renderCrossSellingProducts(products) {
+        const container = document.getElementById('crossSellingProducts');
+        if (!container) return;
+        
+        const html = products.map(product => `
+            <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                <div class="cross-selling-card h-100">
+                    <div class="product-image-container">
+                        <img src="${this.getProductImage(product)}" 
+                             alt="${product.title}" 
+                             class="product-image"
+                             onerror="this.src='https://via.placeholder.com/300x200?text=Ошибка+загрузки'">
+                        ${this.getDiscountBadge(product)}
+                        <div class="cross-selling-badge">
+                            <i class="fas fa-arrow-up me-1"></i>
+                            Апгрейд
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <h6 class="product-title">${product.title}</h6>
+                        <div class="product-vendor">
+                            <i class="fas fa-industry me-1"></i>
+                            ${this.getVendorName(product)}
+                        </div>
+                        <div class="product-price">
+                            <span class="product-price-current">${product.currentPrice.toLocaleString()} грн.</span>
+                            ${product.initPrice && product.initPrice > product.currentPrice ? 
+                                `<span class="product-original-price">${product.initPrice.toLocaleString()} грн.</span>` : ''}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-outline-primary add-to-cart-btn" data-product-id="${product._id}">
+                                <i class="fas fa-cart-plus me-2"></i>
+                                В корзину
+                            </button>
+                            <a href="/product/${encodeURIComponent(product.url || '')}" class="btn btn-primary">
+                                <i class="fas fa-eye me-2"></i>
+                                Смотреть
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+        
+        container.innerHTML = html;
+        
+        // Add event listeners for cross-selling products
+        container.addEventListener('click', (e) => {
+            if (e.target.closest('.add-to-cart-btn')) {
+                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
+                if (window.app && window.app.addToCart) {
+                    window.app.addToCart(productId);
+                }
+            }
+        });
+    }
+
     async loadSimilarProducts() {
         if (!this.currentProduct) return;
 
@@ -597,7 +810,7 @@ class ProductPage {
         }
         
         const html = products.map(product => `
-            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 mb-4">
                 <div class="product-card h-100">
                     <div class="product-image-container">
                         <img src="${this.getProductImage(product)}" 
