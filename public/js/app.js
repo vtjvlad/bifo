@@ -4,7 +4,6 @@ class BifoApp {
         this.apiBase = '/api';
         this.token = localStorage.getItem('bifo_token');
         this.user = JSON.parse(localStorage.getItem('bifo_user'));
-        this.cart = [];
         
         this.init();
     }
@@ -137,7 +136,6 @@ class BifoApp {
         this.loadCatalogs();
         this.loadFeaturedProducts();
         this.updateUI();
-        this.loadCart();
     }
 
     async waitForComponents() {
@@ -162,10 +160,7 @@ class BifoApp {
             loginBtn.addEventListener('click', () => this.showLoginModal());
         }
         
-        const cartBtn = document.getElementById('cartBtn');
-        if (cartBtn) {
-            cartBtn.addEventListener('click', () => this.showCartModal());
-        }
+
         
         const logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {
@@ -218,11 +213,7 @@ class BifoApp {
             });
         }
         
-        // Checkout
-        const checkoutBtn = document.getElementById('checkoutBtn');
-        if (checkoutBtn) {
-            checkoutBtn.addEventListener('click', () => this.checkout());
-        }
+
         
         // Mega Menu Events
         document.addEventListener('click', (e) => {
@@ -244,40 +235,7 @@ class BifoApp {
             }
         });
 
-        // Add to cart buttons
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.add-to-cart-btn')) {
-                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
-                this.addToCart(productId);
-            }
-        });
 
-        // Cart quantity buttons
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.decrease-btn')) {
-                const productId = e.target.closest('.decrease-btn').dataset.productId;
-                const quantity = parseInt(e.target.closest('.decrease-btn').dataset.quantity);
-                this.updateCartItem(productId, quantity);
-            }
-            if (e.target.closest('.increase-btn')) {
-                const productId = e.target.closest('.increase-btn').dataset.productId;
-                const quantity = parseInt(e.target.closest('.increase-btn').dataset.quantity);
-                this.updateCartItem(productId, quantity);
-            }
-            if (e.target.closest('.remove-from-cart-btn')) {
-                const productId = e.target.closest('.remove-from-cart-btn').dataset.productId;
-                this.removeFromCart(productId);
-            }
-        });
-
-        // Cart quantity input
-        document.addEventListener('change', (e) => {
-            if (e.target.classList.contains('quantity-input')) {
-                const productId = e.target.dataset.productId;
-                const quantity = parseInt(e.target.value);
-                this.updateCartItem(productId, quantity);
-            }
-        });
 
         // Category links
         document.addEventListener('click', (e) => {
@@ -1022,11 +980,7 @@ class BifoApp {
                                 Отзывов: ${product.reviewsCount || 0}
                             </small>
                         </div>
-                        <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" 
-                                data-product-id="${product._id}">
-                            <i class="fas fa-cart-plus me-2"></i>
-                            В корзину
-                        </button>
+
                     </div>
                 </div>
             </div>
@@ -1064,118 +1018,7 @@ class BifoApp {
         // Implementation for search results display
     }
 
-    // Cart
-    async loadCart() {
-        if (!this.token) return;
 
-        try {
-            const response = await this.apiRequest('/cart');
-            this.cart = response.data.items;
-            this.updateCartUI();
-        } catch (error) {
-            console.error('Error loading cart:', error);
-        }
-    }
-
-    async addToCart(productId, quantity = 1) {
-        if (!this.token) {
-            this.showLoginModal();
-            return;
-        }
-
-        try {
-            await this.apiRequest('/cart/add', {
-                method: 'POST',
-                body: JSON.stringify({ productId, quantity })
-            });
-            
-            this.loadCart();
-            this.showAlert('Товар добавлен в корзину!', 'success');
-        } catch (error) {
-            console.error('Error adding to cart:', error);
-        }
-    }
-
-    async updateCartItem(productId, quantity) {
-        try {
-            await this.apiRequest('/cart/update', {
-                method: 'PUT',
-                body: JSON.stringify({ productId, quantity })
-            });
-            
-            this.loadCart();
-        } catch (error) {
-            console.error('Error updating cart:', error);
-        }
-    }
-
-    async removeFromCart(productId) {
-        try {
-            await this.apiRequest(`/cart/remove/${productId}`, {
-                method: 'DELETE'
-            });
-            
-            this.loadCart();
-        } catch (error) {
-            console.error('Error removing from cart:', error);
-        }
-    }
-
-    updateCartUI() {
-        const badge = document.getElementById('cartBadge');
-        if (!badge) return;
-        
-        const total = this.cart.reduce((sum, item) => sum + item.quantity, 0);
-        
-        if (total > 0) {
-            badge.textContent = total;
-            badge.style.display = 'block';
-        } else {
-            badge.style.display = 'none';
-        }
-    }
-
-    renderCart() {
-        const container = document.getElementById('cartItems');
-        const totalElement = document.getElementById('cartTotal');
-        
-        if (!container || !totalElement) return;
-        
-        if (this.cart.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-shopping-cart"></i>
-                    <h4>Корзина пуста</h4>
-                    <p>Добавьте товары в корзину</p>
-                </div>
-            `;
-            totalElement.textContent = '0';
-            return;
-        }
-
-        container.innerHTML = this.cart.map(item => `
-            <div class="cart-item">
-                <img src="${item.product.imageLinks && item.product.imageLinks[0] ? item.product.imageLinks[0] : 'https://via.placeholder.com/60x60?text=No+Image'}" 
-                     alt="${item.product.title}" class="cart-item-image">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">${item.product.title}</div>
-                    <div class="cart-item-price">${item.product.currentPrice.toLocaleString()} грн.</div>
-                </div>
-                <div class="cart-item-quantity">
-                    <button class="quantity-btn decrease-btn" data-product-id="${item.product._id}" data-quantity="${item.quantity - 1}">-</button>
-                    <input type="number" class="quantity-input" value="${item.quantity}" 
-                           data-product-id="${item.product._id}" min="1">
-                    <button class="quantity-btn increase-btn" data-product-id="${item.product._id}" data-quantity="${item.quantity + 1}">+</button>
-                </div>
-                <button class="btn btn-sm btn-outline-danger remove-from-cart-btn" data-product-id="${item.product._id}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        `).join('');
-
-        const total = this.cart.reduce((sum, item) => sum + item.total, 0);
-        totalElement.textContent = total.toLocaleString();
-    }
 
     // UI Updates
     updateUI() {
@@ -1225,60 +1068,7 @@ class BifoApp {
         if (modal) modal.hide();
     }
 
-    showCartModal() {
-        this.renderCart();
-        const modalElement = document.getElementById('cartModal');
-        if (!modalElement) return;
-        const modal = new bootstrap.Modal(modalElement);
-        modal.show();
-    }
 
-    // Checkout
-    async checkout() {
-        if (!this.token) {
-            this.showLoginModal();
-            return;
-        }
-
-        if (this.cart.length === 0) {
-            this.showAlert('Корзина пуста', 'warning');
-            return;
-        }
-
-        // Simple checkout - in real app would have address form, payment, etc.
-        try {
-            const orderData = {
-                shippingAddress: {
-                    firstName: this.user.firstName,
-                    lastName: this.user.lastName,
-                    street: 'Улица Примерная, 1',
-                    city: 'Москва',
-                    state: 'Московская область',
-                    zipCode: '123456',
-                    country: 'Россия',
-                    phone: this.user.phone || '+7 (999) 123-45-67'
-                },
-                paymentMethod: 'card'
-            };
-
-            const response = await this.apiRequest('/orders', {
-                method: 'POST',
-                body: JSON.stringify(orderData)
-            });
-
-            this.showAlert(`Заказ оформлен! Номер заказа: ${response.data.orderNumber}`, 'success');
-            
-            // Close cart modal
-            const modalElement = document.getElementById('cartModal');
-            if (modalElement) {
-                const modal = bootstrap.Modal.getInstance(modalElement);
-                if (modal) modal.hide();
-            }
-            
-        } catch (error) {
-            console.error('Checkout error:', error);
-        }
-    }
 
     // Utility Methods
     showAlert(message, type = 'info') {
@@ -1567,11 +1357,7 @@ class BifoApp {
                                     Отзывов: ${product.reviewsCount || 0}
                                 </small>
                             </div>
-                            <button class="btn btn-primary btn-sm w-100 add-to-cart-btn" 
-                                    data-product-id="${product._id}">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                В корзину
-                            </button>
+
                         </div>
                     </div>
                 </div>

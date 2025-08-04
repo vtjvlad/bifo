@@ -114,16 +114,8 @@ class CategoryPage {
             });
         }
 
-        // Add to cart events (delegated)
+        // Quick view events
         document.addEventListener('click', (e) => {
-            if (e.target.closest('.add-to-cart-btn')) {
-                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
-                if (window.app && window.app.addToCart) {
-                    window.app.addToCart(productId);
-                }
-            }
-            
-            // Quick view events
             if (e.target.closest('.quick-view-btn')) {
                 const productId = e.target.closest('.quick-view-btn').dataset.productId;
                 this.showQuickView(productId);
@@ -386,11 +378,6 @@ class CategoryPage {
                         </div>
                         
                         <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-btn" 
-                                    data-product-id="${product._id}">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                В корзину
-                            </button>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-outline-secondary quick-view-btn" 
                                         data-product-id="${product._id}"
@@ -476,11 +463,6 @@ class CategoryPage {
                         </div>
                         
                         <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-btn" 
-                                    data-product-id="${product._id}">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                В корзину
-                            </button>
                             <div class="d-flex gap-2">
                                 <button class="btn btn-outline-secondary quick-view-btn" 
                                         data-product-id="${product._id}"
@@ -758,10 +740,6 @@ class CategoryPage {
                     </div>
                     
                     <div class="d-grid gap-2">
-                        <button class="btn btn-primary add-to-cart-btn" data-product-id="${product._id}">
-                            <i class="fas fa-cart-plus me-2"></i>
-                            Добавить в корзину
-                        </button>
                         <a href="${product.url}" target="_blank" class="btn btn-outline-primary">
                             <i class="fas fa-external-link-alt me-2"></i>
                             Перейти к товару
@@ -895,20 +873,7 @@ class CategoryPage {
             }
         });
 
-        // Add loading states to buttons
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.add-to-cart-btn')) {
-                const btn = e.target.closest('.add-to-cart-btn');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Добавляем...';
-                btn.disabled = true;
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                }, 2000);
-            }
-        });
+
 
         // Add hover effects to product cards
         document.addEventListener('mouseenter', (e) => {

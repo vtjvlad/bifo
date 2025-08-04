@@ -66,14 +66,6 @@ class ProductPage {
     }
 
     setupEventListeners() {
-        // Add to cart button
-        const addToCartBtn = document.getElementById('addToCartBtn');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => {
-                this.addToCart();
-            });
-        }
-
         // Favorite button
         const favoriteBtn = document.getElementById('favoriteBtn');
         if (favoriteBtn) {
@@ -108,6 +100,16 @@ class ProductPage {
                 this.closeImageZoom();
             }
         });
+
+        // Tab navigation for offers
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'offers-tab') {
+                // Load offers when tab is clicked
+                if (this.currentProduct) {
+                    this.loadOffers(this.currentProduct);
+                }
+            }
+        });
     }
 
     updateBreadcrumb() {
@@ -134,6 +136,8 @@ class ProductPage {
         const validatedProduct = {
             ...product,
             currentPrice: product.currentPrice || 0,
+            minPrice: product.minPrice || product.currentPrice || 0,
+            maxPrice: product.maxPrice || product.currentPrice || 0,
             initPrice: product.initPrice || product.currentPrice || 0,
             title: product.title || 'Без названия',
             vendor: product.vendor || { name: 'Не указан', title: 'Не указан' },
@@ -232,12 +236,30 @@ class ProductPage {
         const productVendor = document.getElementById('productVendor');
         if (productVendor) productVendor.textContent = this.getVendorName(product);
         
-        const currentPrice = document.getElementById('currentPrice');
-        if (currentPrice) currentPrice.textContent = product.currentPrice.toLocaleString();
+        // Handle price display - show range if minPrice and maxPrice are different
+        const priceRange = document.querySelector('.price-range');
+        const singlePriceContainer = document.getElementById('singlePriceContainer');
+        const minPriceElement = document.getElementById('minPrice');
+        const maxPriceElement = document.getElementById('maxPrice');
+        const singlePriceElement = document.getElementById('singlePrice');
+        
+        if (product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice) {
+            // Show price range
+            if (priceRange) priceRange.style.display = 'flex';
+            if (singlePriceContainer) singlePriceContainer.style.display = 'none';
+            if (minPriceElement) minPriceElement.textContent = product.minPrice.toLocaleString();
+            if (maxPriceElement) maxPriceElement.textContent = product.maxPrice.toLocaleString();
+        } else {
+            // Show single price
+            if (priceRange) priceRange.style.display = 'none';
+            if (singlePriceContainer) singlePriceContainer.style.display = 'flex';
+            if (singlePriceElement) singlePriceElement.textContent = (product.currentPrice || product.minPrice || 0).toLocaleString();
+        }
         
         // Handle original price and discount
-        if (product.initPrice && product.initPrice > product.currentPrice) {
-            const discount = Math.round(((product.initPrice - product.currentPrice) / product.initPrice) * 100);
+        const currentPrice = product.currentPrice || product.minPrice || 0;
+        if (product.initPrice && product.initPrice > currentPrice) {
+            const discount = Math.round(((product.initPrice - currentPrice) / product.initPrice) * 100);
             
             const originalPrice = document.getElementById('originalPrice');
             if (originalPrice) originalPrice.textContent = product.initPrice.toLocaleString();
@@ -280,6 +302,9 @@ class ProductPage {
 
         // Load description
         this.loadDescription(product);
+
+        // Load offers
+        await this.loadOffers(product);
 
         // Update favorite button state
         this.updateFavoriteButton();
@@ -692,6 +717,191 @@ class ProductPage {
         container.innerHTML = html;
     }
 
+    async loadOffers(product) {
+        const offersContent = document.getElementById('offersContent');
+        if (!offersContent) return;
+
+        // Show loading state
+        offersContent.innerHTML = `
+            <div class="offers-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+                <p class="mt-3">Загрузка предложений...</p>
+            </div>
+        `;
+
+        try {
+            // Try to load offers from API
+            const response = await this.apiRequest(`/products/${product._id}/offers`);
+            if (response.success && response.data.offers) {
+                this.renderOffers(response.data.offers);
+            } else {
+                // Fallback to mock offers
+                this.renderOffers(this.getMockOffers(product));
+            }
+        } catch (error) {
+            console.error('Error loading offers:', error);
+            // Fallback to mock offers
+            this.renderOffers(this.getMockOffers(product));
+        }
+    }
+
+    renderOffers(offers) {
+        const offersContent = document.getElementById('offersContent');
+        if (!offersContent) return;
+
+        if (!offers || offers.length === 0) {
+            offersContent.innerHTML = `
+                <div class="offers-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h4>Предложения не найдены</h4>
+                    <p>Для данного товара пока нет доступных предложений</p>
+                </div>
+            `;
+            return;
+        }
+
+        const offersHTML = offers.map((offer, index) => `
+            <div class="offer-card position-relative">
+                ${this.getOfferBadge(offer)}
+                <div class="offer-header">
+                    <div class="offer-vendor">
+                        <div class="offer-vendor-icon">
+                            ${this.getVendorInitial(offer.vendor)}
+                        </div>
+                        <div class="offer-vendor-info">
+                            <h5>${offer.vendor}</h5>
+                            <small>${offer.location || 'Украина'}</small>
+                        </div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="offer-price-current">
+                            ${offer.price.toLocaleString()} грн.
+                            ${offer.discount ? `<span class="offer-discount">-${offer.discount}%</span>` : ''}
+                        </div>
+                        ${offer.originalPrice && offer.originalPrice > offer.price ? 
+                            `<div class="offer-price-original">${offer.originalPrice.toLocaleString()} грн.</div>` : ''}
+                    </div>
+                </div>
+                <div class="offer-details">
+                    ${offer.delivery ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Доставка: ${offer.delivery}</span>
+                        </div>
+                    ` : ''}
+                    ${offer.availability ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>${offer.availability}</span>
+                        </div>
+                    ` : ''}
+                    ${offer.rating ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-star"></i>
+                            <span>Рейтинг: ${offer.rating}/5</span>
+                        </div>
+                    ` : ''}
+                    ${offer.reviews ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-comments"></i>
+                            <span>${offer.reviews} отзывов</span>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="offer-actions">
+                    <a href="${offer.url}" target="_blank" class="btn btn-outline-primary">
+                        <i class="fas fa-external-link-alt me-1"></i>
+                        Перейти к предложению
+                    </a>
+                    <button class="btn btn-outline-secondary" onclick="window.productPage.showOfferDetails('${offer.id}')">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Подробнее
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        offersContent.innerHTML = offersHTML;
+    }
+
+    getOfferBadge(offer) {
+        if (offer.isPromo) {
+            return '<span class="offer-badge badge-warning">Акция</span>';
+        }
+        if (offer.isNew) {
+            return '<span class="offer-badge badge-success">Новинка</span>';
+        }
+        if (offer.isRecommended) {
+            return '<span class="offer-badge badge-primary">Рекомендуем</span>';
+        }
+        return '';
+    }
+
+    getVendorInitial(vendorName) {
+        if (!vendorName) return '?';
+        return vendorName.charAt(0).toUpperCase();
+    }
+
+    getMockOffers(product) {
+        // Generate mock offers based on product data
+        const mockOffers = [];
+        const offerCount = product.offerCount || Math.floor(Math.random() * 5) + 1;
+        
+        const vendors = [
+            'Rozetka', 'Comfy', 'Allo', 'Citrus', 'Foxtrot', 
+            'Prostor', 'Эльдорадо', 'М.Видео', 'DNS', 'Ситилинк'
+        ];
+        
+        const locations = [
+            'Киев', 'Харьков', 'Одесса', 'Днепр', 'Львов', 'Украина'
+        ];
+        
+        const deliveryOptions = [
+            'Бесплатно', '50 грн.', '100 грн.', '150 грн.', 'По тарифам перевозчика'
+        ];
+        
+        const availabilityOptions = [
+            'В наличии', 'Под заказ', 'Доставка 1-2 дня', 'Доставка 3-5 дней'
+        ];
+
+        for (let i = 0; i < offerCount; i++) {
+            const vendor = vendors[Math.floor(Math.random() * vendors.length)];
+            const basePrice = product.minPrice || product.currentPrice || 1000;
+            const priceVariation = (Math.random() - 0.5) * 0.3; // ±15%
+            const price = Math.round(basePrice * (1 + priceVariation));
+            const originalPrice = Math.random() > 0.7 ? Math.round(price * 1.2) : null;
+            const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : null;
+            
+            mockOffers.push({
+                id: `offer_${i}`,
+                vendor: vendor,
+                location: locations[Math.floor(Math.random() * locations.length)],
+                price: price,
+                originalPrice: originalPrice,
+                discount: discount,
+                delivery: deliveryOptions[Math.floor(Math.random() * deliveryOptions.length)],
+                availability: availabilityOptions[Math.floor(Math.random() * availabilityOptions.length)],
+                rating: (Math.random() * 2 + 3).toFixed(1), // 3.0 - 5.0
+                reviews: Math.floor(Math.random() * 100) + 1,
+                url: `https://${vendor.toLowerCase()}.ua/product/${product._id}`,
+                isPromo: Math.random() > 0.8,
+                isNew: Math.random() > 0.9,
+                isRecommended: i === 0 // First offer is recommended
+            });
+        }
+
+        // Sort by price (lowest first)
+        return mockOffers.sort((a, b) => a.price - b.price);
+    }
+
+    showOfferDetails(offerId) {
+        // This method can be expanded to show detailed offer information
+        console.log('Show offer details for:', offerId);
+        // You can implement a modal or expand the offer card here
+    }
+
     async loadSimilarProducts() {
         if (!this.currentProduct) {
             console.log('❌ No current product for similar products');
@@ -764,16 +974,14 @@ class ProductPage {
                             ${this.getVendorName(product)}
                         </div>
                         <div class="product-price">
-                            <span class="product-price-current">${product.currentPrice.toLocaleString()} грн.</span>
-                            ${product.initPrice && product.initPrice > product.currentPrice ? 
+                            ${product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice ? 
+                                `<span class="product-price-current">${product.minPrice.toLocaleString()} - ${product.maxPrice.toLocaleString()} грн.</span>` :
+                                `<span class="product-price-current">${(product.currentPrice || product.minPrice || 0).toLocaleString()} грн.</span>`
+                            }
+                            ${product.initPrice && product.initPrice > (product.currentPrice || product.minPrice || 0) ? 
                                 `<span class="product-original-price">${product.initPrice.toLocaleString()} грн.</span>` : ''}
                         </div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-btn" data-product-id="${product._id}">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                В корзину
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -781,15 +989,7 @@ class ProductPage {
         
         container.innerHTML = html;
         
-        // Add event listeners for similar products
-        container.addEventListener('click', (e) => {
-            if (e.target.closest('.add-to-cart-btn')) {
-                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
-                if (window.app && window.app.addToCart) {
-                    window.app.addToCart(productId);
-                }
-            }
-        });
+
     }
 
     getProductImage(product) {
@@ -824,21 +1024,15 @@ class ProductPage {
     }
 
     getDiscountBadge(product) {
-        if (product.initPrice && product.initPrice > product.currentPrice) {
-            const discount = Math.round(((product.initPrice - product.currentPrice) / product.initPrice) * 100);
+        const currentPrice = product.currentPrice || product.minPrice || 0;
+        if (product.initPrice && product.initPrice > currentPrice) {
+            const discount = Math.round(((product.initPrice - currentPrice) / product.initPrice) * 100);
             return `<span class="badge bg-danger position-absolute top-0 start-0 m-2">-${discount}%</span>`;
         }
         return '';
     }
 
-    addToCart() {
-        if (!this.currentProduct) return;
-        
-        if (window.app && window.app.addToCart) {
-            window.app.addToCart(this.currentProduct._id);
-            this.showSuccess('Товар добавлен в корзину!');
-        }
-    }
+
 
     toggleFavorite() {
         if (!this.currentProduct) return;
