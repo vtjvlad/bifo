@@ -106,7 +106,7 @@ orderSchema.pre('save', function(next) {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const day = date.getDate().toString().padStart(2, '0');
         const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-        this.orderNumber = `BIFO${year}${month}${day}${random}`;
+        this.orderNumber = `KUPI${year}${month}${day}${random}`;
     }
     next();
 });

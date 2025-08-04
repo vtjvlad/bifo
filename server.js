@@ -71,6 +71,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 BIFO server running on port ${PORT}`);
+    console.log(`🚀 Купи слона server running on port ${PORT}`);
     console.log(`📱 Visit: http://localhost:${PORT}`);
 }); 

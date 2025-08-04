@@ -275,7 +275,7 @@ const products = [
 async function initDatabase() {
     try {
         // Connect to MongoDB
-        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/bifo', {
+        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/kupislona', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
@@ -299,19 +299,19 @@ async function initDatabase() {
         // Create admin user
         const hashedPassword = await bcrypt.hash('admin123', 10);
         const adminUser = new User({
-            email: 'admin@bifo.com',
+            email: 'admin@kupislona.com',
             password: hashedPassword,
             firstName: 'Администратор',
-            lastName: 'BIFO',
+            lastName: 'Купи слона',
             role: 'admin',
             phone: '+7 (999) 123-45-67'
         });
         await adminUser.save();
-        console.log('👤 Created admin user: admin@bifo.com / admin123');
+                    console.log('👤 Created admin user: admin@kupislona.com / admin123');
 
         // Create test user
         const testUser = new User({
-            email: 'user@bifo.com',
+            email: 'user@kupislona.com',
             password: hashedPassword,
             firstName: 'Тестовый',
             lastName: 'Пользователь',
@@ -319,7 +319,7 @@ async function initDatabase() {
             phone: '+7 (999) 987-65-43'
         });
         await testUser.save();
-        console.log('👤 Created test user: user@bifo.com / admin123');
+                    console.log('👤 Created test user: user@kupislona.com / admin123');
 
         // Load and create catalogs from files
         const catalogData = loadCatalogsFromFiles();
@@ -341,8 +341,8 @@ async function initDatabase() {
 
         console.log('\n🎉 Database initialization completed successfully!');
         console.log('\n📋 Login credentials:');
-        console.log('Admin: admin@bifo.com / admin123');
-        console.log('User: user@bifo.com / admin123');
+        console.log('Admin: admin@kupislona.com / admin123');
+        console.log('User: user@kupislona.com / admin123');
         console.log(`\n📁 Created ${createdCatalogs.length} catalogs from files`);
         console.log(`📦 Created ${products.length} sample products`);
         console.log('\n🚀 You can now start the server with: npm start');

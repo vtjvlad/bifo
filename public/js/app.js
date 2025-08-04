@@ -1,9 +1,9 @@
-// BIFO E-commerce Application
-class BifoApp {
+// Купи слона E-commerce Application
+class KupiSlonaApp {
     constructor() {
         this.apiBase = '/api';
-        this.token = localStorage.getItem('bifo_token');
-        this.user = JSON.parse(localStorage.getItem('bifo_user'));
+        this.token = localStorage.getItem('kupislona_token');
+        this.user = JSON.parse(localStorage.getItem('kupislona_user'));
         
         this.init();
     }
@@ -11,7 +11,7 @@ class BifoApp {
     // LocalStorage methods for catalogs
     saveCatalogsToLocalStorage(catalogs, type = 'main') {
         try {
-            const key = `bifo_catalogs_${type}`;
+            const key = `kupislona_catalogs_${type}`;
             const timestamp = Date.now();
             const data = {
                 catalogs: catalogs,
@@ -27,7 +27,7 @@ class BifoApp {
 
     getCatalogsFromLocalStorage(type = 'main') {
         try {
-            const key = `bifo_catalogs_${type}`;
+            const key = `kupislona_catalogs_${type}`;
             const data = localStorage.getItem(key);
             if (!data) return null;
 
@@ -51,7 +51,7 @@ class BifoApp {
 
     clearCatalogsFromLocalStorage(type = 'main') {
         try {
-            const key = `bifo_catalogs_${type}`;
+            const key = `kupislona_catalogs_${type}`;
             localStorage.removeItem(key);
             console.log(`Catalogs cleared from localStorage: ${key}`);
         } catch (error) {
@@ -84,7 +84,7 @@ class BifoApp {
     clearAllCatalogCache() {
         try {
             const keys = Object.keys(localStorage);
-            const catalogKeys = keys.filter(key => key.startsWith('bifo_catalogs_'));
+            const catalogKeys = keys.filter(key => key.startsWith('kupislona_catalogs_'));
             catalogKeys.forEach(key => {
                 localStorage.removeItem(key);
                 console.log(`Cleared catalog cache: ${key}`);
@@ -343,8 +343,8 @@ class BifoApp {
             this.token = response.data.token;
             this.user = response.data.user;
             
-            localStorage.setItem('bifo_token', this.token);
-            localStorage.setItem('bifo_user', JSON.stringify(this.user));
+            localStorage.setItem('kupislona_token', this.token);
+            localStorage.setItem('kupislona_user', JSON.stringify(this.user));
             
             this.updateUI();
             this.hideRegisterModal();
@@ -358,8 +358,8 @@ class BifoApp {
     logout() {
         this.token = null;
         this.user = null;
-        localStorage.removeItem('bifo_token');
-        localStorage.removeItem('bifo_user');
+        localStorage.removeItem('kupislona_token');
+        localStorage.removeItem('kupislona_user');
         this.updateUI();
         this.showAlert('Вы вышли из системы', 'info');
     }
@@ -1561,7 +1561,7 @@ class BifoApp {
 
 // Initialize app when DOM is loaded
 document.addEventListener('DOMContentLoaded', async () => {
-    window.app = new BifoApp();
+            window.app = new KupiSlonaApp();
     await window.app.init();
 });
 

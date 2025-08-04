@@ -1,4 +1,4 @@
-/* Custom styles for BIFO */
+/* Custom styles for Купи слона */
 
 :root {
     --primary-color: #ffc107;
@@ -2505,6 +2505,78 @@ body {
     line-height: 1.6;
 }
 
+/* Description Styles */
+.product-description {
+    padding: 1rem 0;
+}
+
+.description-content {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-dark);
+}
+
+.description-content h1,
+.description-content h2,
+.description-content h3,
+.description-content h4,
+.description-content h5,
+.description-content h6 {
+    color: var(--text-dark);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.description-content p {
+    margin-bottom: 1rem;
+}
+
+.description-content ul,
+.description-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.description-content li {
+    margin-bottom: 0.5rem;
+}
+
+.description-content strong {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.description-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.description-content a:hover {
+    text-decoration: underline;
+}
+
+.description-empty {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--text-light);
+}
+
+.description-empty i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.description-empty h5 {
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.description-empty p {
+    margin-bottom: 0;
+}
+
 /* Similar Products Section */
 .similar-products-section {
     background: white;
@@ -2845,6 +2917,26 @@ body {
     .offer-actions .btn {
         padding: 0.4rem 0.8rem;
         font-size: 0.8rem;
+    }
+    
+    .description-content {
+        font-size: 0.9rem;
+    }
+    
+    .description-content h1,
+    .description-content h2,
+    .description-content h3,
+    .description-content h4,
+    .description-content h5,
+    .description-content h6 {
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .description-content ul,
+    .description-content ol {
+        padding-left: 1rem;
     }
 }
 

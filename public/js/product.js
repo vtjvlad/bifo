@@ -110,6 +110,16 @@ class ProductPage {
                 }
             }
         });
+
+        // Tab navigation for description
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'description-tab') {
+                // Load description when tab is clicked
+                if (this.currentProduct) {
+                    this.loadDescription(this.currentProduct);
+                }
+            }
+        });
     }
 
     updateBreadcrumb() {
@@ -219,11 +229,11 @@ class ProductPage {
         const product = this.currentProduct;
 
         // Update page title and meta
-        document.title = `${product.title} - BIFO`;
+        document.title = `${product.title} - Купи слона`;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
             metaDescription.setAttribute('content', 
-                `Купить ${product.title} - ${product.currentPrice.toLocaleString()} грн. Интернет-магазин BIFO`);
+                `Купить ${product.title} - ${product.currentPrice.toLocaleString()} грн. Интернет-магазин Купи слона`);
         }
 
         // Update breadcrumb
@@ -699,17 +709,48 @@ class ProductPage {
         
         let html = '';
         
-        if (product.description) {
-            html = `<p>${product.description}</p>`;
-        } else {
-            // Если нет описания, создаем базовое описание из данных товара
+        // Проверяем наличие полного описания
+        if (product.fullDescription) {
             html = `
-                <div class="product-description">
-                    <h5>${product.title}</h5>
-                    ${product.vendor && product.vendor.title ? `<p><strong>Производитель:</strong> ${product.vendor.title}</p>` : ''}
-                    ${product.section && product.section.productCategoryName ? `<p><strong>Категория:</strong> ${product.section.productCategoryName}</p>` : ''}
-                    ${product.techShortSpecifications && product.techShortSpecifications.length > 0 ? 
-                        `<p><strong>Основные характеристики:</strong></p><ul>${product.techShortSpecifications.map(spec => `<li>${spec}</li>`).join('')}</ul>` : ''}
+                <div class="description-content">
+                    ${product.fullDescription}
+                </div>
+            `;
+        } 
+        // Проверяем наличие краткого описания
+        else if (product.description) {
+            html = `
+                <div class="description-content">
+                    <p>${product.description}</p>
+                </div>
+            `;
+        } 
+        // Если нет описания, создаем базовое описание из данных товара
+        else {
+            html = `
+                <div class="description-content">
+                    <div class="product-description">
+                        <h5>${product.title}</h5>
+                        ${product.vendor && product.vendor.title ? `<p><strong>Производитель:</strong> ${product.vendor.title}</p>` : ''}
+                        ${product.section && product.section.productCategoryName ? `<p><strong>Категория:</strong> ${product.section.productCategoryName}</p>` : ''}
+                        ${product.techShortSpecifications && product.techShortSpecifications.length > 0 ? 
+                            `<p><strong>Основные характеристики:</strong></p><ul>${product.techShortSpecifications.map(spec => `<li>${spec}</li>`).join('')}</ul>` : ''}
+                        ${product.features && product.features.length > 0 ? 
+                            `<p><strong>Особенности:</strong></p><ul>${product.features.map(feature => `<li>${feature}</li>`).join('')}</ul>` : ''}
+                        ${product.benefits && product.benefits.length > 0 ? 
+                            `<p><strong>Преимущества:</strong></p><ul>${product.benefits.map(benefit => `<li>${benefit}</li>`).join('')}</ul>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Если все еще нет контента, показываем пустое состояние
+        if (!html.trim()) {
+            html = `
+                <div class="description-empty">
+                    <i class="fas fa-file-alt"></i>
+                    <h5>Описание отсутствует</h5>
+                    <p>Для данного товара пока нет подробного описания</p>
                 </div>
             `;
         }

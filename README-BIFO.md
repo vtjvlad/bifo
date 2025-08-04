@@ -1,4 +1,4 @@
-# BIFO - Интернет-магазин
+# Купи слона - Интернет-магазин
 
 Современный интернет-магазин с огромным ассортиментом товаров, построенный на Node.js, Express и MongoDB.
 
@@ -44,7 +44,7 @@
 1. **Клонируйте репозиторий:**
    ```bash
    git clone <repository-url>
-   cd bifo
+   cd kupislona
    ```
 
 2. **Установите зависимости:**
@@ -61,7 +61,7 @@
    ```env
    PORT=3000
    NODE_ENV=development
-   MONGODB_URI=mongodb://localhost:27017/bifo
+   MONGODB_URI=mongodb://localhost:27017/kupislona
    JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
    ```
 
@@ -207,4 +207,4 @@ MIT License
 
 ---
 
-**BIFO** - Ваш надежный интернет-магазин с огромным ассортиментом товаров! 🛒✨ 
+**Купи слона** - Ваш надежный интернет-магазин с огромным ассортиментом товаров! 🛒✨ 

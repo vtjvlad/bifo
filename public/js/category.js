@@ -156,12 +156,12 @@ class CategoryPage {
             if (response.success && response.data.catalog) {
                 const category = response.data.catalog;
                 document.getElementById('categoryTitle').textContent = category.name;
-                document.title = `${category.name} - BIFO`;
+                document.title = `${category.name} - Купи слона`;
                 
                 // Update meta description
                 const metaDescription = document.querySelector('meta[name="description"]');
                 if (metaDescription) {
-                    metaDescription.setAttribute('content', `Товары в категории ${category.name} - интернет-магазин BIFO`);
+                    metaDescription.setAttribute('content', `Товары в категории ${category.name} - интернет-магазин Купи слона`);
                 }
             }
         } catch (error) {
@@ -755,7 +755,7 @@ class CategoryPage {
 
     toggleFavorite(productId) {
         // Простая реализация избранного через localStorage
-        const favorites = JSON.parse(localStorage.getItem('bifo_favorites') || '[]');
+        const favorites = JSON.parse(localStorage.getItem('kupislona_favorites') || '[]');
         const index = favorites.indexOf(productId);
         
         if (index > -1) {
@@ -766,7 +766,7 @@ class CategoryPage {
             this.showAlert('Товар добавлен в избранное', 'success');
         }
         
-        localStorage.setItem('bifo_favorites', JSON.stringify(favorites));
+        localStorage.setItem('kupislona_favorites', JSON.stringify(favorites));
         
         // Обновляем иконку кнопки
         const button = document.querySelector(`[data-product-id="${productId}"].favorite-btn`);
@@ -817,7 +817,7 @@ class CategoryPage {
     }
 
     updateFavoriteButtons() {
-        const favorites = JSON.parse(localStorage.getItem('bifo_favorites') || '[]');
+        const favorites = JSON.parse(localStorage.getItem('kupislona_favorites') || '[]');
         
         // Обновляем все кнопки избранного на странице
         document.querySelectorAll('.favorite-btn').forEach(button => {
