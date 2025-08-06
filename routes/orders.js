@@ -105,20 +105,22 @@ router.post('/', [
             });
         }
 
-        // Check if user has items in cart
-        if (!user.cart || user.cart.length === 0) {
+        // Get order items from request body
+        const { items } = req.body;
+        
+        if (!items || !Array.isArray(items) || items.length === 0) {
             return res.status(400).json({ 
                 success: false, 
-                error: 'Cart is empty' 
+                error: 'Order items are required' 
             });
         }
 
-        // Validate cart items and calculate totals
+        // Validate order items and calculate totals
         const orderItems = [];
         let subtotal = 0;
 
-        for (const cartItem of user.cart) {
-            const product = await Product.findById(cartItem.product);
+        for (const item of items) {
+            const product = await Product.findById(item.productId);
             
             if (!product || !product.isActive) {
                 return res.status(400).json({ 
@@ -127,25 +129,25 @@ router.post('/', [
                 });
             }
 
-            if (product.stock < cartItem.quantity) {
+            if (product.stock < item.quantity) {
                 return res.status(400).json({ 
                     success: false, 
                     error: `Insufficient stock for ${product.name}` 
                 });
             }
 
-            const itemTotal = product.price * cartItem.quantity;
+            const itemTotal = product.price * item.quantity;
             subtotal += itemTotal;
 
             orderItems.push({
                 product: product._id,
-                quantity: cartItem.quantity,
+                quantity: item.quantity,
                 price: product.price,
                 total: itemTotal
             });
 
             // Update product stock
-            product.stock -= cartItem.quantity;
+            product.stock -= item.quantity;
             await product.save();
         }
 
@@ -170,9 +172,7 @@ router.post('/', [
 
         await order.save();
 
-        // Clear user cart
-        user.cart = [];
-        await user.save();
+
 
         res.status(201).json({
             success: true,

@@ -87,30 +87,68 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Get single product by URL
-router.get('/url/:productUrl(*)', async (req, res) => {
-    try {
-        const productUrl = req.params.productUrl;
-        
-        console.log('🔍 API Debug - Product URL Request:');
-        console.log('   Raw URL param:', productUrl);
-        
-        // Decode URL if it was encoded
-        const decodedUrl = decodeURIComponent(productUrl);
-        console.log('   Decoded URL:', decodedUrl);
-        
-        const product = await Product.findOne({ url: decodedUrl });
-        console.log('   Found product:', product ? 'Yes' : 'No');
 
+
+// Get product detailed specifications
+router.get('/:id/specifications', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        
         if (!product) {
-            console.log('   ❌ Product not found in database');
             return res.status(404).json({ success: false, error: 'Product not found' });
         }
 
-        console.log('   ✅ Product found, returning data');
-        res.json({ success: true, data: product });
+        // Extract and format productValues preserving original order
+        const specifications = {
+            basic: [],
+            detailed: [],
+            technical: [],
+            // Новое поле для сохранения исходного порядка
+            ordered: []
+        };
+
+        if (product.productValues && Array.isArray(product.productValues)) {
+            product.productValues.forEach(group => {
+                if (group.edges && Array.isArray(group.edges)) {
+                    group.edges.forEach(edge => {
+                        if (edge.node) {
+                            const spec = {
+                                title: edge.node.title || '',
+                                value: edge.node.value || '',
+                                type: edge.node.type || '',
+                                h1Text: edge.node.h1Text || '',
+                                help: edge.node.help || '',
+                                isHeader: edge.node.isHeader || false,
+                                url: edge.node.url || ''
+                            };
+
+                            // Сохраняем исходный порядок
+                            specifications.ordered.push(spec);
+
+                            // Также сохраняем категоризацию для обратной совместимости
+                            if (spec.isHeader) {
+                                specifications.detailed.push(spec);
+                            } else if (spec.type && spec.type.toLowerCase().includes('технич')) {
+                                specifications.technical.push(spec);
+                            } else {
+                                specifications.basic.push(spec);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        res.json({ 
+            success: true, 
+            data: {
+                productId: product._id,
+                specifications,
+                techShortSpecifications: product.techShortSpecifications || [],
+                techShortSpecificationsList: product.techShortSpecificationsList || []
+            }
+        });
     } catch (error) {
-        console.error('   ❌ Error in URL product lookup:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
@@ -282,8 +320,11 @@ router.get('/catalog/:catalogSlug/group/:groupSlug/category/:categorySlug', asyn
 
 // Create new product (Admin only)
 router.post('/', [
+    body('id').isInt().withMessage('ID is required and must be an integer'),
+    body('hlSectionId').isInt().withMessage('hlSectionId is required and must be an integer'),
+    body('date').notEmpty().withMessage('Date is required'),
     body('title').notEmpty().withMessage('Title is required'),
-    body('currentPrice').isFloat({ min: 0 }).withMessage('Valid price is required'),
+    body('currentPrice').optional().isFloat({ min: 0 }).withMessage('Valid price is required'),
     body('vendor').isObject().withMessage('Vendor information is required'),
     body('section').isObject().withMessage('Section information is required'),
     body('url').isURL().withMessage('Valid URL is required')

@@ -47,14 +47,14 @@ class ProductPage {
     }
 
     getProductIdFromURL() {
-        // Get product URL from the current page URL path
+        // Get product ID from the current page URL path
         const pathSegments = window.location.pathname.split('/');
-        const productUrl = pathSegments.slice(2).join('/'); // Remove '/product/' prefix
+        const productId = pathSegments[2]; // Get the ID after '/product/'
         
         console.log('🔍 Debug - Path segments:', pathSegments);
-        console.log('🔍 Debug - Product URL from path:', productUrl);
+        console.log('🔍 Debug - Product ID from path:', productId);
         
-        if (!productUrl) {
+        if (!productId) {
             // Fallback to query parameter for backward compatibility
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
@@ -62,18 +62,10 @@ class ProductPage {
             return id;
         }
         
-        return productUrl;
+        return productId;
     }
 
     setupEventListeners() {
-        // Add to cart button
-        const addToCartBtn = document.getElementById('addToCartBtn');
-        if (addToCartBtn) {
-            addToCartBtn.addEventListener('click', () => {
-                this.addToCart();
-            });
-        }
-
         // Favorite button
         const favoriteBtn = document.getElementById('favoriteBtn');
         if (favoriteBtn) {
@@ -108,6 +100,26 @@ class ProductPage {
                 this.closeImageZoom();
             }
         });
+
+        // Tab navigation for offers
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'offers-tab') {
+                // Load offers when tab is clicked
+                if (this.currentProduct) {
+                    this.loadOffers(this.currentProduct);
+                }
+            }
+        });
+
+        // Tab navigation for description
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'description-tab') {
+                // Load description when tab is clicked
+                if (this.currentProduct) {
+                    this.loadDescription(this.currentProduct);
+                }
+            }
+        });
     }
 
     updateBreadcrumb() {
@@ -118,60 +130,110 @@ class ProductPage {
         // This will be called after product data is loaded
     }
 
+    validateProductData(product) {
+        console.log('🔍 Debug - Validating product data:', product);
+        
+        // Проверяем обязательные поля
+        const requiredFields = ['_id', 'title'];
+        for (const field of requiredFields) {
+            if (!product[field]) {
+                console.error(`❌ Missing required field: ${field}`);
+                return null;
+            }
+        }
+        
+        // Добавляем значения по умолчанию для отсутствующих полей
+        const validatedProduct = {
+            ...product,
+            currentPrice: product.currentPrice || 0,
+            minPrice: product.minPrice || product.currentPrice || 0,
+            maxPrice: product.maxPrice || product.currentPrice || 0,
+            initPrice: product.initPrice || product.currentPrice || 0,
+            title: product.title || 'Без названия',
+            vendor: product.vendor || { name: 'Не указан', title: 'Не указан' },
+            section: product.section || { productCategoryName: 'Не указана' },
+            url: product.url || '#',
+            imageLinks: product.imageLinks || [],
+            images: product.images || [],
+            offerCount: product.offerCount || 0,
+            imagesCount: product.imagesCount || 0,
+            viewsCount: product.viewsCount || 0,
+            reviewsCount: product.reviewsCount || 0,
+            rating: product.rating || 0,
+            isPromo: product.isPromo || false,
+            isNew: product.isNew || false,
+            madeInUkraine: product.madeInUkraine || false,
+            techShortSpecifications: product.techShortSpecifications || [],
+            techShortSpecificationsList: product.techShortSpecificationsList || [],
+            productValues: product.productValues || [],
+            fullDescription: product.fullDescription || '',
+            description: product.description || ''
+        };
+        
+        console.log('✅ Product data validated successfully');
+        return validatedProduct;
+    }
+
     async loadProduct() {
         if (!this.productId) {
             console.log('❌ No product ID found');
-            this.showEmptyState();
+            this.showEmptyState('ID товара не найден');
             return;
         }
 
-        console.log('🔍 Debug - Loading product with ID/URL:', this.productId);
+        console.log('🔍 Debug - Loading product with ID:', this.productId);
         this.showLoading();
 
         try {
-            let response;
-            let apiEndpoint;
+            const apiEndpoint = `/products/${this.productId}`;
+            console.log('🔍 Debug - Using ID endpoint:', apiEndpoint);
             
-            // Check if productId looks like a URL (contains slashes or is not a MongoDB ObjectId)
-            if (this.productId.includes('/') || this.productId.length > 24) {
-                // It's a URL, use the URL endpoint
-                const decodedUrl = decodeURIComponent(this.productId);
-                apiEndpoint = `/products/url/${encodeURIComponent(decodedUrl)}`;
-                console.log('🔍 Debug - Using URL endpoint:', apiEndpoint);
-            } else {
-                // It's an ID, use the ID endpoint
-                apiEndpoint = `/products/${this.productId}`;
-                console.log('🔍 Debug - Using ID endpoint:', apiEndpoint);
-            }
-            
-            response = await this.apiRequest(apiEndpoint);
+            const response = await this.apiRequest(apiEndpoint);
             console.log('🔍 Debug - API response:', response);
             
             if (response.success && response.data) {
-                this.currentProduct = response.data;
-                this.renderProduct();
-                this.loadSimilarProducts();
+                // Валидируем данные товара
+                const validatedProduct = this.validateProductData(response.data);
+                if (validatedProduct) {
+                    this.currentProduct = validatedProduct;
+                    await this.renderProduct();
+                    this.loadSimilarProducts();
+                } else {
+                    console.log('❌ Product data validation failed');
+                    this.showEmptyState('Данные товара некорректны');
+                }
             } else {
-                console.log('❌ API returned no data or error');
-                this.showEmptyState();
+                console.log('❌ API returned no data or error:', response);
+                const errorMessage = response.error || 'Товар не найден';
+                this.showEmptyState(errorMessage);
             }
         } catch (error) {
             console.error('❌ Error loading product:', error);
-            this.showEmptyState();
+            let errorMessage = 'Ошибка загрузки товара';
+            
+            if (error.message.includes('404')) {
+                errorMessage = 'Товар не найден';
+            } else if (error.message.includes('500')) {
+                errorMessage = 'Ошибка сервера';
+            } else if (error.message.includes('network')) {
+                errorMessage = 'Ошибка сети';
+            }
+            
+            this.showEmptyState(errorMessage);
         }
     }
 
-    renderProduct() {
+    async renderProduct() {
         if (!this.currentProduct) return;
 
         const product = this.currentProduct;
 
         // Update page title and meta
-        document.title = `${product.title} - BIFO`;
+        document.title = `${product.title} - Купи слона`;
         const metaDescription = document.querySelector('meta[name="description"]');
         if (metaDescription) {
             metaDescription.setAttribute('content', 
-                `Купить ${product.title} - ${product.currentPrice.toLocaleString()} грн. Интернет-магазин BIFO`);
+                `Купить ${product.title} - ${product.currentPrice.toLocaleString()} грн. Интернет-магазин Купи слона`);
         }
 
         // Update breadcrumb
@@ -184,12 +246,30 @@ class ProductPage {
         const productVendor = document.getElementById('productVendor');
         if (productVendor) productVendor.textContent = this.getVendorName(product);
         
-        const currentPrice = document.getElementById('currentPrice');
-        if (currentPrice) currentPrice.textContent = product.currentPrice.toLocaleString();
+        // Handle price display - show range if minPrice and maxPrice are different
+        const priceRange = document.querySelector('.price-range');
+        const singlePriceContainer = document.getElementById('singlePriceContainer');
+        const minPriceElement = document.getElementById('minPrice');
+        const maxPriceElement = document.getElementById('maxPrice');
+        const singlePriceElement = document.getElementById('singlePrice');
+        
+        if (product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice) {
+            // Show price range
+            if (priceRange) priceRange.style.display = 'flex';
+            if (singlePriceContainer) singlePriceContainer.style.display = 'none';
+            if (minPriceElement) minPriceElement.textContent = product.minPrice.toLocaleString();
+            if (maxPriceElement) maxPriceElement.textContent = product.maxPrice.toLocaleString();
+        } else {
+            // Show single price
+            if (priceRange) priceRange.style.display = 'none';
+            if (singlePriceContainer) singlePriceContainer.style.display = 'flex';
+            if (singlePriceElement) singlePriceElement.textContent = (product.currentPrice || product.minPrice || 0).toLocaleString();
+        }
         
         // Handle original price and discount
-        if (product.initPrice && product.initPrice > product.currentPrice) {
-            const discount = Math.round(((product.initPrice - product.currentPrice) / product.initPrice) * 100);
+        const currentPrice = product.currentPrice || product.minPrice || 0;
+        if (product.initPrice && product.initPrice > currentPrice) {
+            const discount = Math.round(((product.initPrice - currentPrice) / product.initPrice) * 100);
             
             const originalPrice = document.getElementById('originalPrice');
             if (originalPrice) originalPrice.textContent = product.initPrice.toLocaleString();
@@ -228,10 +308,13 @@ class ProductPage {
         this.loadImages(product);
 
         // Load specifications
-        this.loadSpecifications(product);
+        await this.loadSpecifications(product);
 
         // Load description
         this.loadDescription(product);
+
+        // Load offers
+        await this.loadOffers(product);
 
         // Update favorite button state
         this.updateFavoriteButton();
@@ -268,7 +351,10 @@ class ProductPage {
     }
 
     loadImages(product) {
+        console.log('🔍 Debug - Loading images for product:', product.title);
+        
         this.images = this.getProductImages(product);
+        console.log('🔍 Debug - Found images:', this.images.length);
         
         if (this.images.length > 0) {
             // Set main image
@@ -276,11 +362,21 @@ class ProductPage {
             
             // Create thumbnails
             this.createThumbnails();
+            
+            console.log('✅ Images loaded successfully');
         } else {
+            console.log('⚠️ No images found, using placeholder');
             // Set placeholder image
             const mainImage = document.getElementById('mainImage');
             if (mainImage) {
                 mainImage.src = 'https://via.placeholder.com/400x400?text=Нет+изображения';
+                mainImage.alt = 'Изображение недоступно';
+            }
+            
+            // Clear thumbnails
+            const thumbnailContainer = document.getElementById('thumbnailImages');
+            if (thumbnailContainer) {
+                thumbnailContainer.innerHTML = '';
             }
         }
     }
@@ -288,35 +384,62 @@ class ProductPage {
     getProductImages(product) {
         const images = [];
         
+        console.log('🔍 Debug - Getting images from product data');
+        
         // Проверяем imageLinks (новый формат)
         if (product.imageLinks && Array.isArray(product.imageLinks)) {
-            product.imageLinks.forEach(imageLink => {
+            console.log('🔍 Debug - Processing imageLinks:', product.imageLinks.length);
+            product.imageLinks.forEach((imageLink, index) => {
                 if (typeof imageLink === 'object' && imageLink !== null) {
                     // Priority: big > basic > thumb > small
-                    if (imageLink.big) images.push(imageLink.big);
-                    else if (imageLink.basic) images.push(imageLink.basic);
-                    else if (imageLink.thumb) images.push(imageLink.thumb);
-                    else if (imageLink.small) images.push(imageLink.small);
+                    if (imageLink.big && imageLink.big.trim()) {
+                        images.push(imageLink.big);
+                        console.log(`✅ Added image ${index + 1}: big`);
+                    } else if (imageLink.basic && imageLink.basic.trim()) {
+                        images.push(imageLink.basic);
+                        console.log(`✅ Added image ${index + 1}: basic`);
+                    } else if (imageLink.thumb && imageLink.thumb.trim()) {
+                        images.push(imageLink.thumb);
+                        console.log(`✅ Added image ${index + 1}: thumb`);
+                    } else if (imageLink.small && imageLink.small.trim()) {
+                        images.push(imageLink.small);
+                        console.log(`✅ Added image ${index + 1}: small`);
+                    }
                 }
             });
         }
         
         // Проверяем images (старый формат)
         if (product.images && Array.isArray(product.images)) {
-            product.images.forEach(image => {
-                if (typeof image === 'string') {
+            console.log('🔍 Debug - Processing images:', product.images.length);
+            product.images.forEach((image, index) => {
+                if (typeof image === 'string' && image.trim()) {
                     images.push(image);
+                    console.log(`✅ Added image ${index + 1}: string`);
                 } else if (typeof image === 'object' && image !== null) {
                     // Priority: big > basic > thumb > small
-                    if (image.big) images.push(image.big);
-                    else if (image.basic) images.push(image.basic);
-                    else if (image.thumb) images.push(image.thumb);
-                    else if (image.small) images.push(image.small);
+                    if (image.big && image.big.trim()) {
+                        images.push(image.big);
+                        console.log(`✅ Added image ${index + 1}: big`);
+                    } else if (image.basic && image.basic.trim()) {
+                        images.push(image.basic);
+                        console.log(`✅ Added image ${index + 1}: basic`);
+                    } else if (image.thumb && image.thumb.trim()) {
+                        images.push(image.thumb);
+                        console.log(`✅ Added image ${index + 1}: thumb`);
+                    } else if (image.small && image.small.trim()) {
+                        images.push(image.small);
+                        console.log(`✅ Added image ${index + 1}: small`);
+                    }
                 }
             });
         }
         
-        return images;
+        // Удаляем дубликаты
+        const uniqueImages = [...new Set(images)];
+        console.log(`🔍 Debug - Total unique images found: ${uniqueImages.length}`);
+        
+        return uniqueImages;
     }
 
     changeMainImage(index) {
@@ -325,18 +448,31 @@ class ProductPage {
             const mainImage = document.getElementById('mainImage');
             if (mainImage) {
                 mainImage.src = this.images[index];
+                mainImage.alt = `Изображение ${index + 1}`;
+                
+                // Добавляем обработчик ошибок загрузки изображения
+                mainImage.onerror = () => {
+                    console.log(`⚠️ Failed to load main image ${index + 1}:`, this.images[index]);
+                    mainImage.src = 'https://via.placeholder.com/400x400?text=Ошибка+загрузки';
+                    mainImage.alt = 'Ошибка загрузки изображения';
+                };
             }
             
             // Update thumbnails
             document.querySelectorAll('.thumbnail-item').forEach((item, i) => {
                 item.classList.toggle('active', i === index);
             });
+            
+            console.log(`✅ Changed main image to index ${index}`);
         }
     }
 
     createThumbnails() {
         const container = document.getElementById('thumbnailImages');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ thumbnailImages container not found');
+            return;
+        }
         
         container.innerHTML = '';
         
@@ -345,9 +481,22 @@ class ProductPage {
             thumbnail.className = `thumbnail-item ${index === 0 ? 'active' : ''}`;
             thumbnail.dataset.index = index;
             
-            thumbnail.innerHTML = `<img src="${image}" alt="Изображение ${index + 1}">`;
+            const img = document.createElement('img');
+            img.src = image;
+            img.alt = `Изображение ${index + 1}`;
+            
+            // Добавляем обработчик ошибок загрузки изображения
+            img.onerror = () => {
+                console.log(`⚠️ Failed to load thumbnail image ${index + 1}:`, image);
+                img.src = 'https://via.placeholder.com/100x100?text=Ошибка';
+                img.alt = 'Ошибка загрузки';
+            };
+            
+            thumbnail.appendChild(img);
             container.appendChild(thumbnail);
         });
+        
+        console.log(`✅ Created ${this.images.length} thumbnails`);
     }
 
     previousImage() {
@@ -375,17 +524,128 @@ class ProductPage {
         }
     }
 
-    loadSpecifications(product) {
+    async loadSpecifications(product) {
+        const container = document.getElementById('specificationsContent');
+        if (!container) {
+            console.log('❌ specificationsContent container not found');
+            return;
+        }
+        
+        console.log('🔍 Debug - Loading specifications for product:', product._id);
+        
+        // Показываем загрузку
+        container.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Загрузка характеристик...</div>';
+        
+        try {
+            // Загружаем подробные характеристики с сервера
+            const response = await this.apiRequest(`/products/${product._id}/specifications`);
+            console.log('🔍 Debug - Specifications API response:', response);
+            
+            if (response.success && response.data) {
+                this.renderSpecifications(response.data);
+                console.log('✅ Specifications loaded successfully');
+            } else {
+                console.log('⚠️ Specifications API failed, using fallback');
+                // Fallback к старым данным
+                this.renderLegacySpecifications(product);
+            }
+        } catch (error) {
+            console.error('❌ Error loading specifications:', error);
+            // Fallback к старым данным
+            this.renderLegacySpecifications(product);
+        }
+    }
+
+    renderSpecifications(data) {
         const container = document.getElementById('specificationsContent');
         if (!container) return;
         
         let html = '';
+        // Используем новый массив ordered, который сохраняет исходный порядок
+        let allSpecs = [];
+        if (data.specifications.ordered && Array.isArray(data.specifications.ordered)) {
+            allSpecs = data.specifications.ordered;
+        } else {
+            // Fallback к старой логике для обратной совместимости
+            if (data.specifications.basic && Array.isArray(data.specifications.basic)) {
+                allSpecs = allSpecs.concat(data.specifications.basic);
+            }
+            if (data.specifications.technical && Array.isArray(data.specifications.technical)) {
+                allSpecs = allSpecs.concat(data.specifications.technical);
+            }
+            if (data.specifications.detailed && Array.isArray(data.specifications.detailed)) {
+                allSpecs = allSpecs.concat(data.specifications.detailed);
+            }
+        }
+        
+        // ВРЕМЕННО: выводим массив для отладки
+        console.log('allSpecs for debug:', allSpecs);
+
+        if (allSpecs.length > 0) {
+            html += '<div class="specifications-section mb-4">';
+            let sectionOpen = false;
+            allSpecs.forEach((spec, idx) => {
+                if (spec.isHeader) {
+                    // Закрываем предыдущую секцию, если была
+                    if (sectionOpen) {
+                        html += '</div>';
+                    }
+                    // Открываем новую секцию
+                    html += `<div class=\"spec-section\">`;
+                    html += `<div class=\"spec-section-title fw-bold border-bottom pb-2 mb-3 mt-4\"><i class=\"fas fa-list-alt me-2\"></i>${spec.title}</div>`;
+                    sectionOpen = true;
+                } else if (spec.title && spec.value) {
+                    if (!sectionOpen) {
+                        html += '<div class=\"spec-section\">';
+                        sectionOpen = true;
+                    }
+                    html += `
+                        <div class=\"spec-item d-flex align-items-center mb-2\">
+                            <strong class=\"me-2\">${spec.title}
+                                ${spec.help ? `<span class=\"ms-1\"><i class=\"fas fa-question-circle text-primary\" data-bs-toggle=\"tooltip\" data-bs-placement=\"top\" title=\"${spec.help.replace(/\"/g, '&quot;')}\"></i></span>` : ''}
+                            :</strong> <span>${spec.value}</span>
+                        </div>
+                    `;
+                }
+            });
+            if (sectionOpen) {
+                html += '</div>';
+            }
+            html += '</div>';
+        }
+
+        // Fallback к старым данным если новых нет
+        if (!html && (data.techShortSpecifications || data.techShortSpecificationsList)) {
+            html = this.renderLegacySpecificationsHTML(data);
+        }
+        
+        if (!html) {
+            html = '<p class="text-muted">Характеристики не указаны</p>';
+        }
+        
+        container.innerHTML = html;
+        // Инициализация Bootstrap Tooltip для всех иконок вопроса
+        const tooltipTriggerList = [].slice.call(container.querySelectorAll('[data-bs-toggle=\'tooltip\']'));
+        tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+            new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    }
+
+    renderLegacySpecifications(product) {
+        const container = document.getElementById('specificationsContent');
+        if (!container) return;
+        
+        container.innerHTML = this.renderLegacySpecificationsHTML(product);
+    }
+
+    renderLegacySpecificationsHTML(data) {
+        let html = '';
         
         // Проверяем techShortSpecificationsList (новый формат)
-        if (product.techShortSpecificationsList && Array.isArray(product.techShortSpecificationsList) && product.techShortSpecificationsList.length > 0) {
+        if (data.techShortSpecificationsList && Array.isArray(data.techShortSpecificationsList) && data.techShortSpecificationsList.length > 0) {
             html = '<div class="row">';
             
-            product.techShortSpecificationsList.forEach(spec => {
+            data.techShortSpecificationsList.forEach(spec => {
                 if (spec.key && spec.value) {
                     html += `
                         <div class="col-md-6 mb-3">
@@ -408,10 +668,10 @@ class ProductPage {
             html += '</div>';
         }
         // Проверяем techShortSpecifications (старый формат)
-        else if (product.techShortSpecifications && Array.isArray(product.techShortSpecifications) && product.techShortSpecifications.length > 0) {
+        else if (data.techShortSpecifications && Array.isArray(data.techShortSpecifications) && data.techShortSpecifications.length > 0) {
             html = '<div class="row">';
             
-            product.techShortSpecifications.forEach(spec => {
+            data.techShortSpecifications.forEach(spec => {
                 html += `
                     <div class="col-md-6 mb-3">
                         <div class="spec-item">
@@ -424,26 +684,23 @@ class ProductPage {
             html += '</div>';
         }
         // Проверяем specifications (еще один формат)
-        else if (product.specifications && Object.keys(product.specifications).length > 0) {
+        else if (data.specifications && Object.keys(data.specifications).length > 0) {
             html = '<div class="row">';
             
-            Object.entries(product.specifications).forEach(([key, value]) => {
+            Object.entries(data.specifications).forEach(([key, value]) => {
                 html += `
                     <div class="col-md-6 mb-3">
-                        <div class="col-md-6 mb-3">
-                            <div class="spec-item">
-                                <strong>${key}:</strong> ${value}
-                            </div>
+                        <div class="spec-item">
+                            <strong>${key}:</strong> ${value}
                         </div>
-                    `;
+                    </div>
+                `;
             });
             
             html += '</div>';
-        } else {
-            html = '<p class="text-muted">Характеристики не указаны</p>';
         }
         
-        container.innerHTML = html;
+        return html || '<p class="text-muted">Характеристики не указаны</p>';
     }
 
     loadDescription(product) {
@@ -452,17 +709,48 @@ class ProductPage {
         
         let html = '';
         
-        if (product.description) {
-            html = `<p>${product.description}</p>`;
-        } else {
-            // Если нет описания, создаем базовое описание из данных товара
+        // Проверяем наличие полного описания
+        if (product.fullDescription) {
             html = `
-                <div class="product-description">
-                    <h5>${product.title}</h5>
-                    ${product.vendor && product.vendor.title ? `<p><strong>Производитель:</strong> ${product.vendor.title}</p>` : ''}
-                    ${product.section && product.section.productCategoryName ? `<p><strong>Категория:</strong> ${product.section.productCategoryName}</p>` : ''}
-                    ${product.techShortSpecifications && product.techShortSpecifications.length > 0 ? 
-                        `<p><strong>Основные характеристики:</strong></p><ul>${product.techShortSpecifications.map(spec => `<li>${spec}</li>`).join('')}</ul>` : ''}
+                <div class="description-content">
+                    ${product.fullDescription}
+                </div>
+            `;
+        } 
+        // Проверяем наличие краткого описания
+        else if (product.description) {
+            html = `
+                <div class="description-content">
+                    <p>${product.description}</p>
+                </div>
+            `;
+        } 
+        // Если нет описания, создаем базовое описание из данных товара
+        else {
+            html = `
+                <div class="description-content">
+                    <div class="product-description">
+                        <h5>${product.title}</h5>
+                        ${product.vendor && product.vendor.title ? `<p><strong>Производитель:</strong> ${product.vendor.title}</p>` : ''}
+                        ${product.section && product.section.productCategoryName ? `<p><strong>Категория:</strong> ${product.section.productCategoryName}</p>` : ''}
+                        ${product.techShortSpecifications && product.techShortSpecifications.length > 0 ? 
+                            `<p><strong>Основные характеристики:</strong></p><ul>${product.techShortSpecifications.map(spec => `<li>${spec}</li>`).join('')}</ul>` : ''}
+                        ${product.features && product.features.length > 0 ? 
+                            `<p><strong>Особенности:</strong></p><ul>${product.features.map(feature => `<li>${feature}</li>`).join('')}</ul>` : ''}
+                        ${product.benefits && product.benefits.length > 0 ? 
+                            `<p><strong>Преимущества:</strong></p><ul>${product.benefits.map(benefit => `<li>${benefit}</li>`).join('')}</ul>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Если все еще нет контента, показываем пустое состояние
+        if (!html.trim()) {
+            html = `
+                <div class="description-empty">
+                    <i class="fas fa-file-alt"></i>
+                    <h5>Описание отсутствует</h5>
+                    <p>Для данного товара пока нет подробного описания</p>
                 </div>
             `;
         }
@@ -470,22 +758,236 @@ class ProductPage {
         container.innerHTML = html;
     }
 
-    async loadSimilarProducts() {
-        if (!this.currentProduct) return;
+    async loadOffers(product) {
+        const offersContent = document.getElementById('offersContent');
+        if (!offersContent) return;
+
+        // Show loading state
+        offersContent.innerHTML = `
+            <div class="offers-loading">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Загрузка...</span>
+                </div>
+                <p class="mt-3">Загрузка предложений...</p>
+            </div>
+        `;
 
         try {
-            const response = await this.apiRequest(`/products/${this.productId}/similar`);
-            
-            if (response.success && response.data.length > 0) {
-                this.renderSimilarProducts(response.data);
+            // Try to load offers from API
+            const response = await this.apiRequest(`/products/${product._id}/offers`);
+            if (response.success && response.data.offers) {
+                this.renderOffers(response.data.offers);
             } else {
-                document.getElementById('similarProducts').innerHTML = 
-                    '<div class="col-12"><p class="text-muted text-center">Похожие товары не найдены</p></div>';
+                // Fallback to mock offers
+                this.renderOffers(this.getMockOffers(product));
             }
         } catch (error) {
-            console.error('Error loading similar products:', error);
-            document.getElementById('similarProducts').innerHTML = 
-                '<div class="col-12"><p class="text-muted text-center">Ошибка загрузки похожих товаров</p></div>';
+            console.error('Error loading offers:', error);
+            // Fallback to mock offers
+            this.renderOffers(this.getMockOffers(product));
+        }
+    }
+
+    renderOffers(offers) {
+        const offersContent = document.getElementById('offersContent');
+        if (!offersContent) return;
+
+        if (!offers || offers.length === 0) {
+            offersContent.innerHTML = `
+                <div class="offers-empty">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h4>Предложения не найдены</h4>
+                    <p>Для данного товара пока нет доступных предложений</p>
+                </div>
+            `;
+            return;
+        }
+
+        const offersHTML = offers.map((offer, index) => `
+            <div class="offer-card position-relative">
+                ${this.getOfferBadge(offer)}
+                <div class="offer-header">
+                    <div class="offer-vendor">
+                        <div class="offer-vendor-icon">
+                            ${this.getVendorInitial(offer.vendor)}
+                        </div>
+                        <div class="offer-vendor-info">
+                            <h5>${offer.vendor}</h5>
+                            <small>${offer.location || 'Украина'}</small>
+                        </div>
+                    </div>
+                    <div class="offer-price">
+                        <div class="offer-price-current">
+                            ${offer.price.toLocaleString()} грн.
+                            ${offer.discount ? `<span class="offer-discount">-${offer.discount}%</span>` : ''}
+                        </div>
+                        ${offer.originalPrice && offer.originalPrice > offer.price ? 
+                            `<div class="offer-price-original">${offer.originalPrice.toLocaleString()} грн.</div>` : ''}
+                    </div>
+                </div>
+                <div class="offer-details">
+                    ${offer.delivery ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-truck"></i>
+                            <span>Доставка: ${offer.delivery}</span>
+                        </div>
+                    ` : ''}
+                    ${offer.availability ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>${offer.availability}</span>
+                        </div>
+                    ` : ''}
+                    ${offer.rating ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-star"></i>
+                            <span>Рейтинг: ${offer.rating}/5</span>
+                        </div>
+                    ` : ''}
+                    ${offer.reviews ? `
+                        <div class="offer-detail-item">
+                            <i class="fas fa-comments"></i>
+                            <span>${offer.reviews} отзывов</span>
+                        </div>
+                    ` : ''}
+                </div>
+                <div class="offer-actions">
+                    <a href="${offer.url}" target="_blank" class="btn btn-outline-primary">
+                        <i class="fas fa-external-link-alt me-1"></i>
+                        Перейти к предложению
+                    </a>
+                    <button class="btn btn-outline-secondary" onclick="window.productPage.showOfferDetails('${offer.id}')">
+                        <i class="fas fa-info-circle me-1"></i>
+                        Подробнее
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        offersContent.innerHTML = offersHTML;
+    }
+
+    getOfferBadge(offer) {
+        if (offer.isPromo) {
+            return '<span class="offer-badge badge-warning">Акция</span>';
+        }
+        if (offer.isNew) {
+            return '<span class="offer-badge badge-success">Новинка</span>';
+        }
+        if (offer.isRecommended) {
+            return '<span class="offer-badge badge-primary">Рекомендуем</span>';
+        }
+        return '';
+    }
+
+    getVendorInitial(vendorName) {
+        if (!vendorName) return '?';
+        return vendorName.charAt(0).toUpperCase();
+    }
+
+    getMockOffers(product) {
+        // Generate mock offers based on product data
+        const mockOffers = [];
+        const offerCount = product.offerCount || Math.floor(Math.random() * 5) + 1;
+        
+        const vendors = [
+            'Rozetka', 'Comfy', 'Allo', 'Citrus', 'Foxtrot', 
+            'Prostor', 'Эльдорадо', 'М.Видео', 'DNS', 'Ситилинк'
+        ];
+        
+        const locations = [
+            'Киев', 'Харьков', 'Одесса', 'Днепр', 'Львов', 'Украина'
+        ];
+        
+        const deliveryOptions = [
+            'Бесплатно', '50 грн.', '100 грн.', '150 грн.', 'По тарифам перевозчика'
+        ];
+        
+        const availabilityOptions = [
+            'В наличии', 'Под заказ', 'Доставка 1-2 дня', 'Доставка 3-5 дней'
+        ];
+
+        for (let i = 0; i < offerCount; i++) {
+            const vendor = vendors[Math.floor(Math.random() * vendors.length)];
+            const basePrice = product.minPrice || product.currentPrice || 1000;
+            const priceVariation = (Math.random() - 0.5) * 0.3; // ±15%
+            const price = Math.round(basePrice * (1 + priceVariation));
+            const originalPrice = Math.random() > 0.7 ? Math.round(price * 1.2) : null;
+            const discount = originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : null;
+            
+            mockOffers.push({
+                id: `offer_${i}`,
+                vendor: vendor,
+                location: locations[Math.floor(Math.random() * locations.length)],
+                price: price,
+                originalPrice: originalPrice,
+                discount: discount,
+                delivery: deliveryOptions[Math.floor(Math.random() * deliveryOptions.length)],
+                availability: availabilityOptions[Math.floor(Math.random() * availabilityOptions.length)],
+                rating: (Math.random() * 2 + 3).toFixed(1), // 3.0 - 5.0
+                reviews: Math.floor(Math.random() * 100) + 1,
+                url: `https://${vendor.toLowerCase()}.ua/product/${product._id}`,
+                isPromo: Math.random() > 0.8,
+                isNew: Math.random() > 0.9,
+                isRecommended: i === 0 // First offer is recommended
+            });
+        }
+
+        // Sort by price (lowest first)
+        return mockOffers.sort((a, b) => a.price - b.price);
+    }
+
+    showOfferDetails(offerId) {
+        // This method can be expanded to show detailed offer information
+        console.log('Show offer details for:', offerId);
+        // You can implement a modal or expand the offer card here
+    }
+
+    async loadSimilarProducts() {
+        if (!this.currentProduct) {
+            console.log('❌ No current product for similar products');
+            return;
+        }
+
+        console.log('🔍 Debug - Loading similar products for:', this.currentProduct._id);
+
+        try {
+            const response = await this.apiRequest(`/products/${this.currentProduct._id}/similar`);
+            console.log('🔍 Debug - Similar products response:', response);
+            
+            if (response.success && response.data && response.data.length > 0) {
+                this.renderSimilarProducts(response.data);
+                console.log(`✅ Loaded ${response.data.length} similar products`);
+            } else {
+                console.log('⚠️ No similar products found');
+                const container = document.getElementById('similarProducts');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="col-12">
+                            <div class="text-center py-4">
+                                <i class="fas fa-info-circle text-muted mb-2"></i>
+                                <p class="text-muted">Похожие товары не найдены</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error loading similar products:', error);
+            const container = document.getElementById('similarProducts');
+            if (container) {
+                container.innerHTML = `
+                    <div class="col-12">
+                        <div class="text-center py-4">
+                            <i class="fas fa-exclamation-triangle text-warning mb-2"></i>
+                            <p class="text-muted">Ошибка загрузки похожих товаров</p>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="window.productPage.loadSimilarProducts()">
+                                <i class="fas fa-redo me-1"></i>Повторить
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
         }
     }
 
@@ -513,16 +1015,14 @@ class ProductPage {
                             ${this.getVendorName(product)}
                         </div>
                         <div class="product-price">
-                            <span class="product-price-current">${product.currentPrice.toLocaleString()} грн.</span>
-                            ${product.initPrice && product.initPrice > product.currentPrice ? 
+                            ${product.minPrice && product.maxPrice && product.minPrice !== product.maxPrice ? 
+                                `<span class="product-price-current">${product.minPrice.toLocaleString()} - ${product.maxPrice.toLocaleString()} грн.</span>` :
+                                `<span class="product-price-current">${(product.currentPrice || product.minPrice || 0).toLocaleString()} грн.</span>`
+                            }
+                            ${product.initPrice && product.initPrice > (product.currentPrice || product.minPrice || 0) ? 
                                 `<span class="product-original-price">${product.initPrice.toLocaleString()} грн.</span>` : ''}
                         </div>
-                        <div class="product-actions">
-                            <button class="btn btn-primary add-to-cart-btn" data-product-id="${product._id}">
-                                <i class="fas fa-cart-plus me-2"></i>
-                                В корзину
-                            </button>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -530,15 +1030,7 @@ class ProductPage {
         
         container.innerHTML = html;
         
-        // Add event listeners for similar products
-        container.addEventListener('click', (e) => {
-            if (e.target.closest('.add-to-cart-btn')) {
-                const productId = e.target.closest('.add-to-cart-btn').dataset.productId;
-                if (window.app && window.app.addToCart) {
-                    window.app.addToCart(productId);
-                }
-            }
-        });
+
     }
 
     getProductImage(product) {
@@ -573,21 +1065,15 @@ class ProductPage {
     }
 
     getDiscountBadge(product) {
-        if (product.initPrice && product.initPrice > product.currentPrice) {
-            const discount = Math.round(((product.initPrice - product.currentPrice) / product.initPrice) * 100);
+        const currentPrice = product.currentPrice || product.minPrice || 0;
+        if (product.initPrice && product.initPrice > currentPrice) {
+            const discount = Math.round(((product.initPrice - currentPrice) / product.initPrice) * 100);
             return `<span class="badge bg-danger position-absolute top-0 start-0 m-2">-${discount}%</span>`;
         }
         return '';
     }
 
-    addToCart() {
-        if (!this.currentProduct) return;
-        
-        if (window.app && window.app.addToCart) {
-            window.app.addToCart(this.currentProduct._id);
-            this.showSuccess('Товар добавлен в корзину!');
-        }
-    }
+
 
     toggleFavorite() {
         if (!this.currentProduct) return;
@@ -658,18 +1144,29 @@ class ProductPage {
         }
     }
 
-    showEmptyState() {
+    showEmptyState(message = 'Товар не найден') {
         const container = document.querySelector('.product-container');
         if (container) {
             container.innerHTML = `
                 <div class="product-empty text-center py-5">
                     <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                    <h3>Товар не найден</h3>
-                    <p class="text-muted">Запрашиваемый товар не существует или был удален</p>
-                    <a href="/catalog.html" class="btn btn-primary">
-                        <i class="fas fa-arrow-left me-2"></i>
-                        Вернуться к каталогу
-                    </a>
+                    <h3>${message}</h3>
+                    <p class="text-muted">
+                        ${message === 'Товар не найден' ? 'Запрашиваемый товар не существует или был удален' : 
+                          message === 'ID товара не найден' ? 'Не удалось определить ID товара из URL' :
+                          message === 'Данные товара некорректны' ? 'Полученные данные товара содержат ошибки' :
+                          'Произошла ошибка при загрузке товара'}
+                    </p>
+                    <div class="mt-4">
+                        <a href="/catalog.html" class="btn btn-primary me-2">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Вернуться к каталогу
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="window.location.reload()">
+                            <i class="fas fa-redo me-2"></i>
+                            Обновить страницу
+                        </button>
+                    </div>
                 </div>
             `;
         }
@@ -697,6 +1194,8 @@ class ProductPage {
     async apiRequest(endpoint, options = {}) {
         const url = `${this.apiBase}${endpoint}`;
         
+        console.log('🔍 Debug - API Request:', url);
+        
         const defaultOptions = {
             method: 'GET',
             headers: {
@@ -704,13 +1203,23 @@ class ProductPage {
             },
         };
 
-        const response = await fetch(url, { ...defaultOptions, ...options });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        try {
+            const response = await fetch(url, { ...defaultOptions, ...options });
+            console.log('🔍 Debug - API Response status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ API Error:', response.status, errorText);
+                throw new Error(`HTTP ${response.status}: ${errorText || 'Unknown error'}`);
+            }
+            
+            const data = await response.json();
+            console.log('🔍 Debug - API Response data:', data);
+            return data;
+        } catch (error) {
+            console.error('❌ API Request failed:', error);
+            throw error;
         }
-        
-        return await response.json();
     }
 }
 

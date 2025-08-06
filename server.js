@@ -33,15 +33,129 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+mongoose.connect(process.env.MONGO_URI);
 
 // Routes
 app.use('/api/products', require('./routes/products'));
 app.use('/api/catalogs', require('./routes/catalogs'));
+app.use('/api/filters', require('./routes/filters'));
+
+// Test routes for filters
+app.get('/test-filters', async (req, res) => {
+    try {
+        const Filter = require('./models/Filters');
+        
+        const filterCount = await Filter.countDocuments();
+        const smartphoneFilters = await Filter.find({ 
+            categoryUrl: 'smartphones',
+            isPublic: true 
+        }).sort({ weight: -1, title: 1 });
+        
+        res.json({
+            success: true,
+            database: 'connected',
+            totalFilters: filterCount,
+            smartphoneFilters: smartphoneFilters.length,
+            filters: smartphoneFilters
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
+
+app.post('/create-test-filters', async (req, res) => {
+    try {
+        const Filter = require('./models/Filters');
+        
+        // Удаляем существующие тестовые фильтры
+        await Filter.deleteMany({ categoryUrl: 'smartphones' });
+        
+        // Создаем тестовые фильтры
+        const testFilters = [
+            {
+                _id: 'brand-filter',
+                title: 'Бренд',
+                description: 'Выберите производителя товара',
+                type: 'checkbox',
+                weight: 100,
+                values: [
+                    { _id: 'samsung', title: 'Samsung', productsCount: 150 },
+                    { _id: 'apple', title: 'Apple', productsCount: 80 },
+                    { _id: 'xiaomi', title: 'Xiaomi', productsCount: 120 },
+                    { _id: 'huawei', title: 'Huawei', productsCount: 60 }
+                ],
+                sectionId: 11,
+                categoryUrl: 'smartphones',
+                categoryName: 'Смартфоны',
+                isPublic: true
+            },
+            {
+                _id: 'memory-filter',
+                title: 'Объем памяти',
+                description: 'Внутренняя память устройства',
+                type: 'checkbox',
+                weight: 90,
+                values: [
+                    { _id: '64gb', title: '64 ГБ', productsCount: 45 },
+                    { _id: '128gb', title: '128 ГБ', productsCount: 90 },
+                    { _id: '256gb', title: '256 ГБ', productsCount: 75 },
+                    { _id: '512gb', title: '512 ГБ', productsCount: 30 }
+                ],
+                sectionId: 11,
+                categoryUrl: 'smartphones',
+                categoryName: 'Смартфоны',
+                isPublic: true
+            },
+            {
+                _id: 'screen-size-filter',
+                title: 'Диагональ экрана',
+                description: 'Размер экрана в дюймах',
+                type: 'range',
+                weight: 80,
+                sectionId: 11,
+                categoryUrl: 'smartphones',
+                categoryName: 'Смартфоны',
+                isPublic: true
+            },
+            {
+                _id: 'color-filter',
+                title: 'Цвет',
+                description: 'Цвет корпуса',
+                type: 'select',
+                weight: 70,
+                values: [
+                    { _id: 'black', title: 'Черный', productsCount: 200 },
+                    { _id: 'white', title: 'Белый', productsCount: 150 },
+                    { _id: 'blue', title: 'Синий', productsCount: 80 },
+                    { _id: 'red', title: 'Красный', productsCount: 45 }
+                ],
+                sectionId: 11,
+                categoryUrl: 'smartphones',
+                categoryName: 'Смартфоны',
+                isPublic: true
+            }
+        ];
+        
+        await Filter.insertMany(testFilters);
+        
+        res.json({
+            success: true,
+            message: 'Тестовые фильтры созданы',
+            count: testFilters.length
+        });
+        
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message
+        });
+    }
+});
 app.use('/api/auth', require('./routes/auth'));
-app.use('/api/cart', require('./routes/cart'));
 app.use('/api/orders', require('./routes/orders'));
 
 // Serve main page
@@ -54,11 +168,21 @@ app.get('/category.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'category.html'));
 });
 
+// Serve test filters page
+app.get('/test-filters.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test-filters.html'));
+});
+
+// Serve test category filters page
+app.get('/test-category-filters.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test-category-filters.html'));
+});
+
 // Serve static files (after specific routes)
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve product page - handle dynamic product URLs (after static files)
-app.get('/product/:productUrl(*)', (req, res) => {
+// Serve product page - handle dynamic product IDs (after static files)
+app.get('/product/:productId', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'product.html'));
 });
 
@@ -74,6 +198,6 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 BIFO server running on port ${PORT}`);
+    console.log(`🚀 Купи слона server running on port ${PORT}`);
     console.log(`📱 Visit: http://localhost:${PORT}`);
 }); 

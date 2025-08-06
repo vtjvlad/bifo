@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Категория товаров - BIFO</title>
-    <meta name="description" content="Товары в категории - интернет-магазин BIFO">
-    <link rel="icon" href="images/bifo-logo.png" type="image/png">
+    <title>Категория товаров - Купи слона</title>
+    <meta name="description" content="Товары в категории - интернет-магазин Купи слона">
+    <link rel="icon" href="images/kupislona-logo.png" type="image/png">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -73,6 +73,11 @@
                                         </div>
                                     </div>
 
+                                    <!-- Dynamic Filters Container -->
+                                    <div id="dynamicFiltersContainer">
+                                        <!-- Dynamic filters will be loaded here -->
+                                    </div>
+
                                     <!-- Sort Options -->
                                     <div class="mb-4">
                                         <h6>Сортировка</h6>
@@ -90,6 +95,12 @@
                                     <button class="btn btn-primary btn-sm w-100" id="applyFilters">
                                         <i class="fas fa-search me-2"></i>
                                         Применить фильтры
+                                    </button>
+                                    
+                                    <!-- Reset Filters Button -->
+                                    <button class="btn btn-outline-secondary btn-sm w-100 mt-2" id="resetFilters" style="display: none;">
+                                        <i class="fas fa-times me-2"></i>
+                                        Сбросить фильтры
                                     </button>
                                 </div>
                             </div>
@@ -174,7 +185,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // Инициализируем основное приложение
             if (!window.app) {
-                window.app = new BifoApp();
+                window.app = new KupiSlonaApp();
                 await window.app.init();
             }
             
