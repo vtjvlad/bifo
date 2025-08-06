@@ -1,220 +1,287 @@
-# Hotline Parser - Мультикатегорийный парсер
+# 🏪 Прайс-агрегатор
 
-Парсер для сайта Hotline.ua с поддержкой батчевой обработки и работы с несколькими категориями товаров.
+Современная платформа для сравнения цен на товары из разных интернет-магазинов через фиды.
 
-## 🚀 Возможности
+## 📋 Техническое задание
 
-- **Батчевая обработка** - параллельное получение нескольких страниц
-- **Мультикатегорийность** - парсинг нескольких категорий товаров
-- **Адаптивные задержки** - автоматическая настройка скорости
-- **Прогресс-бар** - визуальное отображение процесса
-- **Постепенное сохранение** - сохранение данных по мере получения
-- **Статистика** - подробная информация о запросах
+### Цель проекта
+Сравнение цен на одни и те же товары, полученных через фиды магазинов.
 
-## 📁 Структура файлов
+### Технологический стек
+- **Бэкенд**: Node.js (Express.js)
+- **База данных**: MongoDB + Mongoose
+- **Фронтенд**: Чистый HTML + CSS + JavaScript
+- **Обновление цен**: Через фиды (XML/CSV/JSON от магазинов)
 
-```
-├── hotline-parser.js      # Основной парсер
-├── categories.txt         # Список категорий для парсинга
-├── example-usage.js       # Пример использования
-├── tt.js                 # Файл с токенами (не включен в репозиторий)
-├── JSON/                 # Папка с JSON файлами
-├── CSV/                  # Папка с CSV файлами
-└── README.md             # Этот файл
-```
+## 🚀 Быстрый старт
 
-## ⚙️ Настройка
+### Установка зависимостей
 
-1. **Установите зависимости:**
 ```bash
-npm install axios cli-progress puppeteer
+npm install
 ```
 
-2. **Создайте файл `tt.js` с токенами (опционально, для fallback):**
+### Настройка окружения
+
+Создайте файл `.env` в корне проекта:
+
+```env
+MONGO_URI=mongodb://localhost:27017/price-aggregator
+PORT=3000
+NODE_ENV=development
+```
+
+### Инициализация базы данных
+
+```bash
+npm run init-db
+```
+
+### Запуск сервера
+
+```bash
+# Режим разработки
+npm run dev
+
+# Продакшн режим
+npm start
+```
+
+### Обработка фидов
+
+```bash
+# Ручной запуск обработки фидов
+npm run process-feeds
+```
+
+## 📊 API Endpoints
+
+### Товары
+- `GET /api/products` - список товаров с фильтрацией
+- `GET /api/products/:id` - детальная информация о товаре
+- `GET /api/products/search/:query` - поиск товаров
+- `GET /api/products/categories/list` - список категорий
+- `GET /api/products/brands/list` - список брендов
+
+### Магазины
+- `GET /api/stores` - список магазинов
+- `GET /api/stores/:id` - информация о магазине
+- `POST /api/stores` - добавление магазина
+- `PUT /api/stores/:id` - обновление магазина
+- `DELETE /api/stores/:id` - удаление магазина
+
+### Админка
+- `GET /api/admin/stores` - управление магазинами
+- `POST /api/admin/stores` - добавление магазина и фида
+- `POST /api/admin/fetch/:storeId` - ручной запуск импорта фида
+- `POST /api/admin/fetch-all` - обработка всех фидов
+- `GET /api/admin/errors` - журнал ошибок
+- `GET /api/admin/stats` - статистика системы
+
+### Статистика
+- `GET /api/stats` - общая статистика системы
+
+## 🏗️ Архитектура
+
+### Модели данных
+
+#### Store (Магазин)
 ```javascript
-module.exports = () => {
-    return {
-        XTOKEN: 'ваш_токен',
-        XREQUESTID: 'ваш_request_id'
-    };
-};
-```
-
-3. **Настройте категории в `categories.txt`:**
-```
-https://hotline.ua/mobile/mobilnye-telefony-i-smartfony/
-https://hotline.ua/computer/noutbuki/
-https://hotline.ua/computer/planshety/
-# Добавьте свои категории
-```
-
-## 🎯 Использование
-
-### Парсинг всех категорий из файла
-
-```javascript
-const HotlineParser = require('./hotline-parser');
-
-async function main() {
-    const parser = new HotlineParser();
-    
-    // Загружаем категории из файла
-    const categories = await parser.loadCategoriesFromFile('categories.txt');
-    
-    // Парсим все категории
-    const results = await parser.parseAllCategories(categories, true, 15);
-    
-    console.log('Парсинг завершен!');
-}
-
-main();
-```
-
-### Парсинг одной категории
-
-```javascript
-const HotlineParser = require('./hotline-parser');
-
-async function main() {
-    const parser = new HotlineParser();
-    
-    const categoryUrl = 'https://hotline.ua/computer/noutbuki/';
-    const products = await parser.getAllProducts(true, 25, 15, categoryUrl);
-    
-    console.log(`Получено ${products.length} товаров`);
-}
-
-main();
-```
-
-### Тестирование производительности
-
-```javascript
-// В main() установите TEST_PERFORMANCE = true
-const TEST_PERFORMANCE = true;
-await parser.testBatchPerformance(20);
-```
-
-## ⚡ Настройки производительности
-
-### Основные параметры в `main()`:
-
-```javascript
-const TEST_PERFORMANCE = false;        // Тестирование производительности
-const BATCH_SIZE = 15;                 // Размер батча (5-25)
-const PARSE_ALL_CATEGORIES = true;     // Парсинг всех категорий
-const AUTO_GET_TOKENS = true;          // Автоматическое получение токенов для каждой категории
-```
-
-### Рекомендуемые настройки:
-
-- **BATCH_SIZE = 10-15** - оптимальный баланс скорости и стабильности
-- **BATCH_SIZE = 20-25** - максимальная скорость (может вызвать блокировку)
-- **BATCH_SIZE = 5-8** - консервативный режим для стабильности
-
-## 📊 Результаты
-
-### Файлы результатов:
-
-- `JSON/hotline-{category-name}.json` - товары каждой категории (JSON)
-- `CSV/hotline-{category-name}.csv` - товары каждой категории (CSV)
-- `JSON/hotline-all-categories-report.json` - общий отчет
-- `CSV/hotline-all-categories.csv` - все товары всех категорий (CSV)
-
-### Структура данных товара:
-
-```json
 {
-  "_id": "product_id",
-  "title": "Название товара",
-  "vendor": {"title": "Производитель"},
-  "minPrice": 15000,
-  "maxPrice": 20000,
-  "url": "ссылка_на_товар",
-  "imageLinks": ["ссылки_на_изображения"],
-  "techShortSpecificationsList": ["характеристики"]
+  name: String,
+  feedUrl: String, // URL или путь к локальному файлу
+  feedType: "xml" | "json" | "csv",
+  logo: String,
+  description: String,
+  feedMapping: {
+    productName: String,
+    productDescription: String,
+    productCategory: String,
+    productBrand: String,
+    productImage: String,
+    productSku: String,
+    productSpecs: String,
+    offerPrice: String,
+    offerCurrency: String,
+    offerUrl: String,
+    offerAvailability: String
+  },
+  isActive: Boolean,
+  lastUpdated: Date,
+  errorLog: [{
+    message: String,
+    timestamp: Date
+  }]
 }
 ```
 
-### Структура CSV файлов:
-
-**Отдельная категория:**
-- ID, Название, Производитель, Категория, Минимальная цена, Максимальная цена, Количество предложений, URL, Изображения, Характеристики
-
-**Общий файл (все категории):**
-- ID, Название, Производитель, Категория, URL категории, Минимальная цена, Максимальная цена, Количество предложений, URL, Изображения, Характеристики
-
-## 🔧 Дополнительные методы
-
-### Фильтрация товаров:
-
+#### Product (Товар)
 ```javascript
-// По цене
-const filtered = parser.filterByPrice(products, 5000, 50000);
-
-// По названию
-const searchResults = parser.searchByName(products, 'iPhone');
+{
+  name: String,
+  description: String,
+  category: String,
+  brand: String,
+  image: String,
+  specs: Map,
+  sku: String,
+  offers: [ObjectId], // ссылки на предложения
+  isActive: Boolean,
+  searchKeywords: [String]
+}
 ```
 
-### Сохранение в CSV:
-
+#### Offer (Предложение)
 ```javascript
-await parser.saveToCSV(products, 'filename.csv');
+{
+  productId: ObjectId,
+  storeId: ObjectId,
+  price: Number,
+  currency: String,
+  url: String,
+  available: Boolean,
+  lastUpdated: Date
+}
 ```
 
-## 🔑 Автоматическое получение токенов
+## 🔧 Обработка фидов
 
-Парсер автоматически получает актуальные токены для каждой категории перед её парсингом:
+### Поддерживаемые форматы
+- **JSON** - структурированные данные
+- **XML** - RSS, Atom, кастомные форматы
+- **CSV** - табличные данные
 
-- **x-token** - токен авторизации для API
-- **x-request-id** - уникальный идентификатор запроса
-- **puppeteer** - используется для извлечения токенов из браузера
-- **fallback** - при ошибке используются дефолтные токены из `tt.js`
-
-### Настройка получения токенов:
+### Настраиваемая маппинг-конфигурация
+Каждый магазин может иметь свою структуру фида. Система поддерживает настройку маппинга полей:
 
 ```javascript
-const AUTO_GET_TOKENS = true;  // Включить автоматическое получение
-const AUTO_GET_TOKENS = false; // Отключить (использовать дефолтные токены)
+feedMapping: {
+  productName: 'title',           // Название товара
+  productDescription: 'desc',     // Описание
+  productCategory: 'category',    // Категория
+  productBrand: 'brand',          // Бренд
+  productImage: 'image_url',      // Изображение
+  productSku: 'sku',              // SKU
+  productSpecs: 'specifications', // Характеристики
+  offerPrice: 'price',            // Цена
+  offerCurrency: 'currency',      // Валюта
+  offerUrl: 'product_url',        // Ссылка на товар
+  offerAvailability: 'in_stock'   // Наличие
+}
 ```
 
-### Тестирование токенов:
+### Автоматическое обновление
+- **По расписанию**: каждый час (cron)
+- **Ручной запуск**: через админку
+- **Логирование ошибок**: для каждого магазина
+
+## 📁 Структура сайта
+
+### Главная страница
+- Поисковая строка
+- Популярные товары
+- Категории
+
+### Категория
+- Список товаров
+- Фильтры (цена, бренд, магазин)
+- Сортировка
+
+### Карточка товара
+- Фото, описание, характеристики
+- Таблица цен из разных магазинов
+- Ссылки на источники
+
+### Страница магазина
+- Информация о магазине
+- Список товаров из фида
+
+### Админ-панель
+- Добавление магазинов и фидов
+- Управление загрузкой фидов
+- Журнал ошибок и логов
+
+## 🔒 Безопасность
+
+- **Авторизация для админки** (JWT или Basic Auth)
+- **Валидация данных** из фидов
+- **Очистка HTML-контента**
+- **CORS настройки**
+- **Защита от SQL-инъекций**
+
+## 📈 Мониторинг
+
+### Логи
+- Обработка фидов
+- Ошибки и предупреждения
+- Статистика производительности
+
+### Метрики
+- Количество товаров
+- Количество магазинов
+- Количество предложений
+- Популярные категории и бренды
+
+## 🚀 Развертывание
+
+### Хостинг
+- **Бэкенд**: VPS
+- **MongoDB**: локально или в облаке
+- **Фронтенд**: статические файлы через Nginx
+
+### Автоматизация
+- **Загрузка фидов**: node-cron или systemd timers
+- **Мониторинг**: логи и метрики
+- **Резервное копирование**: база данных
+
+## 🔮 Расширение в будущем
+
+- Регистрация пользователей
+- Сохранение товаров в избранное
+- Уведомления об изменении цен
+- Импорт с Google Merchant
+- Мобильное приложение
+- API для партнеров
+
+## 📝 Примеры использования
+
+### Добавление нового магазина через API
 
 ```bash
-node test-tokens.js
+curl -X POST http://localhost:3000/api/admin/stores \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Новый магазин",
+    "feedUrl": "https://store.com/feed.xml",
+    "feedType": "xml",
+    "feedMapping": {
+      "productName": "title",
+      "offerPrice": "price"
+    }
+  }'
 ```
 
-## ⚠️ Важные замечания
-
-1. **Соблюдайте правила сайта** - не делайте слишком много запросов
-2. **Мониторьте статистику** - следите за процентом успешных запросов
-3. **Адаптивные задержки** - автоматически подстраиваются под нагрузку
-4. **Обработка ошибок** - парсер продолжает работу даже при ошибках в отдельных категориях
-5. **Получение токенов** - может замедлить процесс, но обеспечивает стабильность
-
-## 🚀 Запуск
+### Ручной запуск обработки фида
 
 ```bash
-# Парсинг всех категорий
-node hotline-parser.js
-
-# Пример использования
-node example-usage.js
+curl -X POST http://localhost:3000/api/admin/fetch/STORE_ID \
+  -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-## 📈 Производительность
+## 🤝 Вклад в проект
 
-- **Последовательная обработка**: ~1 страница/сек
-- **Батчевая обработка (batchSize=15)**: ~10-15 страниц/сек
-- **Ускорение**: в 10-15 раз быстрее!
+1. Fork репозитория
+2. Создайте ветку для новой функции
+3. Внесите изменения
+4. Создайте Pull Request
 
-## 🔄 Обновления
+## 📞 Поддержка
 
-- Добавлена поддержка мультикатегорийности
-- Реализована батчевая обработка
-- Добавлены адаптивные задержки
-- Улучшена обработка ошибок
-- Добавлена подробная статистика
-- **Автоматическое получение токенов для каждой категории**
-- **Поддержка puppeteer для извлечения актуальных токенов**
-- **Организация файлов по папкам JSON и CSV** 
+- Email: support@price-aggregator.com
+- Issues: GitHub Issues
+- Документация: `/docs`
+
+---
+
+**Прайс-агрегатор** - ваш надежный помощник в поиске лучших цен через фиды магазинов! 🛒💰 

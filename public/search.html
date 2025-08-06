@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Категория - Прайс-агрегатор</title>
+    <title>Поиск товаров - Прайс-агрегатор</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -28,10 +28,41 @@
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .category-header {
+        .search-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 60px 0 40px;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-input {
+            border: none;
+            outline: none;
+            font-size: 1.1rem;
+            padding: 12px 20px;
+            border-radius: 10px;
+            width: 100%;
+            background: transparent;
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--secondary-color);
         }
 
         .filters-section {
@@ -127,12 +158,6 @@
             color: white;
             border-color: var(--primary-color);
         }
-
-        .breadcrumb {
-            background: transparent;
-            padding: 0;
-            margin-bottom: 1rem;
-        }
     </style>
 </head>
 <body>
@@ -162,17 +187,21 @@
         </div>
     </nav>
 
-    <!-- Заголовок категории -->
-    <section class="category-header">
+    <!-- Заголовок поиска -->
+    <section class="search-header">
         <div class="container">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="/" class="text-white">Главная</a></li>
-                    <li class="breadcrumb-item active" id="categoryName">Категория</li>
-                </ol>
-            </nav>
-            <h1 id="categoryTitle" class="mb-3">Категория товаров</h1>
-            <p id="categoryDescription" class="mb-0">Найдите лучшие цены на товары в этой категории</p>
+            <div class="search-box">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="search-input" placeholder="Введите название товара..." id="searchInput" value="">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="search-btn w-100" onclick="searchProducts()">
+                            <i class="fas fa-search me-2"></i>Найти
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -185,6 +214,14 @@
                     <div class="filters-section">
                         <h5 class="mb-3">Фильтры</h5>
                         
+                        <!-- Категории -->
+                        <div class="mb-3">
+                            <label class="form-label">Категория</label>
+                            <select class="form-select" id="categoryFilter">
+                                <option value="">Все категории</option>
+                            </select>
+                        </div>
+
                         <!-- Бренды -->
                         <div class="mb-3">
                             <label class="form-label">Бренд</label>
@@ -221,7 +258,7 @@
                                 <option value="name">По названию</option>
                                 <option value="price">По цене (возрастание)</option>
                                 <option value="-price">По цене (убывание)</option>
-                                <option value="offers">По количеству предложений</option>
+                                <option value="stores">По количеству магазинов</option>
                             </select>
                         </div>
 
@@ -231,10 +268,10 @@
                     </div>
                 </div>
 
-                <!-- Результаты -->
+                <!-- Результаты поиска -->
                 <div class="col-lg-9">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 id="resultsTitle">Товары в категории</h5>
+                        <h5>Результаты поиска</h5>
                         <span class="text-muted" id="resultsCount">0 товаров</span>
                     </div>
 
@@ -248,7 +285,7 @@
                     <div id="noResults" class="no-results" style="display: none;">
                         <i class="fas fa-search fa-2x mb-3"></i>
                         <p>Товары не найдены</p>
-                        <small>Попробуйте изменить параметры фильтрации</small>
+                        <small>Попробуйте изменить параметры поиска</small>
                     </div>
 
                     <!-- Список товаров -->
@@ -271,47 +308,34 @@
     <script>
         let currentPage = 1;
         let currentFilters = {};
-        let currentCategory = '';
 
         // Инициализация страницы
         document.addEventListener('DOMContentLoaded', function() {
-            const categorySlug = getCategoryFromUrl();
-            if (categorySlug) {
-                currentCategory = categorySlug;
-                loadCategoryInfo(categorySlug);
-                loadProducts();
-                loadFilters();
-            } else {
-                showError('Категория не найдена');
+            // Получаем параметры из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('q');
+            
+            if (query) {
+                document.getElementById('searchInput').value = query;
+                searchProducts();
             }
+
+            // Загружаем фильтры
+            loadCategories();
+            loadBrands();
+            loadStores();
         });
 
-        // Получение категории из URL
-        function getCategoryFromUrl() {
-            const pathParts = window.location.pathname.split('/');
-            return pathParts[pathParts.length - 1];
-        }
+        // Поиск товаров
+        async function searchProducts() {
+            const query = document.getElementById('searchInput').value;
+            if (!query.trim()) return;
 
-        // Загрузка информации о категории
-        async function loadCategoryInfo(categorySlug) {
-            try {
-                // Здесь можно загрузить дополнительную информацию о категории
-                document.getElementById('categoryName').textContent = categorySlug;
-                document.getElementById('categoryTitle').textContent = `Категория: ${categorySlug}`;
-                document.getElementById('categoryDescription').textContent = `Найдите лучшие цены на товары в категории "${categorySlug}"`;
-                document.getElementById('resultsTitle').textContent = `Товары в категории "${categorySlug}"`;
-            } catch (error) {
-                console.error('Ошибка загрузки информации о категории:', error);
-            }
-        }
-
-        // Загрузка товаров
-        async function loadProducts() {
             showLoading();
             
             try {
                 const params = new URLSearchParams({
-                    category: currentCategory,
+                    search: query,
                     page: currentPage,
                     limit: 12,
                     ...currentFilters
@@ -326,7 +350,7 @@
 
                 hideLoading();
             } catch (error) {
-                console.error('Ошибка загрузки товаров:', error);
+                console.error('Ошибка поиска:', error);
                 hideLoading();
                 showNoResults();
             }
@@ -353,39 +377,35 @@
             const col = document.createElement('div');
             col.className = 'col-lg-4 col-md-6 mb-4';
 
-            const offers = product.offers || [];
-            const availableOffers = offers.filter(offer => offer.available);
-            const prices = availableOffers.map(offer => offer.price);
-            
-            const minPrice = prices.length > 0 ? Math.min(...prices) : 0;
-            const maxPrice = prices.length > 0 ? Math.max(...prices) : 0;
+            const minPrice = product.minPrice || 0;
+            const maxPrice = product.maxPrice || 0;
             const priceText = minPrice === maxPrice ? 
                 `${minPrice.toLocaleString()} ₴` : 
                 `${minPrice.toLocaleString()} - ${maxPrice.toLocaleString()} ₴`;
 
             col.innerHTML = `
                 <div class="product-card">
-                    <img src="${product.image || 'https://via.placeholder.com/300x200?text=Нет+изображения'}" 
+                    <img src="${product.images?.[0] || 'https://via.placeholder.com/300x200?text=Нет+изображения'}" 
                          class="product-image" alt="${product.name}">
                     <div class="p-3">
                         <h6 class="mb-2">${product.name}</h6>
                         <p class="text-muted small mb-2">${product.brand || 'Неизвестный бренд'}</p>
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <span class="price-badge">${priceText}</span>
-                            <small class="text-muted">${offers.length} предложений</small>
+                            <small class="text-muted">${product.storeCount || 0} магазинов</small>
                         </div>
                         
-                        ${offers.length > 0 ? `
+                        ${product.currentPrices && product.currentPrices.length > 0 ? `
                             <div class="price-comparison">
                                 <small class="text-muted mb-2 d-block">Цены в магазинах:</small>
-                                ${offers.slice(0, 3).map(offer => `
+                                ${product.currentPrices.slice(0, 3).map(price => `
                                     <div class="store-price">
                                         <div class="d-flex align-items-center">
-                                            <img src="${offer.storeId?.logo || 'https://via.placeholder.com/60x30'}" 
+                                            <img src="${price.storeId?.logo || 'https://via.placeholder.com/60x30'}" 
                                                  class="store-logo me-2">
-                                            <small>${offer.storeId?.name || 'Магазин'}</small>
+                                            <small>${price.storeId?.name || 'Магазин'}</small>
                                         </div>
-                                        <small class="fw-bold">${offer.price.toLocaleString()} ₴</small>
+                                        <small class="fw-bold">${price.price.toLocaleString()} ₴</small>
                                     </div>
                                 `).join('')}
                             </div>
@@ -407,27 +427,50 @@
             window.location.href = `/product/${productId}`;
         }
 
-        // Загрузка фильтров
-        async function loadFilters() {
+        // Загрузка категорий
+        async function loadCategories() {
             try {
-                // Загружаем бренды для категории
-                const brandsResponse = await fetch(`/api/products/brands/list`);
-                const brands = await brandsResponse.json();
+                const response = await fetch('/api/products/categories/list');
+                const categories = await response.json();
                 
-                const brandSelect = document.getElementById('brandFilter');
+                const select = document.getElementById('categoryFilter');
+                categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Ошибка загрузки категорий:', error);
+            }
+        }
+
+        // Загрузка брендов
+        async function loadBrands() {
+            try {
+                const response = await fetch('/api/products/brands/list');
+                const brands = await response.json();
+                
+                const select = document.getElementById('brandFilter');
                 brands.forEach(brand => {
                     const option = document.createElement('option');
                     option.value = brand;
                     option.textContent = brand;
-                    brandSelect.appendChild(option);
+                    select.appendChild(option);
                 });
+            } catch (error) {
+                console.error('Ошибка загрузки брендов:', error);
+            }
+        }
 
-                // Загружаем магазины
-                const storesResponse = await fetch('/api/stores');
-                const storesData = await storesResponse.json();
+        // Загрузка магазинов
+        async function loadStores() {
+            try {
+                const response = await fetch('/api/stores');
+                const data = await response.json();
                 
-                const storesContainer = document.getElementById('storesFilter');
-                storesData.stores.forEach(store => {
+                const container = document.getElementById('storesFilter');
+                data.stores.forEach(store => {
                     const div = document.createElement('div');
                     div.className = 'form-check';
                     div.innerHTML = `
@@ -436,16 +479,17 @@
                             ${store.name}
                         </label>
                     `;
-                    storesContainer.appendChild(div);
+                    container.appendChild(div);
                 });
             } catch (error) {
-                console.error('Ошибка загрузки фильтров:', error);
+                console.error('Ошибка загрузки магазинов:', error);
             }
         }
 
         // Применение фильтров
         function applyFilters() {
             currentFilters = {
+                category: document.getElementById('categoryFilter').value,
                 brand: document.getElementById('brandFilter').value,
                 minPrice: document.getElementById('minPrice').value,
                 maxPrice: document.getElementById('maxPrice').value,
@@ -462,7 +506,7 @@
             }
 
             currentPage = 1;
-            loadProducts();
+            searchProducts();
         }
 
         // Отображение пагинации
@@ -511,7 +555,7 @@
         // Переход на страницу
         function goToPage(page) {
             currentPage = page;
-            loadProducts();
+            searchProducts();
         }
 
         // Обновление счетчика результатов
@@ -537,14 +581,12 @@
             document.getElementById('productsList').innerHTML = '';
         }
 
-        // Показать ошибку
-        function showError(message) {
-            document.getElementById('loading').innerHTML = `
-                <i class="fas fa-exclamation-triangle fa-2x mb-3 text-danger"></i>
-                <p class="text-danger">${message}</p>
-                <a href="/search" class="btn btn-primary">Вернуться к поиску</a>
-            `;
-        }
+        // Поиск по Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
     </script>
 </body>
 </html> 

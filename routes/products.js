@@ -1,353 +1,265 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const Offer = require('../models/Offer');
+const Store = require('../models/Store');
 const { body, validationResult } = require('express-validator');
 
-// Get all products with pagination and filters
+// Поиск товаров с фильтрацией
 router.get('/', async (req, res) => {
     try {
         const {
             page = 1,
-            limit = 12,
-            section,
+            limit = 20,
             search,
+            category,
+            brand,
             minPrice,
             maxPrice,
-            sort = 'createdAt',
-            order = 'desc',
-            isPromo
+            sortBy = 'name',
+            sortOrder = 'asc',
+            stores
         } = req.query;
 
-        const query = {};
+        let query = { isActive: true };
 
-        // Section filter
-        if (section) {
-            query['section.id'] = section;
-        }
-
-        // Search filter
+        // Поиск по тексту
         if (search) {
-            query.$or = [
-                { title: { $regex: search, $options: 'i' } },
-                { 'vendor.name': { $regex: search, $options: 'i' } }
-            ];
+            query.$text = { $search: search };
         }
 
-        // Price filter
-        if (minPrice || maxPrice) {
-            query.currentPrice = {};
-            if (minPrice) query.currentPrice.$gte = parseFloat(minPrice);
-            if (maxPrice) query.currentPrice.$lte = parseFloat(maxPrice);
+        // Фильтр по категории
+        if (category) {
+            query.category = category;
         }
 
-        // Promo filter
-        if (isPromo === 'true') {
-            query.isPromo = true;
+        // Фильтр по бренду
+        if (brand) {
+            query.brand = brand;
         }
 
-        const skip = (parseInt(page) - 1) * parseInt(limit);
-        const sortObj = { [sort]: order === 'desc' ? -1 : 1 };
+        // Сортировка
+        let sortOptions = {};
+        if (sortBy === 'price') {
+            sortOptions['offers.price'] = sortOrder === 'desc' ? -1 : 1;
+        } else if (sortBy === 'offers') {
+            sortOptions.offersCount = sortOrder === 'desc' ? -1 : 1;
+        } else {
+            sortOptions[sortBy] = sortOrder === 'desc' ? -1 : 1;
+        }
 
         const products = await Product.find(query)
-            .sort(sortObj)
-            .skip(skip)
-            .limit(parseInt(limit));
+            .populate({
+                path: 'offers',
+                populate: {
+                    path: 'storeId',
+                    select: 'name logo'
+                }
+            })
+            .sort(sortOptions)
+            .limit(limit * 1)
+            .skip((page - 1) * limit)
+            .exec();
 
-        const total = await Product.countDocuments(query);
+        // Фильтрация по цене и магазинам
+        let filteredProducts = products;
+        
+        if (minPrice || maxPrice || stores) {
+            filteredProducts = products.filter(product => {
+                const offers = product.offers || [];
+                
+                // Фильтр по магазинам
+                if (stores) {
+                    const storeIds = stores.split(',');
+                    const hasStore = offers.some(offer => 
+                        storeIds.includes(offer.storeId._id.toString())
+                    );
+                    if (!hasStore) return false;
+                }
+                
+                // Фильтр по цене
+                if (minPrice || maxPrice) {
+                    const prices = offers.map(offer => offer.price).filter(price => price > 0);
+                    if (prices.length === 0) return false;
+                    
+                    const minProductPrice = Math.min(...prices);
+                    const maxProductPrice = Math.max(...prices);
+                    
+                    if (minPrice && minProductPrice < parseFloat(minPrice)) return false;
+                    if (maxPrice && maxProductPrice > parseFloat(maxPrice)) return false;
+                }
+                
+                return true;
+            });
+        }
+
+        const count = await Product.countDocuments(query);
 
         res.json({
-            success: true,
-            data: products,
-            pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
-                totalPages: Math.ceil(total / parseInt(limit)),
-                totalDocs: total,
-                hasNextPage: skip + products.length < total,
-                hasPrevPage: parseInt(page) > 1
-            }
+            products: filteredProducts,
+            totalPages: Math.ceil(count / limit),
+            currentPage: parseInt(page),
+            totalProducts: count
         });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Get single product by ID
+// Получить товар по ID с детальной информацией о предложениях
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
-
-        if (!product) {
-            return res.status(404).json({ success: false, error: 'Product not found' });
-        }
-
-        res.json({ success: true, data: product });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-
-
-// Get product detailed specifications
-router.get('/:id/specifications', async (req, res) => {
-    try {
-        const product = await Product.findById(req.params.id);
-        
-        if (!product) {
-            return res.status(404).json({ success: false, error: 'Product not found' });
-        }
-
-        // Extract and format productValues preserving original order
-        const specifications = {
-            basic: [],
-            detailed: [],
-            technical: [],
-            // Новое поле для сохранения исходного порядка
-            ordered: []
-        };
-
-        if (product.productValues && Array.isArray(product.productValues)) {
-            product.productValues.forEach(group => {
-                if (group.edges && Array.isArray(group.edges)) {
-                    group.edges.forEach(edge => {
-                        if (edge.node) {
-                            const spec = {
-                                title: edge.node.title || '',
-                                value: edge.node.value || '',
-                                type: edge.node.type || '',
-                                h1Text: edge.node.h1Text || '',
-                                help: edge.node.help || '',
-                                isHeader: edge.node.isHeader || false,
-                                url: edge.node.url || ''
-                            };
-
-                            // Сохраняем исходный порядок
-                            specifications.ordered.push(spec);
-
-                            // Также сохраняем категоризацию для обратной совместимости
-                            if (spec.isHeader) {
-                                specifications.detailed.push(spec);
-                            } else if (spec.type && spec.type.toLowerCase().includes('технич')) {
-                                specifications.technical.push(spec);
-                            } else {
-                                specifications.basic.push(spec);
-                            }
-                        }
-                    });
+        const product = await Product.findById(req.params.id)
+            .populate({
+                path: 'offers',
+                populate: {
+                    path: 'storeId',
+                    select: 'name logo description'
                 }
             });
+
+        if (!product) {
+            return res.status(404).json({ error: 'Товар не найден' });
         }
 
-        res.json({ 
-            success: true, 
-            data: {
-                productId: product._id,
-                specifications,
-                techShortSpecifications: product.techShortSpecifications || [],
-                techShortSpecificationsList: product.techShortSpecificationsList || []
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
+        // Группировка предложений по магазинам
+        const offers = product.offers || [];
+        const availableOffers = offers.filter(offer => offer.available);
+        const unavailableOffers = offers.filter(offer => !offer.available);
 
-// Get products by section
-router.get('/section/:sectionId', async (req, res) => {
-    try {
-        const { page = 1, limit = 12 } = req.query;
-        
-        const skip = (parseInt(page) - 1) * parseInt(limit);
+        // Сортировка предложений по цене
+        availableOffers.sort((a, b) => a.price - b.price);
 
-        const products = await Product.find(
-            { 'section.id': req.params.sectionId }
-        )
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(parseInt(limit));
-
-        const total = await Product.countDocuments({ 'section.id': req.params.sectionId });
+        // Статистика цен
+        const prices = availableOffers.map(offer => offer.price);
+        const priceStats = {
+            minPrice: prices.length > 0 ? Math.min(...prices) : 0,
+            maxPrice: prices.length > 0 ? Math.max(...prices) : 0,
+            averagePrice: prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0,
+            totalOffers: offers.length,
+            availableOffers: availableOffers.length,
+            unavailableOffers: unavailableOffers.length
+        };
 
         res.json({
-            success: true,
-            data: products,
-            pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
-                totalPages: Math.ceil(total / parseInt(limit)),
-                totalDocs: total
-            }
+            product: {
+                id: product._id,
+                name: product.name,
+                description: product.description,
+                category: product.category,
+                brand: product.brand,
+                image: product.image,
+                specs: product.specs,
+                sku: product.sku,
+                offersCount: product.offersCount
+            },
+            offers: {
+                available: availableOffers,
+                unavailable: unavailableOffers
+            },
+            priceStats
         });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Search products
+// Поиск товаров по названию
 router.get('/search/:query', async (req, res) => {
     try {
-        const { page = 1, limit = 12 } = req.query;
-        
-        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const { query } = req.params;
+        const { limit = 10 } = req.query;
 
-        const query = {
-            $or: [
-                { title: { $regex: req.params.query, $options: 'i' } },
-                { 'vendor.name': { $regex: req.params.query, $options: 'i' } }
-            ]
-        };
-
-        const products = await Product.find(query)
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(parseInt(limit));
-
-        const total = await Product.countDocuments(query);
-
-        res.json({
-            success: true,
-            data: products,
-            pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
-                totalPages: Math.ceil(total / parseInt(limit)),
-                totalDocs: total
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// Get promo products
-router.get('/promo/list', async (req, res) => {
-    try {
-        const products = await Product.find({ 
-            isPromo: true 
+        const products = await Product.find({
+            $text: { $search: query },
+            isActive: true
         })
-        .limit(8)
-        .sort({ createdAt: -1 });
-
-        res.json({ success: true, data: products });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
-});
-
-// Get products by category
-router.get('/catalog/:catalogSlug/group/:groupSlug/category/:categorySlug', async (req, res) => {
-    try {
-        const { catalogSlug, groupSlug, categorySlug } = req.params;
-        const { page = 1, limit = 12, sort = 'createdAt', order = 'desc', minPrice, maxPrice, isPromo } = req.query;
-        
-        console.log('🔍 API Debug - Category Products Request:');
-        console.log('   Params:', { catalogSlug, groupSlug, categorySlug });
-        console.log('   Query:', req.query);
-        
-        const skip = (parseInt(page) - 1) * parseInt(limit);
-        const sortObj = { [sort]: order === 'desc' ? -1 : 1 };
-
-        // First, try to get the category to find the productSearchField
-        let category = null;
-        try {
-            category = await require('../models/Catalog').findOne({ 
-                slug: categorySlug, 
-                level: 2,
-                isActive: true 
-            });
-        } catch (error) {
-            console.log('   Could not find category:', error.message);
-        }
-
-        // Build query based on category - try multiple possible field structures
-        const query = {
-            $or: [
-                // If category has productSearchField, use it
-                ...(category && category.productSearchField ? [
-                    { 'section.category': category.productSearchField },
-                    { 'section.category': { $regex: category.productSearchField + '$', $options: 'i' } }
-                ] : []),
-                // Fallback to original logic
-                { 'section.category': { $regex: categorySlug + '$', $options: 'i' } },
-                { 'section.category': categorySlug },
-                { 'section.id': categorySlug },
-                { 'section.slug': categorySlug },
-                { 'section.name': categorySlug },
-                { 'category': categorySlug },
-                { 'categorySlug': categorySlug },
-                { 'categoryId': categorySlug }
-            ]
-        };
-        
-        console.log('   MongoDB Query:', JSON.stringify(query, null, 2));
-
-        // Price filter
-        if (minPrice || maxPrice) {
-            query.currentPrice = {};
-            if (minPrice) query.currentPrice.$gte = parseFloat(minPrice);
-            if (maxPrice) query.currentPrice.$lte = parseFloat(maxPrice);
-        }
-
-        // Promo filter
-        if (isPromo === 'true') {
-            query.isPromo = true;
-        }
-
-        const products = await Product.find(query)
-            .sort(sortObj)
-            .skip(skip)
-            .limit(parseInt(limit));
-
-        const total = await Product.countDocuments(query);
-
-        res.json({
-            success: true,
-            data: products,
-            pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
-                totalPages: Math.ceil(total / parseInt(limit)),
-                totalDocs: total,
-                hasNextPage: skip + products.length < total,
-                hasPrevPage: parseInt(page) > 1
+        .populate({
+            path: 'offers',
+            populate: {
+                path: 'storeId',
+                select: 'name logo'
             }
-        });
+        })
+        .limit(parseInt(limit))
+        .exec();
+
+        res.json(products);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Create new product (Admin only)
+// Получить категории
+router.get('/categories/list', async (req, res) => {
+    try {
+        const categories = await Product.distinct('category');
+        res.json(categories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Получить бренды
+router.get('/brands/list', async (req, res) => {
+    try {
+        const brands = await Product.distinct('brand');
+        res.json(brands.filter(brand => brand));
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Получить статистику цен для товара
+router.get('/:id/price-stats', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id)
+            .populate('offers');
+
+        if (!product) {
+            return res.status(404).json({ error: 'Товар не найден' });
+        }
+
+        const offers = product.offers || [];
+        const availableOffers = offers.filter(offer => offer.available);
+        const unavailableOffers = offers.filter(offer => !offer.available);
+
+        const prices = availableOffers.map(offer => offer.price);
+        const stats = {
+            totalOffers: offers.length,
+            availableOffers: availableOffers.length,
+            unavailableOffers: unavailableOffers.length,
+            minPrice: prices.length > 0 ? Math.min(...prices) : 0,
+            maxPrice: prices.length > 0 ? Math.max(...prices) : 0,
+            averagePrice: prices.length > 0 ? prices.reduce((a, b) => a + b, 0) / prices.length : 0
+        };
+
+        res.json(stats);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Создать новый товар (для админки)
 router.post('/', [
-    body('id').isInt().withMessage('ID is required and must be an integer'),
-    body('hlSectionId').isInt().withMessage('hlSectionId is required and must be an integer'),
-    body('date').notEmpty().withMessage('Date is required'),
-    body('title').notEmpty().withMessage('Title is required'),
-    body('currentPrice').optional().isFloat({ min: 0 }).withMessage('Valid price is required'),
-    body('vendor').isObject().withMessage('Vendor information is required'),
-    body('section').isObject().withMessage('Section information is required'),
-    body('url').isURL().withMessage('Valid URL is required')
+    body('name').notEmpty().withMessage('Название товара обязательно'),
+    body('category').notEmpty().withMessage('Категория обязательна')
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(400).json({ 
-                success: false, 
-                errors: errors.array() 
-            });
+            return res.status(400).json({ errors: errors.array() });
         }
 
         const product = new Product(req.body);
         await product.save();
-
-        res.status(201).json({ success: true, data: product });
+        res.status(201).json(product);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Update product (Admin only)
+// Обновить товар
 router.put('/:id', async (req, res) => {
     try {
         const product = await Product.findByIdAndUpdate(
@@ -357,27 +269,25 @@ router.put('/:id', async (req, res) => {
         );
 
         if (!product) {
-            return res.status(404).json({ success: false, error: 'Product not found' });
+            return res.status(404).json({ error: 'Товар не найден' });
         }
 
-        res.json({ success: true, data: product });
+        res.json(product);
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
-// Delete product (Admin only)
+// Удалить товар
 router.delete('/:id', async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id);
-
         if (!product) {
-            return res.status(404).json({ success: false, error: 'Product not found' });
+            return res.status(404).json({ error: 'Товар не найден' });
         }
-
-        res.json({ success: true, message: 'Product deleted successfully' });
+        res.json({ message: 'Товар успешно удален' });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 

@@ -1,286 +1,469 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Товар - Купи слона</title>
-    <meta name="description" content="Детальная информация о товаре - интернет-магазин Купи слона">
-    <link rel="icon" href="/images/kupislona-logo.png" type="image/png">
-    
-    <!-- Bootstrap CSS -->
+    <title>Карточка товара - Прайс-агрегатор</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="product-page">
-    <!-- Header Component -->
-    <div data-component="header"></div>
-    
-    <!-- Mega Menu Component -->
-    <div data-component="mega-menu"></div>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #f59e0b;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+        }
 
-    <!-- Main Content -->
-    <div class="container-fluid">
-        <div class="product-container">
-            <!-- Breadcrumb -->
-            <nav aria-label="breadcrumb" class="container-fluid px-4 pt-4">
-                <ol class="breadcrumb" id="breadcrumb">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            width: 100%;
+            max-width: 400px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .price-table {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .store-offer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: background-color 0.3s ease;
+        }
+
+        .store-offer:hover {
+            background-color: #f8f9fa;
+        }
+
+        .store-offer:last-child {
+            border-bottom: none;
+        }
+
+        .store-logo {
+            width: 80px;
+            height: 40px;
+            object-fit: contain;
+        }
+
+        .price-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .price-badge.best {
+            background: var(--accent-color);
+        }
+
+        .specs-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #6c757d;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .alert-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">
+                <i class="fas fa-chart-line text-primary me-2"></i>
+                Прайс-агрегатор
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#features">Возможности</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#stats">Статистика</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api">API</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <section class="py-5 mt-5">
+        <div class="container">
+            <!-- Хлебные крошки -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Главная</a></li>
-                    <li class="breadcrumb-item"><a href="/catalog.html">Каталоги</a></li>
-                    <li class="breadcrumb-item"><a href="#" id="categoryLink">Категория</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Товар</li>
+                    <li class="breadcrumb-item"><a href="/search">Поиск</a></li>
+                    <li class="breadcrumb-item active" id="productCategory">Товар</li>
                 </ol>
             </nav>
 
-            <!-- Product Content -->
-            <div class="container-fluid px-4 py-4">
-                <div class="row">
-                    <!-- Product Images -->
-                    <div class="col-lg-6 col-md-6 mb-4">
-                        <div class="product-images-section">
-                            <!-- Main Image -->
-                            <div class="main-image-container">
-                                <img id="mainImage" src="" alt="Товар" class="main-product-image">
-                                <div class="image-overlay">
-                                    <button class="btn btn-light btn-sm zoom-btn" id="zoomBtn">
-                                        <i class="fas fa-search-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- Thumbnail Images -->
-                            <div class="thumbnail-images" id="thumbnailImages">
-                                <!-- Thumbnails will be loaded here -->
-                            </div>
+            <!-- Загрузка -->
+            <div id="loading" class="loading">
+                <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                <p>Загрузка информации о товаре...</p>
+            </div>
+
+            <!-- Контент товара -->
+            <div id="productContent" style="display: none;">
+                <!-- Заголовок товара -->
+                <div class="product-header">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <img id="productImage" src="" alt="" class="product-image mb-3">
                         </div>
-                    </div>
-
-                    <!-- Product Info -->
-                    <div class="col-lg-6 col-md-6">
-                        <div class="product-info-section">
-                            <!-- Product Title -->
-                            <h1 id="productTitle" class="product-title">Название товара</h1>
+                        <div class="col-lg-6">
+                            <h1 id="productName" class="mb-3"></h1>
+                            <p id="productDescription" class="text-muted mb-3"></p>
                             
-                            <!-- Product Vendor -->
-                            <div class="product-vendor-info">
-                                <i class="fas fa-industry me-2"></i>
-                                <span id="productVendor">Производитель</span>
-                            </div>
-
-                            <!-- Product Rating -->
-                            <div class="product-rating-section">
-                                <div class="rating-stars">
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="fas fa-star text-warning"></i>
-                                    <i class="far fa-star text-warning"></i>
+                            <div class="stats-cards">
+                                <div class="stat-card">
+                                    <div class="stat-number" id="minPrice">0</div>
+                                    <small>Минимальная цена</small>
                                 </div>
-                                <span class="rating-text">
-                                    <span id="ratingValue">4.2</span> 
-                                    (<span id="reviewsCount">0</span> отзывов)
-                                </span>
-                            </div>
-
-                            <!-- Product Price -->
-                            <div class="product-price-section">
-                                <div class="price-range">
-                                    <span class="price-label">Цена:</span>
-                                    <div class="price-amounts">
-                                        <span id="minPrice" class="price-amount">0</span>
-                                        <span class="price-separator">-</span>
-                                        <span id="maxPrice" class="price-amount">0</span>
-                                        <span class="price-currency">грн.</span>
-                                    </div>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="maxPrice">0</div>
+                                    <small>Максимальная цена</small>
                                 </div>
-                                <div id="singlePriceContainer" class="single-price" style="display: none;">
-                                    <span class="price-label">Цена:</span>
-                                    <span id="singlePrice" class="price-amount">0</span>
-                                    <span class="price-currency">грн.</span>
+                                <div class="stat-card">
+                                    <div class="stat-number" id="avgPrice">0</div>
+                                    <small>Средняя цена</small>
                                 </div>
-                                <div id="originalPriceContainer" class="original-price" style="display: none;">
-                                    <span id="originalPrice" class="price-amount">0</span>
-                                    <span class="price-currency">грн.</span>
-                                </div>
-                                <div id="discountBadge" class="discount-badge" style="display: none;">
-                                    -<span id="discountPercent">0</span>%
+                                <div class="stat-card">
+                                    <div class="stat-number" id="offersCount">0</div>
+                                    <small>Предложений</small>
                                 </div>
                             </div>
 
-                            <!-- Product Actions -->
-                            <div class="product-actions-section">
-                                <div class="row g-3">
-                                    <div class="col-6">
-                                        <button class="btn btn-outline-secondary w-100 favorite-btn" id="favoriteBtn">
-                                            <i class="far fa-heart me-2"></i>
-                                            В избранное
-                                        </button>
-                                    </div>
-                                    <div class="col-6">
-                                        <a href="#" target="_blank" class="btn btn-outline-secondary w-100" id="externalLink">
-                                            <i class="fas fa-external-link-alt me-2"></i>
-                                            На сайте
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Product Stats -->
-                            <div class="product-stats-section">
-                                <div class="row text-center">
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-shopping-cart text-primary"></i>
-                                            <div class="stat-value" id="offersCount">0</div>
-                                            <div class="stat-label">предложений</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-image text-info"></i>
-                                            <div class="stat-value" id="imagesCount">0</div>
-                                            <div class="stat-label">фото</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4">
-                                        <div class="stat-item">
-                                            <i class="fas fa-eye text-success"></i>
-                                            <div class="stat-value" id="viewsCount">0</div>
-                                            <div class="stat-label">просмотров</div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-primary" onclick="setPriceAlert()">
+                                    <i class="fas fa-bell me-2"></i>Уведомление о цене
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="shareProduct()">
+                                    <i class="fas fa-share me-2"></i>Поделиться
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Product Details Tabs -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="product-details-section">
-                            <ul class="nav nav-tabs" id="productTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="specs-tab" data-bs-toggle="tab" data-bs-target="#specs" type="button" role="tab">
-                                        <i class="fas fa-info-circle me-2"></i>
-                                        Характеристики
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab">
-                                        <i class="fas fa-align-left me-2"></i>
-                                        Описание
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
-                                        <i class="fas fa-star me-2"></i>
-                                        Отзывы
-                                    </button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers" type="button" role="tab">
-                                        <i class="fas fa-shopping-cart me-2"></i>
-                                        Предложения
-                                    </button>
-                                </li>
-                            </ul>
-                            
-                            <div class="tab-content" id="productTabsContent">
-                                <!-- Specifications Tab -->
-                                <div class="tab-pane fade show active" id="specs" role="tabpanel">
-                                    <div class="specifications-content" id="specificationsContent">
-                                        <!-- Specifications will be loaded here -->
-                                    </div>
-                                </div>
-                                
-                                <!-- Description Tab -->
-                                <div class="tab-pane fade" id="description" role="tabpanel">
-                                    <div class="description-content" id="descriptionContent">
-                                        <!-- Description will be loaded here -->
-                                    </div>
-                                </div>
-                                
-                                <!-- Reviews Tab -->
-                                <div class="tab-pane fade" id="reviews" role="tabpanel">
-                                    <div class="reviews-content" id="reviewsContent">
-                                        <!-- Reviews will be loaded here -->
-                                    </div>
-                                </div>
-                                
-                                <!-- Offers Tab -->
-                                <div class="tab-pane fade" id="offers" role="tabpanel">
-                                    <div class="offers-content" id="offersContent">
-                                        <!-- Offers will be loaded here -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <!-- Таблица цен -->
+                <div class="price-table">
+                    <h3 class="mb-4">Цены в магазинах</h3>
+                    <div id="offersList">
+                        <!-- Предложения будут загружены динамически -->
                     </div>
                 </div>
 
-                <!-- Similar Products -->
-                <div class="row mt-5">
-                    <div class="col-12">
-                        <div class="similar-products-section">
-                            <h3 class="section-title">
-                                <i class="fas fa-th-large me-2"></i>
-                                Похожие товары
-                            </h3>
-                            <div class="row" id="similarProducts">
-                                <!-- Similar products will be loaded here -->
+                <!-- Характеристики -->
+                <div class="specs-section">
+                    <h3 class="mb-4">Характеристики</h3>
+                    <div id="specsList">
+                        <!-- Характеристики будут загружены динамически -->
+                    </div>
+                </div>
+
+                <!-- Уведомления о ценах -->
+                <div class="alert-section">
+                    <h3 class="mb-4">Уведомления о ценах</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Целевая цена (₴)</label>
+                                <input type="number" class="form-control" id="targetPrice" placeholder="Введите цену">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Условие</label>
+                                <select class="form-select" id="alertCondition">
+                                    <option value="below">Ниже указанной цены</option>
+                                    <option value="above">Выше указанной цены</option>
+                                    <option value="change">При любом изменении</option>
+                                </select>
                             </div>
                         </div>
                     </div>
+                    <button class="btn btn-success" onclick="createPriceAlert()">
+                        <i class="fas fa-bell me-2"></i>Создать уведомление
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Footer Component -->
-    <div data-component="footer"></div>
-
-    <!-- Modals Component -->
-    <div data-component="modals"></div>
-
-    <!-- Image Zoom Modal -->
-    <div class="modal fade" id="imageZoomModal" tabindex="-1">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Просмотр изображения</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="zoomedImage" src="" alt="Увеличенное изображение" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Component Loader -->
-    <script src="/js/components.js"></script>
-    <!-- Custom JS -->
-    <script src="/js/app.js"></script>
-    <!-- Product Page JS -->
-    <script src="/js/product.js"></script>
     <script>
-        // Инициализация основного приложения для работы шапки
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Инициализируем основное приложение
-            if (!window.app) {
-                window.app = new KupiSlonaApp();
-                await window.app.init();
+        let productData = null;
+
+        // Инициализация страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = getProductIdFromUrl();
+            if (productId) {
+                loadProduct(productId);
+            } else {
+                showError('ID товара не найден');
             }
-            
-            // Инициализируем страницу товара
-            window.productPage = new ProductPage();
-            await window.productPage.init();
         });
+
+        // Получение ID товара из URL
+        function getProductIdFromUrl() {
+            const pathParts = window.location.pathname.split('/');
+            return pathParts[pathParts.length - 1];
+        }
+
+        // Загрузка информации о товаре
+        async function loadProduct(productId) {
+            try {
+                const response = await fetch(`/api/products/${productId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    productData = data;
+                    displayProduct(data);
+                } else {
+                    showError(data.error || 'Товар не найден');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки товара:', error);
+                showError('Ошибка загрузки товара');
+            }
+        }
+
+        // Отображение товара
+        function displayProduct(data) {
+            const product = data.product;
+            const offers = data.offers;
+            const priceStats = data.priceStats;
+
+            // Основная информация
+            document.getElementById('productName').textContent = product.name;
+            document.getElementById('productDescription').textContent = product.description;
+            document.getElementById('productImage').src = product.image || 'https://via.placeholder.com/400x400?text=Нет+изображения';
+            document.getElementById('productImage').alt = product.name;
+
+            // Статистика цен
+            document.getElementById('minPrice').textContent = priceStats.minPrice.toLocaleString();
+            document.getElementById('maxPrice').textContent = priceStats.maxPrice.toLocaleString();
+            document.getElementById('avgPrice').textContent = Math.round(priceStats.averagePrice).toLocaleString();
+            document.getElementById('offersCount').textContent = priceStats.totalOffers;
+
+            // Хлебные крошки
+            document.getElementById('productCategory').textContent = product.category;
+
+            // Отображение предложений
+            displayOffers(offers.available);
+
+            // Отображение характеристик
+            displaySpecs(product.specs);
+
+            // Показываем контент
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('productContent').style.display = 'block';
+        }
+
+        // Отображение предложений
+        function displayOffers(offers) {
+            const container = document.getElementById('offersList');
+            container.innerHTML = '';
+
+            if (!offers || offers.length === 0) {
+                container.innerHTML = '<p class="text-muted">Предложения не найдены</p>';
+                return;
+            }
+
+            // Находим минимальную цену для выделения лучшего предложения
+            const minPrice = Math.min(...offers.map(offer => offer.price));
+
+            offers.forEach(offer => {
+                const offerDiv = document.createElement('div');
+                offerDiv.className = 'store-offer';
+                
+                const isBestPrice = offer.price === minPrice;
+                
+                offerDiv.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <img src="${offer.storeId?.logo || 'https://via.placeholder.com/80x40'}" 
+                             class="store-logo me-3" alt="${offer.storeId?.name || 'Магазин'}">
+                        <div>
+                            <h6 class="mb-1">${offer.storeId?.name || 'Магазин'}</h6>
+                            <small class="text-muted">${offer.available ? 'В наличии' : 'Нет в наличии'}</small>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <div class="price-badge ${isBestPrice ? 'best' : ''}">
+                            ${offer.price.toLocaleString()} ₴
+                        </div>
+                        ${isBestPrice ? '<small class="text-success">Лучшая цена</small>' : ''}
+                        <br>
+                        <a href="${offer.url}" target="_blank" class="btn btn-sm btn-outline-primary mt-2">
+                            Перейти в магазин
+                        </a>
+                    </div>
+                `;
+                
+                container.appendChild(offerDiv);
+            });
+        }
+
+        // Отображение характеристик
+        function displaySpecs(specs) {
+            const container = document.getElementById('specsList');
+            container.innerHTML = '';
+
+            if (!specs || specs.size === 0) {
+                container.innerHTML = '<p class="text-muted">Характеристики не указаны</p>';
+                return;
+            }
+
+            specs.forEach((value, key) => {
+                const specDiv = document.createElement('div');
+                specDiv.className = 'spec-item';
+                specDiv.innerHTML = `
+                    <span class="fw-bold">${key}</span>
+                    <span>${value}</span>
+                `;
+                container.appendChild(specDiv);
+            });
+        }
+
+        // Создание уведомления о цене
+        function createPriceAlert() {
+            const targetPrice = document.getElementById('targetPrice').value;
+            const condition = document.getElementById('alertCondition').value;
+
+            if (!targetPrice) {
+                alert('Введите целевую цену');
+                return;
+            }
+
+            // Здесь должна быть логика создания уведомления
+            alert(`Уведомление создано: ${condition} ${targetPrice} ₴`);
+        }
+
+        // Установка уведомления о цене
+        function setPriceAlert() {
+            const currentMinPrice = productData?.priceStats?.minPrice || 0;
+            document.getElementById('targetPrice').value = Math.round(currentMinPrice * 0.9);
+            document.getElementById('alertCondition').value = 'below';
+            
+            // Прокручиваем к секции уведомлений
+            document.querySelector('.alert-section').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Поделиться товаром
+        function shareProduct() {
+            if (navigator.share) {
+                navigator.share({
+                    title: productData?.product?.name || 'Товар',
+                    url: window.location.href
+                });
+            } else {
+                // Fallback для браузеров без поддержки Web Share API
+                navigator.clipboard.writeText(window.location.href);
+                alert('Ссылка скопирована в буфер обмена');
+            }
+        }
+
+        // Показать ошибку
+        function showError(message) {
+            document.getElementById('loading').innerHTML = `
+                <i class="fas fa-exclamation-triangle fa-2x mb-3 text-danger"></i>
+                <p class="text-danger">${message}</p>
+                <a href="/search" class="btn btn-primary">Вернуться к поиску</a>
+            `;
+        }
     </script>
 </body>
 </html> 
