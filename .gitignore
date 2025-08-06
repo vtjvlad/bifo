@@ -1,3 +1,6 @@
+public/img/
+public/public/i/
+
 node_modules
 .env
 JSON-try/
