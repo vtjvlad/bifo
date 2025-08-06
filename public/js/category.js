@@ -8,6 +8,7 @@ class CategoryPage {
         this.currentSort = 'createdAt:desc';
         this.viewMode = 'list'; // 'grid' or 'list' - по умолчанию список
         this.currentProducts = []; // Добавляем для хранения текущих товаров
+        this.availableFilters = []; // Добавляем для хранения доступных фильтров
         
         // Get category parameters from URL
         this.categoryParams = this.getCategoryParamsFromURL();
@@ -22,7 +23,7 @@ class CategoryPage {
         this.setupEventListeners();
         this.updateBreadcrumb();
         this.loadCategoryInfo();
-        this.loadProducts();
+        this.loadProducts(); // Сначала загружаем товары, потом фильтры по их section._id
         
         // Initialize enhanced interactions after a short delay
         setTimeout(() => {
@@ -114,6 +115,14 @@ class CategoryPage {
             });
         }
 
+        // Reset filters button
+        const resetFiltersBtn = document.getElementById('resetFilters');
+        if (resetFiltersBtn) {
+            resetFiltersBtn.addEventListener('click', () => {
+                this.resetAllFilters();
+            });
+        }
+
         // Quick view events
         document.addEventListener('click', (e) => {
             if (e.target.closest('.quick-view-btn')) {
@@ -171,6 +180,345 @@ class CategoryPage {
         }
     }
 
+    async loadFilters(sectionId) {
+        if (!sectionId) {
+            console.log('No sectionId provided for filters');
+            return;
+        }
+
+        try {
+            console.log('🔍 Loading filters for sectionId:', sectionId);
+            
+            // Загружаем фильтры по sectionId
+            const response = await this.apiRequest(`/filters/section/${sectionId}`);
+            
+            if (response.success && response.data.length > 0) {
+                this.availableFilters = response.data;
+                console.log(`✅ Found ${response.data.length} filters for section ${sectionId}`);
+                this.renderFilters();
+            } else {
+                console.log(`No filters found for section ${sectionId}`);
+                this.showNoFiltersMessage();
+            }
+        } catch (error) {
+            console.error('Error loading filters:', error);
+            this.showNoFiltersMessage();
+        }
+    }
+
+    showNoFiltersMessage() {
+        const dynamicFiltersContainer = document.getElementById('dynamicFiltersContainer');
+        if (dynamicFiltersContainer) {
+            dynamicFiltersContainer.innerHTML = `
+                <div class="text-center text-muted">
+                    <small><i class="fas fa-info-circle me-2"></i>Фильтры для данной категории не настроены</small>
+                </div>
+            `;
+        }
+    }
+
+    renderFilters() {
+        const dynamicFiltersContainer = document.getElementById('dynamicFiltersContainer');
+        if (!dynamicFiltersContainer) return;
+
+        // Создаем HTML для динамических фильтров
+        let filtersHTML = '';
+        
+        this.availableFilters.forEach(filter => {
+            filtersHTML += this.renderSingleFilter(filter);
+        });
+
+        // Вставляем динамические фильтры в контейнер
+        dynamicFiltersContainer.innerHTML = filtersHTML;
+
+        // Добавляем обработчики событий для новых фильтров
+        this.attachFilterListeners();
+        
+        // Показываем кнопку сброса, если есть фильтры
+        if (this.availableFilters.length > 0) {
+            const resetButton = document.getElementById('resetFilters');
+            if (resetButton) {
+                resetButton.style.display = 'block';
+            }
+        }
+    }
+
+    renderSingleFilter(filter) {
+        let filterHTML = '';
+
+        switch (filter.type) {
+            case 'checkbox':
+                filterHTML = this.renderCheckboxFilter(filter);
+                break;
+            case 'range':
+                filterHTML = this.renderRangeFilter(filter);
+                break;
+            case 'select':
+                filterHTML = this.renderSelectFilter(filter);
+                break;
+            default:
+                filterHTML = this.renderCheckboxFilter(filter);
+        }
+
+        return filterHTML;
+    }
+
+    renderCheckboxFilter(filter) {
+        const values = filter.values || [];
+        const topValues = filter.topValues || [];
+        const displayValues = topValues.length > 0 ? topValues : values.slice(0, 10);
+
+        return `
+            <div class="mb-4 dynamic-filter" data-filter-id="${filter._id}">
+                <h6>${filter.title}</h6>
+                ${filter.description ? `<small class="text-muted">${filter.description}</small>` : ''}
+                <div class="filter-values">
+                    ${displayValues.map(value => `
+                        <div class="form-check">
+                            <input class="form-check-input filter-checkbox" 
+                                   type="checkbox" 
+                                   id="filter_${filter._id}_${value._id}"
+                                   data-filter-id="${filter._id}"
+                                   data-value-id="${value._id}"
+                                   value="${value._id}">
+                            <label class="form-check-label" for="filter_${filter._id}_${value._id}">
+                                ${value.title}
+                                ${value.productsCount > 0 ? `<span class="text-muted">(${value.productsCount})</span>` : ''}
+                            </label>
+                        </div>
+                    `).join('')}
+                    ${values.length > displayValues.length ? `
+                        <button class="btn btn-link btn-sm p-0 show-more-values" 
+                                data-filter-id="${filter._id}">
+                            Показать еще (${values.length - displayValues.length})
+                        </button>
+                    ` : ''}
+                </div>
+            </div>
+        `;
+    }
+
+    renderRangeFilter(filter) {
+        return `
+            <div class="mb-4 dynamic-filter" data-filter-id="${filter._id}">
+                <h6>${filter.title}</h6>
+                ${filter.description ? `<small class="text-muted">${filter.description}</small>` : ''}
+                <div class="row g-2">
+                    <div class="col-6">
+                        <input type="number" 
+                               class="form-control form-control-sm filter-range-min" 
+                               data-filter-id="${filter._id}"
+                               placeholder="От" 
+                               min="0">
+                    </div>
+                    <div class="col-6">
+                        <input type="number" 
+                               class="form-control form-control-sm filter-range-max" 
+                               data-filter-id="${filter._id}"
+                               placeholder="До" 
+                               min="0">
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    renderSelectFilter(filter) {
+        const values = filter.values || [];
+
+        return `
+            <div class="mb-4 dynamic-filter" data-filter-id="${filter._id}">
+                <h6>${filter.title}</h6>
+                ${filter.description ? `<small class="text-muted">${filter.description}</small>` : ''}
+                <select class="form-select form-select-sm filter-select" 
+                        data-filter-id="${filter._id}">
+                    <option value="">Выберите ${filter.title.toLowerCase()}</option>
+                    ${values.map(value => `
+                        <option value="${value._id}">${value.title}</option>
+                    `).join('')}
+                </select>
+            </div>
+        `;
+    }
+
+    attachFilterListeners() {
+        // Обработчики для чекбоксов
+        document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                this.handleFilterChange();
+            });
+        });
+
+        // Обработчики для диапазонов
+        document.querySelectorAll('.filter-range-min, .filter-range-max').forEach(input => {
+            input.addEventListener('change', () => {
+                this.handleFilterChange();
+            });
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.handleFilterChange();
+            });
+        });
+
+        // Обработчики для селектов
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.addEventListener('change', () => {
+                this.handleFilterChange();
+            });
+        });
+
+        // Обработчики для кнопок "Показать еще"
+        document.querySelectorAll('.show-more-values').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.showMoreFilterValues(button.dataset.filterId);
+            });
+        });
+    }
+
+    handleFilterChange() {
+        // Собираем все активные фильтры
+        const dynamicFilters = {};
+
+        // Чекбоксы
+        document.querySelectorAll('.filter-checkbox:checked').forEach(checkbox => {
+            const filterId = checkbox.dataset.filterId;
+            const valueId = checkbox.dataset.valueId;
+            
+            if (!dynamicFilters[filterId]) {
+                dynamicFilters[filterId] = [];
+            }
+            dynamicFilters[filterId].push(valueId);
+        });
+
+        // Диапазоны
+        document.querySelectorAll('.dynamic-filter').forEach(filterEl => {
+            const filterId = filterEl.dataset.filterId;
+            const minInput = filterEl.querySelector('.filter-range-min');
+            const maxInput = filterEl.querySelector('.filter-range-max');
+            
+            if (minInput && maxInput) {
+                const minValue = minInput.value;
+                const maxValue = maxInput.value;
+                
+                if (minValue || maxValue) {
+                    dynamicFilters[filterId] = {
+                        min: minValue || null,
+                        max: maxValue || null
+                    };
+                }
+            }
+        });
+
+        // Селекты
+        document.querySelectorAll('.filter-select').forEach(select => {
+            const filterId = select.dataset.filterId;
+            const value = select.value;
+            
+            if (value) {
+                dynamicFilters[filterId] = value;
+            }
+        });
+
+        // Обновляем текущие фильтры (оставляем базовые фильтры как есть)
+        this.currentFilters = {
+            ...this.getBasicFilters(),
+            ...dynamicFilters
+        };
+
+        this.currentPage = 1;
+        this.loadProducts();
+    }
+
+    getBasicFilters() {
+        const basicFilters = {};
+        
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        const promoFilterInput = document.getElementById('promoFilter');
+        
+        const minPrice = minPriceInput ? minPriceInput.value : '';
+        const maxPrice = maxPriceInput ? maxPriceInput.value : '';
+        const isPromo = promoFilterInput ? promoFilterInput.checked : false;
+
+        if (minPrice) basicFilters.minPrice = minPrice;
+        if (maxPrice) basicFilters.maxPrice = maxPrice;
+        if (isPromo) basicFilters.isPromo = 'true';
+
+        return basicFilters;
+    }
+
+    showMoreFilterValues(filterId) {
+        const filter = this.availableFilters.find(f => f._id === filterId);
+        if (!filter) return;
+
+        const filterElement = document.querySelector(`[data-filter-id="${filterId}"]`);
+        const valuesContainer = filterElement.querySelector('.filter-values');
+        const showMoreBtn = filterElement.querySelector('.show-more-values');
+
+        // Показываем все значения
+        const allValues = filter.values || [];
+        const currentlyShown = filterElement.querySelectorAll('.form-check').length;
+
+        const additionalValues = allValues.slice(currentlyShown);
+        additionalValues.forEach(value => {
+            const checkboxHTML = `
+                <div class="form-check">
+                    <input class="form-check-input filter-checkbox" 
+                           type="checkbox" 
+                           id="filter_${filter._id}_${value._id}"
+                           data-filter-id="${filter._id}"
+                           data-value-id="${value._id}"
+                           value="${value._id}">
+                    <label class="form-check-label" for="filter_${filter._id}_${value._id}">
+                        ${value.title}
+                        ${value.productsCount > 0 ? `<span class="text-muted">(${value.productsCount})</span>` : ''}
+                    </label>
+                </div>
+            `;
+            showMoreBtn.insertAdjacentHTML('beforebegin', checkboxHTML);
+        });
+
+        // Удаляем кнопку "Показать еще"
+        showMoreBtn.remove();
+
+        // Добавляем обработчики для новых чекбоксов
+        this.attachFilterListeners();
+    }
+
+    resetAllFilters() {
+        // Сбрасываем базовые фильтры
+        const minPriceInput = document.getElementById('minPrice');
+        const maxPriceInput = document.getElementById('maxPrice');
+        const promoFilterInput = document.getElementById('promoFilter');
+        const sortSelect = document.getElementById('sortSelect');
+
+        if (minPriceInput) minPriceInput.value = '';
+        if (maxPriceInput) maxPriceInput.value = '';
+        if (promoFilterInput) promoFilterInput.checked = false;
+        if (sortSelect) sortSelect.value = 'createdAt:desc';
+
+        // Сбрасываем динамические фильтры
+        document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        document.querySelectorAll('.filter-range-min, .filter-range-max').forEach(input => {
+            input.value = '';
+        });
+
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.selectedIndex = 0;
+        });
+
+        // Обновляем состояние
+        this.currentFilters = {};
+        this.currentSort = 'createdAt:desc';
+        this.currentPage = 1;
+        
+        // Перезагружаем товары
+        this.loadProducts();
+    }
+
     async loadProducts() {
         if (!this.categoryParams.categorySlug) {
             this.showEmptyState();
@@ -197,6 +545,20 @@ class CategoryPage {
 
             if (response.success) {
                 this.renderProducts(response.data, response.pagination);
+                
+                // Загружаем фильтры по sectionId первого товара (только если фильтры еще не загружены)
+                if (response.data.length > 0 && this.availableFilters.length === 0) {
+                    const firstProduct = response.data[0];
+                    const sectionId = firstProduct.section?.id || firstProduct.section?._id;
+                    
+                    if (sectionId) {
+                        console.log('🔍 Loading filters based on first product section:', sectionId);
+                        console.log('🔍 First product section structure:', firstProduct.section);
+                        this.loadFilters(sectionId);
+                    } else {
+                        console.log('❌ No section ID found in first product:', firstProduct.section);
+                    }
+                }
             } else {
                 this.showEmptyState();
             }
@@ -207,22 +569,8 @@ class CategoryPage {
     }
 
     applyFilters() {
-        this.currentFilters = {};
-        
-        const minPriceInput = document.getElementById('minPrice');
-        const maxPriceInput = document.getElementById('maxPrice');
-        const promoFilterInput = document.getElementById('promoFilter');
-        
-        const minPrice = minPriceInput ? minPriceInput.value : '';
-        const maxPrice = maxPriceInput ? maxPriceInput.value : '';
-        const isPromo = promoFilterInput ? promoFilterInput.checked : false;
-
-        if (minPrice) this.currentFilters.minPrice = minPrice;
-        if (maxPrice) this.currentFilters.maxPrice = maxPrice;
-        if (isPromo) this.currentFilters.isPromo = 'true';
-
-        this.currentPage = 1;
-        this.loadProducts();
+        // Используем тот же метод, что и для динамических фильтров
+        this.handleFilterChange();
     }
 
     setViewMode(mode) {

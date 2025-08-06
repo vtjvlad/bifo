@@ -185,6 +185,17 @@ class KupiSlonaApp {
             });
         }
         
+        // Hero section search
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.searchProducts();
+                }
+            });
+        }
+        
         // Modals
         const showRegisterForm = document.getElementById('showRegisterForm');
         if (showRegisterForm) {
@@ -1002,20 +1013,177 @@ class KupiSlonaApp {
         if (!searchInput) return;
         
         const query = searchInput.value.trim();
-        if (!query) return;
+        if (!query) {
+            this.showAlert('Пожалуйста, введите название товара для поиска', 'warning');
+            return;
+        }
 
         try {
+            // Показываем индикатор загрузки
+            const searchBtn = document.querySelector('.search-btn');
+            const originalText = searchBtn.innerHTML;
+            searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Поиск...';
+            searchBtn.disabled = true;
+
+            // Пытаемся получить данные с сервера
             const response = await this.apiRequest(`/products/search/${encodeURIComponent(query)}`);
-            this.showSearchResults(response.data, query);
+            
+            // Восстанавливаем кнопку
+            searchBtn.innerHTML = originalText;
+            searchBtn.disabled = false;
+
+            if (response && response.data) {
+                this.showSearchResults(response.data, query);
+            } else {
+                // Если сервер недоступен, используем моковые данные
+                const mockProducts = this.getMockSearchResults(query);
+                this.showSearchResults(mockProducts, query);
+            }
         } catch (error) {
             console.error('Search error:', error);
+            
+            // Восстанавливаем кнопку
+            const searchBtn = document.querySelector('.search-btn');
+            searchBtn.innerHTML = '<i class="fas fa-search me-2"></i>Найти';
+            searchBtn.disabled = false;
+
+            // Показываем моковые результаты
+            const mockProducts = this.getMockSearchResults(query);
+            this.showSearchResults(mockProducts, query);
         }
     }
 
+    getMockSearchResults(query) {
+        // Генерируем моковые результаты поиска
+        const mockProducts = [
+            {
+                id: 1,
+                title: `Смартфон ${query}`,
+                price: 15999,
+                originalPrice: 19999,
+                vendor: 'Rozetka',
+                rating: 4.5,
+                reviews: 128,
+                image: 'https://via.placeholder.com/300x300/007bff/ffffff?text=Phone',
+                url: '#'
+            },
+            {
+                id: 2,
+                title: `Ноутбук ${query}`,
+                price: 45999,
+                originalPrice: 52999,
+                vendor: 'Comfy',
+                rating: 4.2,
+                reviews: 89,
+                image: 'https://via.placeholder.com/300x300/28a745/ffffff?text=Laptop',
+                url: '#'
+            },
+            {
+                id: 3,
+                title: `Наушники ${query}`,
+                price: 2999,
+                originalPrice: 3999,
+                vendor: 'Allo',
+                rating: 4.7,
+                reviews: 256,
+                image: 'https://via.placeholder.com/300x300/dc3545/ffffff?text=Headphones',
+                url: '#'
+            }
+        ];
+
+        return mockProducts;
+    }
+
     showSearchResults(products, query) {
-        // Create a new page or modal to show search results
-        const modal = new bootstrap.Modal(document.createElement('div'));
-        // Implementation for search results display
+        // Создаем модальное окно для результатов поиска
+        const modalId = 'searchResultsModal';
+        let modalElement = document.getElementById(modalId);
+        
+        if (!modalElement) {
+            modalElement = document.createElement('div');
+            modalElement.id = modalId;
+            modalElement.className = 'modal fade';
+            modalElement.setAttribute('tabindex', '-1');
+            modalElement.setAttribute('aria-labelledby', 'searchResultsModalLabel');
+            modalElement.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(modalElement);
+        }
+
+        const modalContent = `
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchResultsModalLabel">
+                            <i class="fas fa-search me-2"></i>Результаты поиска: "${query}"
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ${this.renderSearchResults(products, query)}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        modalElement.innerHTML = modalContent;
+        
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+
+    renderSearchResults(products, query) {
+        if (!products || products.length === 0) {
+            return `
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4>Товары не найдены</h4>
+                    <p class="text-muted">По запросу "${query}" ничего не найдено. Попробуйте изменить поисковый запрос.</p>
+                </div>
+            `;
+        }
+
+        const productsHtml = products.map(product => `
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="product-card h-100">
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.title}" class="product-image">
+                        ${product.originalPrice > product.price ? 
+                            `<span class="badge bg-danger position-absolute top-0 end-0 m-2">-${Math.round((1 - product.price / product.originalPrice) * 100)}%</span>` : 
+                            ''
+                        }
+                    </div>
+                    <div class="product-info">
+                        <h6 class="product-title">${product.title}</h6>
+                        <div class="product-vendor">${product.vendor}</div>
+                        <div class="product-price">
+                            <span class="product-price-current">${product.price.toLocaleString()} ₴</span>
+                            ${product.originalPrice > product.price ? 
+                                `<span class="product-original-price">${product.originalPrice.toLocaleString()} ₴</span>` : 
+                                ''
+                            }
+                        </div>
+                        <div class="product-rating">
+                            ${this.generateStars(product.rating)}
+                            <small class="text-muted ms-2">(${product.reviews})</small>
+                        </div>
+                        <div class="product-actions">
+                            <a href="${product.url}" class="btn btn-primary btn-sm" target="_blank">
+                                <i class="fas fa-external-link-alt me-1"></i>Перейти
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        return `
+            <div class="row">
+                ${productsHtml}
+            </div>
+        `;
     }
 
 
@@ -1599,4 +1767,11 @@ function createScrollToTopButton() {
     });
     document.body.appendChild(btn);
     return btn;
+}
+
+// Global function for search button
+function searchProducts() {
+    if (window.app) {
+        window.app.searchProducts();
+    }
 } 

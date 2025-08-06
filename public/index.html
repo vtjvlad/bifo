@@ -22,7 +22,7 @@
     <div data-component="mega-menu"></div>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section">
+    <!-- <section id="home" class="hero-section">
         <div class="container">
             <div class="row align-items-center min-vh-100">
                 <div class="col-lg-6">
@@ -47,7 +47,51 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
+
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Найдите лучшие цены</h1>
+            <p class="hero-subtitle">Сравнивайте цены на товары в разных магазинах Украины</p>
+            
+            <div class="search-box">
+                <div class="row">
+                    <div class="col-md-8">
+                        <input type="text" class="search-input" placeholder="Введите название товара..." id="searchInput">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="search-btn w-100" onclick="searchProducts()">
+                            <i class="fas fa-search me-2"></i>Найти
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="fas fa-store fa-2x mb-3"></i>
+                        <h5>5+ магазинов</h5>
+                        <p>Rozetka, Comfy, Allo, Citrus, Foxtrot</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="fas fa-clock fa-2x mb-3"></i>
+                        <h5>Обновление каждый час</h5>
+                        <p>Актуальные цены в реальном времени</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center">
+                        <i class="fas fa-bell fa-2x mb-3"></i>
+                        <h5>Уведомления о ценах</h5>
+                        <p>Получайте оповещения о снижении цен</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section> 
 
     <!-- Categories Section -->
     <section id="categories" class="py-5 bg-light">

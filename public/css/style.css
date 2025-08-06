@@ -23,9 +23,10 @@ body {
     min-height: 100vh;
     display: flex;
     align-items: center;
-    padding-top: 80px;
+    padding: 120px 0 80px 0;
     position: relative;
     overflow: hidden;
+    color: white;
 }
 
 .hero-section::before {
@@ -37,6 +38,175 @@ body {
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
     opacity: 0.3;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    opacity: 0.9;
+    position: relative;
+    z-index: 1;
+}
+
+.search-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+.search-input {
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.search-btn {
+    background: linear-gradient(45deg, var(--primary-color), #ffb300);
+    border: none;
+    border-radius: 15px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 6px 20px rgba(255, 193, 7, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.search-btn:hover::before {
+    left: 100%;
+}
+
+.search-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(255, 193, 7, 0.4);
+}
+
+.hero-section .row {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-section .text-center {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.hero-section .text-center:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.hero-section .text-center i {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.hero-section .text-center h5 {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.hero-section .text-center p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+/* Hero Section Animations */
+.hero-title {
+    animation: fadeInDown 1s ease-out;
+}
+
+.hero-subtitle {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.search-box {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.hero-section .text-center {
+    animation: fadeInUp 1s ease-out 0.9s both;
+}
+
+.hero-section .text-center:nth-child(1) {
+    animation-delay: 0.9s;
+}
+
+.hero-section .text-center:nth-child(2) {
+    animation-delay: 1.1s;
+}
+
+.hero-section .text-center:nth-child(3) {
+    animation-delay: 1.3s;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .hero-logo {
@@ -366,7 +536,48 @@ body {
 @media (max-width: 768px) {
     .hero-section {
         text-align: center;
-        padding-top: 100px;
+        padding: 100px 0 60px 0;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .search-box {
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .search-input {
+        font-size: 1rem;
+        padding: 0.875rem 1.25rem;
+    }
+    
+    .search-btn {
+        font-size: 1rem;
+        padding: 0.875rem 1.5rem;
+    }
+    
+    .hero-section .text-center {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-section .text-center i {
+        font-size: 1.5rem;
+    }
+    
+    .hero-section .text-center h5 {
+        font-size: 1rem;
+    }
+    
+    .hero-section .text-center p {
+        font-size: 0.85rem;
     }
     
     .hero-logo {
@@ -400,6 +611,54 @@ body {
     .container {
         padding-left: 1rem;
         padding-right: 1rem;
+    }
+    
+    .hero-section {
+        padding: 80px 0 40px 0;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-box {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .search-input {
+        font-size: 0.9rem;
+        padding: 0.75rem 1rem;
+    }
+    
+    .search-btn {
+        font-size: 0.9rem;
+        padding: 0.75rem 1.25rem;
+    }
+    
+    .hero-section .text-center {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .hero-section .text-center i {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-section .text-center h5 {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .hero-section .text-center p {
+        font-size: 0.8rem;
     }
     
     .hero-section h1 {
