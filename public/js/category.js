@@ -195,6 +195,7 @@ class CategoryPage {
             if (response.success && response.data.length > 0) {
                 this.availableFilters = response.data;
                 console.log(`✅ Found ${response.data.length} filters for section ${sectionId}`);
+                console.log('🔍 Filter types:', response.data.map(f => ({ title: f.title, type: f.type })));
                 this.renderFilters();
             } else {
                 console.log(`No filters found for section ${sectionId}`);
@@ -228,6 +229,25 @@ class CategoryPage {
             filtersHTML += this.renderSingleFilter(filter);
         });
 
+        // Добавляем тестовый аккордион фильтр для демонстрации
+        if (this.availableFilters.length === 0) {
+            console.log('🧪 Adding test accordion filter for demonstration');
+            const testFilter = {
+                _id: 'test_accordion_filter',
+                title: 'Тестовый аккордион',
+                type: 'checkbox',
+                description: 'Это тестовый фильтр для демонстрации аккордионов',
+                values: [
+                    { _id: 'val1', title: 'Значение 1', productsCount: 5 },
+                    { _id: 'val2', title: 'Значение 2', productsCount: 3 },
+                    { _id: 'val3', title: 'Значение 3', productsCount: 7 },
+                    { _id: 'val4', title: 'Значение 4', productsCount: 2 },
+                    { _id: 'val5', title: 'Значение 5', productsCount: 4 }
+                ]
+            };
+            filtersHTML += this.renderSingleFilter(testFilter);
+        }
+
         // Вставляем динамические фильтры в контейнер
         dynamicFiltersContainer.innerHTML = filtersHTML;
 
@@ -235,7 +255,7 @@ class CategoryPage {
         this.attachFilterListeners();
         
         // Показываем кнопку сброса, если есть фильтры
-        if (this.availableFilters.length > 0) {
+        if (this.availableFilters.length > 0 || filtersHTML) {
             const resetButton = document.getElementById('resetFilters');
             if (resetButton) {
                 resetButton.style.display = 'block';
@@ -246,17 +266,23 @@ class CategoryPage {
     renderSingleFilter(filter) {
         let filterHTML = '';
 
+        console.log('🔍 Rendering filter:', filter.title, 'Type:', filter.type);
+
         switch (filter.type) {
             case 'checkbox':
+                console.log('✅ Rendering checkbox filter (accordion)');
                 filterHTML = this.renderCheckboxFilter(filter);
                 break;
             case 'range':
+                console.log('✅ Rendering range filter');
                 filterHTML = this.renderRangeFilter(filter);
                 break;
             case 'select':
+                console.log('✅ Rendering select filter (legacy)');
                 filterHTML = this.renderSelectFilter(filter);
                 break;
             default:
+                console.log('⚠️ Unknown filter type, using checkbox as default');
                 filterHTML = this.renderCheckboxFilter(filter);
         }
 
@@ -270,29 +296,50 @@ class CategoryPage {
 
         return `
             <div class="mb-4 dynamic-filter" data-filter-id="${filter._id}">
-                <h6>${filter.title}</h6>
-                ${filter.description ? `<small class="text-muted">${filter.description}</small>` : ''}
-                <div class="filter-values">
-                    ${displayValues.map(value => `
-                        <div class="form-check">
-                            <input class="form-check-input filter-checkbox" 
-                                   type="checkbox" 
-                                   id="filter_${filter._id}_${value._id}"
-                                   data-filter-id="${filter._id}"
-                                   data-value-id="${value._id}"
-                                   value="${value._id}">
-                            <label class="form-check-label" for="filter_${filter._id}_${value._id}">
-                                ${value.title}
-                                ${value.productsCount > 0 ? `<span class="text-muted">(${value.productsCount})</span>` : ''}
-                            </label>
+                <div class="accordion" id="accordion_${filter._id}">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading_${filter._id}">
+                            <button class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse_${filter._id}" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapse_${filter._id}">
+                                <i class="fas fa-chevron-down me-2"></i>
+                                ${filter.title}
+                                ${filter.description ? `<small class="text-muted ms-2">${filter.description}</small>` : ''}
+                            </button>
+                        </h2>
+                        <div id="collapse_${filter._id}" 
+                             class="accordion-collapse collapse" 
+                             aria-labelledby="heading_${filter._id}" 
+                             data-bs-parent="#accordion_${filter._id}">
+                            <div class="accordion-body">
+                                <div class="filter-values">
+                                    ${displayValues.map(value => `
+                                        <div class="form-check">
+                                            <input class="form-check-input filter-checkbox" 
+                                                   type="checkbox" 
+                                                   id="filter_${filter._id}_${value._id}"
+                                                   data-filter-id="${filter._id}"
+                                                   data-value-id="${value._id}"
+                                                   value="${value._id}">
+                                            <label class="form-check-label" for="filter_${filter._id}_${value._id}">
+                                                ${value.title}
+                                                ${value.productsCount > 0 ? `<span class="text-muted">(${value.productsCount})</span>` : ''}
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                    ${values.length > displayValues.length ? `
+                                        <button class="btn btn-link btn-sm p-0 show-more-values" 
+                                                data-filter-id="${filter._id}">
+                                            Показать еще (${values.length - displayValues.length})
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
                         </div>
-                    `).join('')}
-                    ${values.length > displayValues.length ? `
-                        <button class="btn btn-link btn-sm p-0 show-more-values" 
-                                data-filter-id="${filter._id}">
-                            Показать еще (${values.length - displayValues.length})
-                        </button>
-                    ` : ''}
+                    </div>
                 </div>
             </div>
         `;
@@ -325,24 +372,62 @@ class CategoryPage {
 
     renderSelectFilter(filter) {
         const values = filter.values || [];
+        const topValues = filter.topValues || [];
+        const displayValues = topValues.length > 0 ? topValues : values.slice(0, 10);
 
         return `
             <div class="mb-4 dynamic-filter" data-filter-id="${filter._id}">
-                <h6>${filter.title}</h6>
-                ${filter.description ? `<small class="text-muted">${filter.description}</small>` : ''}
-                <select class="form-select form-select-sm filter-select" 
-                        data-filter-id="${filter._id}">
-                    <option value="">Выберите ${filter.title.toLowerCase()}</option>
-                    ${values.map(value => `
-                        <option value="${value._id}">${value.title}</option>
-                    `).join('')}
-                </select>
+                <div class="accordion" id="accordion_${filter._id}">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading_${filter._id}">
+                            <button class="accordion-button collapsed" 
+                                    type="button" 
+                                    data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse_${filter._id}" 
+                                    aria-expanded="false" 
+                                    aria-controls="collapse_${filter._id}">
+                                <i class="fas fa-chevron-down me-2"></i>
+                                ${filter.title}
+                                ${filter.description ? `<small class="text-muted ms-2">${filter.description}</small>` : ''}
+                            </button>
+                        </h2>
+                        <div id="collapse_${filter._id}" 
+                             class="accordion-collapse collapse" 
+                             aria-labelledby="heading_${filter._id}" 
+                             data-bs-parent="#accordion_${filter._id}">
+                            <div class="accordion-body">
+                                <div class="filter-values">
+                                    ${displayValues.map(value => `
+                                        <div class="form-check">
+                                            <input class="form-check-input filter-checkbox" 
+                                                   type="checkbox" 
+                                                   id="filter_${filter._id}_${value._id}"
+                                                   data-filter-id="${filter._id}"
+                                                   data-value-id="${value._id}"
+                                                   value="${value._id}">
+                                            <label class="form-check-label" for="filter_${filter._id}_${value._id}">
+                                                ${value.title}
+                                                ${value.productsCount > 0 ? `<span class="text-muted">(${value.productsCount})</span>` : ''}
+                                            </label>
+                                        </div>
+                                    `).join('')}
+                                    ${values.length > displayValues.length ? `
+                                        <button class="btn btn-link btn-sm p-0 show-more-values" 
+                                                data-filter-id="${filter._id}">
+                                            Показать еще (${values.length - displayValues.length})
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
     }
 
     attachFilterListeners() {
-        // Обработчики для чекбоксов
+        // Обработчики для чекбоксов (включая те, что в аккордионах)
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', () => {
                 this.handleFilterChange();
@@ -359,12 +444,12 @@ class CategoryPage {
             });
         });
 
-        // Обработчики для селектов
-        document.querySelectorAll('.filter-select').forEach(select => {
-            select.addEventListener('change', () => {
-                this.handleFilterChange();
-            });
-        });
+        // Удаляем обработчики для селектов, так как их больше нет
+        // document.querySelectorAll('.filter-select').forEach(select => {
+        //     select.addEventListener('change', () => {
+        //         this.handleFilterChange();
+        //     });
+        // });
 
         // Обработчики для кнопок "Показать еще"
         document.querySelectorAll('.show-more-values').forEach(button => {
@@ -373,13 +458,28 @@ class CategoryPage {
                 this.showMoreFilterValues(button.dataset.filterId);
             });
         });
+
+        // Добавляем обработчики для аккордионов
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Добавляем анимацию иконки
+                const icon = button.querySelector('i');
+                if (icon) {
+                    if (button.classList.contains('collapsed')) {
+                        icon.className = 'fas fa-chevron-up me-2';
+                    } else {
+                        icon.className = 'fas fa-chevron-down me-2';
+                    }
+                }
+            });
+        });
     }
 
     handleFilterChange() {
         // Собираем все активные фильтры
         const dynamicFilters = {};
 
-        // Чекбоксы
+        // Чекбоксы (включая те, что теперь в аккордионах)
         document.querySelectorAll('.filter-checkbox:checked').forEach(checkbox => {
             const filterId = checkbox.dataset.filterId;
             const valueId = checkbox.dataset.valueId;
@@ -409,15 +509,8 @@ class CategoryPage {
             }
         });
 
-        // Селекты
-        document.querySelectorAll('.filter-select').forEach(select => {
-            const filterId = select.dataset.filterId;
-            const value = select.value;
-            
-            if (value) {
-                dynamicFilters[filterId] = value;
-            }
-        });
+        // Удаляем обработку селектов, так как теперь все фильтры используют чекбоксы
+        // Селекты больше не используются
 
         // Обновляем текущие фильтры (оставляем базовые фильтры как есть)
         this.currentFilters = {
@@ -497,7 +590,7 @@ class CategoryPage {
         if (promoFilterInput) promoFilterInput.checked = false;
         if (sortSelect) sortSelect.value = 'createdAt:desc';
 
-        // Сбрасываем динамические фильтры
+        // Сбрасываем динамические фильтры (включая те, что в аккордионах)
         document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
             checkbox.checked = false;
         });
@@ -506,9 +599,10 @@ class CategoryPage {
             input.value = '';
         });
 
-        document.querySelectorAll('.filter-select').forEach(select => {
-            select.selectedIndex = 0;
-        });
+        // Удаляем сброс селектов, так как их больше нет
+        // document.querySelectorAll('.filter-select').forEach(select => {
+        //     select.selectedIndex = 0;
+        // });
 
         // Обновляем состояние
         this.currentFilters = {};

@@ -3339,3 +3339,152 @@ body {
         font-size: 0.8rem;
     }
 } 
+
+/* Filter Accordion Styles */
+.filters-sidebar .accordion {
+    border: none;
+    box-shadow: none;
+}
+
+.filters-sidebar .accordion-item {
+    border: none;
+    background: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.filters-sidebar .accordion-button {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+    box-shadow: none;
+    transition: all 0.3s ease;
+}
+
+.filters-sidebar .accordion-button:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+    color: #212529;
+}
+
+.filters-sidebar .accordion-button:not(.collapsed) {
+    background: #007bff;
+    border-color: #007bff;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.filters-sidebar .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: #007bff;
+}
+
+.filters-sidebar .accordion-button::after {
+    display: none;
+}
+
+.filters-sidebar .accordion-button i {
+    transition: transform 0.3s ease;
+}
+
+.filters-sidebar .accordion-button:not(.collapsed) i {
+    transform: rotate(180deg);
+}
+
+.filters-sidebar .accordion-collapse {
+    border: none;
+}
+
+.filters-sidebar .accordion-body {
+    padding: 1rem;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -1px;
+}
+
+.filters-sidebar .accordion-body .filter-values {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.filters-sidebar .accordion-body .form-check {
+    margin-bottom: 0.5rem;
+}
+
+.filters-sidebar .accordion-body .form-check:last-child {
+    margin-bottom: 0;
+}
+
+.filters-sidebar .accordion-body .form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.filters-sidebar .accordion-body .form-check-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.filters-sidebar .accordion-body .form-check-label:hover {
+    color: #495057;
+}
+
+.filters-sidebar .accordion-body .show-more-values {
+    color: #007bff;
+    font-size: 0.8rem;
+    text-decoration: none;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+.filters-sidebar .accordion-body .show-more-values:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Animation for accordion icons */
+.filters-sidebar .accordion-button i.fa-chevron-down {
+    transition: transform 0.3s ease;
+}
+
+.filters-sidebar .accordion-button:not(.collapsed) i.fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* Responsive adjustments for filter accordions */
+@media (max-width: 768px) {
+    .filters-sidebar .accordion-button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+    }
+    
+    .filters-sidebar .accordion-body {
+        padding: 0.75rem;
+    }
+    
+    .filters-sidebar .accordion-body .filter-values {
+        max-height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .filters-sidebar .accordion-button {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .filters-sidebar .accordion-body {
+        padding: 0.5rem;
+    }
+    
+    .filters-sidebar .accordion-body .form-check-label {
+        font-size: 0.8rem;
+    }
+}

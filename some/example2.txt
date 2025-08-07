@@ -1,8 +1,0 @@
-curl -X POST 'https://hotline.ua/svc/frontend-api/graphql' -H 'accept: */*' -H 'content-type: application/json' -H 'x-language:	uk' -H 'x-referer: https://hotline.ua/mobile-mobilnye-telefony-i-smartfony/samsung-galaxy-a56-5g-8128gb-awesome-graphite-sm-a566bzka/' -H 'x-token: cdc3e828-1d6c-4e41-a68f-fbd730641f32' -H 'x-request-id: 6c5138d8abcf11ebbf7337651cf3de14' -d '{
-  "operationName": "getOffers",
-  "variables": {
-    "path": "samsung-galaxy-s21-fe-5g-6128gb-lavender-sm-g990blvd",
-    "cityId": 5394
-  },
-  "query": "query getOffers($path: String!, $cityId: Int!) {\n  byPathQueryProduct(path: $path, cityId: $cityId) {\n    id\n    offers(first: 1000) {\n      totalCount\n      edges {\n        node {\n          _id\n          condition\n          conditionId\n          conversionUrl\n          descriptionFull\n          descriptionShort\n          firmId\n          firmLogo\n          firmTitle\n          firmExtraInfo\n          guaranteeTerm\n          guaranteeTermName\n          guaranteeType\n          hasBid\n          historyId\n          payment\n          price\n          reviewsNegativeNumber\n          reviewsPositiveNumber\n          bid\n          shipping\n          delivery {\n            deliveryMethods\n            hasFreeDelivery\n            isSameCity\n            name\n            countryCodeFirm\n            __typename\n          }\n          sortPlace\n          __typename\n        }\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}\n"
-}'

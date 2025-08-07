@@ -1,0 +1,24 @@
+{
+  "verbose": true,
+  "watch": [
+    "server.js",
+    "routes/",
+    "models/",
+    "scripts/",
+    "config/"
+  ],
+  "ignore": [
+    "public/img/**",
+    "node_modules/**",
+    "*.md",
+    "*.log",
+    "*.txt",
+    "test*.js",
+    "test*.json",
+    "package-lock.json"
+  ],
+  "ext": "js",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
