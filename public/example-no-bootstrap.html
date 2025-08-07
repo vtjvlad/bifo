@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пример без Bootstrap - Купи слона</title>
+    <meta name="description" content="Пример страницы без Bootstrap, используя кастомную CSS систему">
+    <link rel="icon" href="images/kupislona-logo.png" type="image/png">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Кастомная CSS система -->
+    <link rel="stylesheet" href="css/custom-framework.css">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="css/base.css">
+    <style>
+        /* Дополнительные стили для примера */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .testimonial {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: var(--border-radius-lg);
+            margin: 1rem 0;
+        }
+        
+        .price-card {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .price-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        .price-card.featured {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .stats-section {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="images/kupislona-logo.png" alt="Купи слона" height="40">
+            </a>
+            
+            <div class="d-flex">
+                <button class="btn btn-outline-light me-2" id="loginBtn">
+                    <i class="fas fa-sign-in-alt me-2"></i>Войти
+                </button>
+                <button class="btn btn-primary" id="registerBtn">
+                    <i class="fas fa-user-plus me-2"></i>Регистрация
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="mb-4">Добро пожаловать в Купи слона</h1>
+                    <p class="mb-4">Ваш надежный интернет-магазин с огромным ассортиментом товаров</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#features" class="btn btn-warning btn-lg">
+                            <i class="fas fa-star me-2"></i>Узнать больше
+                        </a>
+                        <a href="#catalog" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-shopping-cart me-2"></i>Перейти к каталогу
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2>Почему выбирают нас</h2>
+                    <p class="text-muted">Мы предлагаем лучшие условия для наших клиентов</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h4>Быстрая доставка</h4>
+                        <p>Доставляем товары по всей России в кратчайшие сроки</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>Гарантия качества</h4>
+                        <p>Все товары проходят строгую проверку качества</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h4>Поддержка 24/7</h4>
+                        <p>Наша служба поддержки работает круглосуточно</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">10K+</div>
+                        <div>Довольных клиентов</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div>Товаров в каталоге</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">99%</div>
+                        <div>Положительных отзывов</div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="stat-item">
+                        <div class="stat-number">24/7</div>
+                        <div>Поддержка клиентов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2>Тарифы доставки</h2>
+                    <p class="text-muted">Выберите подходящий тариф доставки</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="price-card">
+                        <h4>Стандарт</h4>
+                        <div class="price">299₽</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Доставка 3-5 дней</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Отслеживание</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Страхование</li>
+                        </ul>
+                        <button class="btn btn-outline-primary w-100">Выбрать</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="price-card featured">
+                        <h4>Экспресс</h4>
+                        <div class="price">599₽</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check me-2"></i>Доставка 1-2 дня</li>
+                            <li><i class="fas fa-check me-2"></i>Приоритетное отслеживание</li>
+                            <li><i class="fas fa-check me-2"></i>Полное страхование</li>
+                            <li><i class="fas fa-check me-2"></i>Уведомления SMS</li>
+                        </ul>
+                        <button class="btn btn-light w-100">Выбрать</button>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="price-card">
+                        <h4>Премиум</h4>
+                        <div class="price">999₽</div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Доставка в день заказа</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Персональный менеджер</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Максимальное страхование</li>
+                            <li><i class="fas fa-check text-success me-2"></i>VIP поддержка</li>
+                        </ul>
+                        <button class="btn btn-outline-primary w-100">Выбрать</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row text-center mb-5">
+                <div class="col-12">
+                    <h2>Отзывы клиентов</h2>
+                    <p class="text-muted">Что говорят о нас наши клиенты</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial">
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Отличный магазин! Быстрая доставка, качественные товары. Рекомендую всем!"</p>
+                        <div class="d-flex align-items-center">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="Аватар">
+                            <div>
+                                <strong>Анна Петрова</strong><br>
+                                <small class="text-muted">Москва</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="testimonial">
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Покупаю здесь уже второй год. Ни разу не было проблем с качеством товаров."</p>
+                        <div class="d-flex align-items-center">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="Аватар">
+                            <div>
+                                <strong>Иван Сидоров</strong><br>
+                                <small class="text-muted">Санкт-Петербург</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="testimonial">
+                        <div class="text-warning mb-3">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Лучший интернет-магазин! Большой выбор, хорошие цены, отличный сервис."</p>
+                        <div class="d-flex align-items-center">
+                            <img src="https://via.placeholder.com/50" class="rounded-circle me-3" alt="Аватар">
+                            <div>
+                                <strong>Мария Козлова</strong><br>
+                                <small class="text-muted">Екатеринбург</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0"><i class="fas fa-envelope me-2"></i>Свяжитесь с нами</h4>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="name">Имя</label>
+                                            <input type="text" class="form-control" id="name" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="subject">Тема</label>
+                                    <input type="text" class="form-control" id="subject" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="message">Сообщение</label>
+                                    <textarea class="form-control" id="message" rows="5" required></textarea>
+                                </div>
+                                
+                                <div class="text-center">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Отправить сообщение
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Купи слона</h5>
+                    <p>Ваш надежный интернет-магазин с огромным ассортиментом товаров</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h5>Контакты</h5>
+                    <p>
+                        <i class="fas fa-phone me-2"></i>8-800-555-0123<br>
+                        <i class="fas fa-envelope me-2"></i>info@kupislona.ru
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p>&copy; 2024 Купи слона. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно входа -->
+    <div class="modal fade" id="loginModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Вход в систему</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" class="form-control" id="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Пароль</label>
+                            <input type="password" class="form-control" id="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Войти</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div class="modal fade" id="registerModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Регистрация</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="registerName">Имя</label>
+                            <input type="text" class="form-control" id="registerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerEmail">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="registerPassword">Пароль</label>
+                            <input type="password" class="form-control" id="registerPassword" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кастомная JavaScript система -->
+    <script src="js/custom-framework.js"></script>
+    
+    <script>
+        // Обработчики для кнопок
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const modal = document.getElementById('loginModal');
+            window.customFramework.showModal(modal);
+        });
+        
+        document.getElementById('registerBtn').addEventListener('click', () => {
+            const modal = document.getElementById('registerModal');
+            window.customFramework.showModal(modal);
+        });
+        
+        // Обработчик формы контактов
+        document.querySelector('form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            window.bootstrap.Alert.show('Сообщение отправлено!', 'success');
+        });
+        
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
