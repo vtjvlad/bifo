@@ -6,7 +6,7 @@ class CategoryPage {
         this.itemsPerPage = 12;
         this.currentFilters = {};
         this.currentSort = 'createdAt:desc';
-        this.viewMode = 'list'; // 'grid' or 'list' - по умолчанию список
+        this.viewMode = 'grid'; // 'grid' or 'list' - по умолчанию сетка
         this.currentProducts = []; // Добавляем для хранения текущих товаров
         this.availableFilters = []; // Добавляем для хранения доступных фильтров
         
@@ -24,6 +24,9 @@ class CategoryPage {
         this.updateBreadcrumb();
         this.loadCategoryInfo();
         this.loadProducts(); // Сначала загружаем товары, потом фильтры по их section._id
+        
+        // Устанавливаем правильный режим просмотра
+        this.setViewMode(this.viewMode);
         
         // Initialize enhanced interactions after a short delay
         setTimeout(() => {
